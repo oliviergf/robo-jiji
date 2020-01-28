@@ -9,6 +9,7 @@ const request = require("request");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var testDBRouter = require("./routes/testdb");
+var rssQuery = require("./services/rss/rssTest");
 var app = express();
 
 app.use(
@@ -50,25 +51,6 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-let count = 0;
-
-let call = () => {
-  request(
-    "https://www.kijiji.ca/rss-srp-for-rent/quebec/c30349001l9001",
-    { json: true },
-    (err, res, body) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(body);
-      console.log(`call: ${count}`);
-      count++;
-    }
-  );
-};
-
-setInterval(function() {
-  call();
-}, 3000);
+rssQuery("https://www.kijiji.ca/rss-srp-for-rent/quebec/c30349001l9001");
 
 module.exports = app;
