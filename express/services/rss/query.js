@@ -1,14 +1,8 @@
 const request = require("request");
 const parser = require("fast-xml-parser");
-//todo: make this work
-// const mysql = require("mysql");
-
-// const con = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "securethispassword",
-//   database: "devbot"
-// });
+const configs = require("../../sql/config");
+const mysql = require("mysql");
+const connection = mysql.createConnection(configs);
 
 const rssQuery = link => {
   const time = new Date(Date.now());
@@ -21,8 +15,11 @@ const rssQuery = link => {
       }
 
       const jsonObj = parser.parse(body);
-      const items = jsonObj.rss.channel.item;
+      let items = jsonObj.rss.channel.item;
       const timeQuery = time.getUTCDay();
+
+      //to be erased once we figure out the querying bug
+      items = [items[0]];
 
       items.map(item => {
         // console.log(item.description);
@@ -36,6 +33,20 @@ const rssQuery = link => {
 
         //sql insert
         // make geo first and then apparts?
+        let stmt = `INSERT INTO Geo(lat,lng)
+            VALUES(?,?)`;
+        let todo = [lat, lng];
+
+        // execute the insert statment
+        connection.query(stmt, todo, (err, results, fields) => {
+          if (err) {
+            return console.error(err.message);
+          }
+          // get inserted id
+          console.log("Todo Id:" + results.insertId);
+        });
+
+        connection.end();
       });
 
       //LOGS
