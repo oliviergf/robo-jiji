@@ -4,10 +4,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 var logger = require("morgan");
+const request = require("request");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var testDBRouter = require("./routes/testdb");
+var rssQuery = require("./services/rss/rssTest");
 var app = express();
 
 app.use(
@@ -48,5 +50,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+rssQuery("https://www.kijiji.ca/rss-srp-for-rent/quebec/c30349001l9001");
 
 module.exports = app;
