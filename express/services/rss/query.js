@@ -2,9 +2,14 @@ const request = require("request");
 const parser = require("fast-xml-parser");
 const configs = require("../../sql/config");
 const mysql = require("mysql");
-const connection = mysql.createConnection(configs);
+const con = mysql.createConnection(configs);
 
 const rssQuery = link => {
+  con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
+
   const time = new Date(Date.now());
   let count = 0;
 
@@ -31,22 +36,22 @@ const rssQuery = link => {
         const price = item["g-core:price"];
         const description = item.description;
 
-        //sql insert
-        // make geo first and then apparts?
-        let stmt = `INSERT INTO Geo(lat,lng)
-            VALUES(?,?)`;
-        let todo = [lat, lng];
+        // //sql insert
+        // // make geo first and then apparts?
+        // let stmt = `INSERT INTO Geo(lat,lng)
+        //     VALUES(?,?)`;
+        // let todo = [lat, lng];
 
-        // execute the insert statment
-        connection.query(stmt, todo, (err, results, fields) => {
-          if (err) {
-            return console.error(err.message);
-          }
-          // get inserted id
-          console.log("Todo Id:" + results.insertId);
-        });
+        // // execute the insert statment
+        // con.query(stmt, todo, (err, results, fields) => {
+        //   if (err) {
+        //     return console.error(err.message);
+        //   }
+        //   // get inserted id
+        //   console.log("Todo Id:" + results.insertId);
+        // });
 
-        connection.end();
+        con.end();
       });
 
       //LOGS

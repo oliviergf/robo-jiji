@@ -1,6 +1,6 @@
 let config = {
-  host: "ideapad",
-  user: "olivier",
+  host: "localhost",
+  user: "node_olivier",
   password: "securethispassword",
   database: "devbot"
 };
