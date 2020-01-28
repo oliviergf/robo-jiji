@@ -1,16 +1,14 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var cors = require("cors");
-var logger = require("morgan");
-const request = require("request");
-
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var testDBRouter = require("./routes/testdb");
-var rssQuery = require("./services/rss/rssTest");
-var app = express();
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const logger = require("morgan");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const testDBRouter = require("./routes/testdb");
+const rss = require("./services/rss/rss");
+const app = express();
 
 app.use(
   cors({
@@ -51,6 +49,6 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-rssQuery("https://www.kijiji.ca/rss-srp-for-rent/quebec/c30349001l9001");
+rss();
 
 module.exports = app;
