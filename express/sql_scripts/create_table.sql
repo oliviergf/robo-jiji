@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `devbot`.`Zones` (
 
 CREATE TABLE IF NOT EXISTS `devbot`.`Geo` (
   `_id` int NOT NULL AUTO_INCREMENT ,
-  `zone_id` int NOT NULL ,
+  `zone_id` int,
   `lat` DECIMAL(10, 8) ,
   `lng` DECIMAL(11, 8)  ,
   FOREIGN KEY (zone_id) REFERENCES Zones (_id) ON DELETE RESTRICT ON UPDATE CASCADE,
