@@ -19,7 +19,6 @@ class Register extends React.Component {
   }
 
   handleSubmit(event) {
-    // Make a request for a user with a given ID
     axios
       .post("http://localhost:3000/register", {
         firstName: this.state.firstname,
@@ -32,6 +31,8 @@ class Register extends React.Component {
       .catch(function(error) {
         console.log(error);
       });
+
+    event.preventDefault();
   }
 
   render() {
