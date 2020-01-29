@@ -24,11 +24,11 @@ router.get("/", function(req, res, next) {
 todo: handle que le user peut pas etre deja la
 */
 router.post("/", function(req, res, next) {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const email = req.body.email;
-  const password = req.body.password;
-  const sql = `INSERT INTO Users (firstname, lastname, email, password, coins) VALUES ('${firstname}','${lastname}','${email}',AES_ENCRYPT('${password}','my_secret_key_to_encrypt'),0)`;
+  const firstname = req.body.firstname,
+    lastname = req.body.lastname,
+    email = req.body.email,
+    password = req.body.password,
+    sql = `INSERT INTO Users (firstname, lastname, email, password, coins) VALUES ('${firstname}','${lastname}','${email}',AES_ENCRYPT('${password}','my_secret_key_to_encrypt'),0)`;
   con.query(sql, function(err, result) {
     if (err) throw err;
     console.log("1 record inserted, ID: " + result.insertId);

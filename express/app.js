@@ -8,6 +8,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const registerRouter = require("./routes/register");
 const testDBRouter = require("./routes/testdb");
+const loginRouter = require("./routes/login");
 const rss = require("./services/rss/rss");
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // REGISTER ROUTES
 app.use("/", indexRouter);
 app.use("/register", registerRouter);
+app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/testdb", testDBRouter);
 
