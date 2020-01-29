@@ -28,8 +28,7 @@ router.post("/", function(req, res, next) {
   const lastname = req.body.lastname;
   const email = req.body.email;
   const password = req.body.password;
-
-  const sql = `INSERT INTO Users (firstname, lastname, email, password, coins) VALUES ('${firstname}','${lastname}','${email}',MD5('${password}'),0)`;
+  const sql = `INSERT INTO Users (firstname, lastname, email, password, coins) VALUES ('${firstname}','${lastname}','${email}',AES_ENCRYPT('${password}','my_secret_key_to_encrypt'),0)`;
   con.query(sql, function(err, result) {
     if (err) throw err;
     console.log("1 record inserted, ID: " + result.insertId);

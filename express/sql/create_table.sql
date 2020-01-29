@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `devbot`.`Users` (
   `_id` int NOT NULL AUTO_INCREMENT ,
   `lastname` VARCHAR(100) ,
   `firstname` VARCHAR(100) ,
-  `password` VARCHAR(32) ,
+  `password` BLOB ,
   `email` VARCHAR(100) ,
   `coins` int ,
   PRIMARY KEY (`_id`) );
