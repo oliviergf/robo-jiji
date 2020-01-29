@@ -4,10 +4,16 @@ import axios from "axios";
 class Register extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { firstname: "", lastname: "", email: "" };
+    this.state = {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmation: ""
+    };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRegisterInput = this.handleRegisterInput.bind(this);
   }
 
   handleChange(evt) {
@@ -18,12 +24,13 @@ class Register extends React.Component {
     console.log(this.state);
   }
 
-  handleSubmit(event) {
+  handleRegisterInput(event) {
     axios
       .post("http://localhost:3000/register", {
-        firstName: this.state.firstname,
-        lastName: this.state.lastname,
-        email: this.state.email
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        email: this.state.email,
+        password: this.state.password
       })
       .then(function(response) {
         console.log(response);
@@ -37,7 +44,7 @@ class Register extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleRegisterInput}>
         <label>
           firstname:
           <input
@@ -62,6 +69,24 @@ class Register extends React.Component {
             type="text"
             name="email"
             value={this.state.email}
+            onChange={this.handleChange}
+          />
+        </label>
+        <label>
+          password :
+          <input
+            type="text"
+            name="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
+        </label>
+        <label>
+          confirmation :
+          <input
+            type="text"
+            name="confirmation"
+            value={this.state.confirmation}
             onChange={this.handleChange}
           />
         </label>
