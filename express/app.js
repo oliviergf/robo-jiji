@@ -6,6 +6,7 @@ const cors = require("cors");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const registerRouter = require("./routes/register");
 const testDBRouter = require("./routes/testdb");
 const rss = require("./services/rss/rss");
 const app = express();
@@ -28,8 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use("/", indexRouter);
+// REGISTER ROUTES
 app.use("/", indexRouter);
+app.use("/register", registerRouter);
 app.use("/users", usersRouter);
 app.use("/testdb", testDBRouter);
 
@@ -49,6 +51,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-rss();
+// uncomment this to run RSS
+// rss();
 
 module.exports = app;
