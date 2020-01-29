@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 class Register extends React.Component {
   constructor(props) {
@@ -18,8 +19,19 @@ class Register extends React.Component {
   }
 
   handleSubmit(event) {
-    alert("A name was submitted: " + this.state);
-    event.preventDefault();
+    // Make a request for a user with a given ID
+    axios
+      .post("http://localhost:3000/register", {
+        firstName: this.state.firstname,
+        lastName: this.state.lastname,
+        email: this.state.email
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   render() {
