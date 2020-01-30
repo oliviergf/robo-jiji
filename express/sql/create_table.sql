@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `devbot`.`Users` (
   `lastname` VARCHAR(100) ,
   `firstname` VARCHAR(100) ,
   `password` BLOB ,
-  `email` VARCHAR(100) ,
+  `email` VARCHAR(100) UNIQUE,
   `coins` int ,
   PRIMARY KEY (`_id`) );
 

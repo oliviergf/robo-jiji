@@ -12,6 +12,13 @@ const loginRouter = require("./routes/login");
 const rss = require("./services/rss/rss");
 const app = express();
 
+/**   TECHSTACK CHEZ SOFDESK
+ * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
+ * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github
+ * / TravisCI pour source management TravisCI
+ * / AWS pour déploiements
+ */
+
 app.use(
   cors({
     origin: true,

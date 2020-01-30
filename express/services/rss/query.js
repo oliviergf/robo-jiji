@@ -54,6 +54,8 @@ const rssQuery = link => {
         con.end();
       });
 
+      //faire un conditional GET ?
+
       //LOGS
       console.log("-RSS query");
       console.log(`--current time: ${timeQuery}`);
