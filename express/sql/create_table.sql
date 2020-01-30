@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `devbot`.`Geo` (
 
 CREATE TABLE IF NOT EXISTS `devbot`.`Apparts` (
   `_id` int NOT NULL AUTO_INCREMENT ,
-  `geo_id` int NOT NULL  ,
+  `geo_id` int NOT NULL  , 
   `title` VARCHAR(300) ,
   `price` SMALLINT ,
   `link` VARCHAR(255) ,
