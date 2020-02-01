@@ -1,5 +1,6 @@
 import React from "react";
 import Register from "./components/Register";
+import Login from "./components/Login";
 import "./App.css";
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div className="App">
       bonjour hi!
       <Register />
+      <Login />
     </div>
   );
 }

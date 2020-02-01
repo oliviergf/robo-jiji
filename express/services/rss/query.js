@@ -1,14 +1,14 @@
 const request = require("request");
 const parser = require("fast-xml-parser");
-const configs = require("../../sql/config");
-const mysql = require("mysql");
-const con = mysql.createConnection(configs);
+// const configs = require("../../sql_tobeDeleted/config");
+// const mysql = require("mysql");
+// const con = mysql.createConnection(configs);
 
 const rssQuery = link => {
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
+  // con.connect(function(err) {
+  //   if (err) throw err;
+  //   console.log("Connected!");
+  // });
 
   const time = new Date(Date.now());
   let count = 0;
@@ -51,8 +51,10 @@ const rssQuery = link => {
         //   console.log("Todo Id:" + results.insertId);
         // });
 
-        con.end();
+        // con.end();
       });
+
+      //faire un conditional GET ?
 
       //LOGS
       console.log("-RSS query");
