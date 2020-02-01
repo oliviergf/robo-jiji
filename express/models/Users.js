@@ -1,6 +1,6 @@
 module.exports = function(sequelize, Sequelize) {
-  var User = sequelize.define("seq_users", {
-    id: {
+  var Users = sequelize.define("Users", {
+    _id: {
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
@@ -16,16 +16,9 @@ module.exports = function(sequelize, Sequelize) {
       notEmpty: true
     },
 
-    username: {
-      type: Sequelize.TEXT
-    },
-
-    about: {
-      type: Sequelize.TEXT
-    },
-
     email: {
       type: Sequelize.STRING,
+      allowNull: false,
       validate: {
         isEmail: true
       }
@@ -46,5 +39,14 @@ module.exports = function(sequelize, Sequelize) {
     }
   });
 
-  return User;
+  Users.associate = models => {
+    Users.belongsToMany(models.Aparts, {
+      through: "UserApart",
+      as: "aparts",
+      foreignKey: "userId"
+    });
+    Users.hasMany(models.Zones, { foreignKey: "_id" });
+  };
+
+  return Users;
 };

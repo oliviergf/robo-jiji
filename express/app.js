@@ -13,6 +13,7 @@ const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const app = express();
+const models = require("./models");
 
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
@@ -47,11 +48,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-// TESTS FOR SEQUELIZE : https://code.tutsplus.com/tutorials/using-passport-with-sequelize-and-mysql--cms-27537
-//Models
-var models = require("./models");
+models.users;
 
-//Sync Database
+//Sync Database: will create any tables that are missing
 models.sequelize
   .sync()
   .then(function() {
