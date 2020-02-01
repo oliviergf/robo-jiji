@@ -7,6 +7,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const registerRouter = require("./routes/register");
+const dbTestRouter = require("./routes/db_test");
 const loginRouter = require("./routes/login");
 const rss = require("./services/rss/rss");
 const passport = require("passport");
@@ -68,6 +69,7 @@ app.use("/", indexRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/users", usersRouter);
+app.use("/db", dbTestRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
