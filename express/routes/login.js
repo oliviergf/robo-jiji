@@ -1,8 +1,13 @@
 var express = require("express");
 var router = express.Router();
+var passport = require("passport");
 
 /* GET React home page. */
-router.get("/", function(req, res, next) {
+router.get("/", passport.authenticate("local-signup"), function(
+  req,
+  res,
+  next
+) {
   const email = req.body.email;
   const password = req.body.password;
   res.send(

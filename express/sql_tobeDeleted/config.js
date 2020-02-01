@@ -6,3 +6,5 @@ let config = {
 };
 
 module.exports = config;
+
+//maybe to be deleted

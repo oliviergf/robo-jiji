@@ -1,6 +1,6 @@
 const request = require("request");
 const parser = require("fast-xml-parser");
-const configs = require("../../sql/config");
+const configs = require("../../sql_tobeDeleted/config");
 const mysql = require("mysql");
 const con = mysql.createConnection(configs);
 
