@@ -12,7 +12,8 @@ module.exports = function(passport, Users) {
         if (!user) {
           return done(null, false, { message: "Incorrect credentials." });
         }
-        return done(null, user);
+
+        return done(null, user.dataValues);
       }
     )
   );

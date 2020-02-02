@@ -64,6 +64,8 @@ app.use(session({ secret: "keyboard cat" })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
+// VISIT THIS LINK: https://levelup.gitconnected.com/everything-you-need-to-know-about-the-passport-local-passport-js-strategy-633bbab6195
+
 //load passport strategies
 require("./services/passport/passport.js")(passport, models.Users);
 
@@ -77,7 +79,9 @@ passport.deserializeUser(async function(id, done) {
     where: { _id: id }
   });
 
-  done(null, user); //should error instead of null
+  console.log("deseralized user", user);
+
+  done(null, user.dataValues); //should error instead of null
 });
 
 /**
@@ -85,6 +89,11 @@ passport.deserializeUser(async function(id, done) {
  *
  * --------------------------------------------------------------------------------
  */
+
+app.use((req, res, next) => {
+  console.log("req.session", req.session);
+  return next();
+});
 app.use("/", indexRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
