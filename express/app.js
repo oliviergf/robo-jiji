@@ -80,6 +80,11 @@ app.use(
 //   next();
 // });
 
+app.use((req, res, next) => {
+  console.log("req.headers", req.headers);
+  return next();
+});
+
 app.use(express.static(`${__dirname}/build`));
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -125,10 +130,6 @@ passport.deserializeUser(async function(id, done) {
  * --------------------------------------------------------------------------------
  */
 
-app.use((req, res, next) => {
-  console.log("req.session", req.session);
-  return next();
-});
 app.use("/", indexRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
