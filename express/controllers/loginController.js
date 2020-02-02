@@ -10,6 +10,8 @@ LoginController = {
       }
     });
 
+    console.log("login controler here");
+
     if (userCount === 1) {
       console.log("user exist create session and send back JWT?");
     } else {

@@ -67,6 +67,19 @@ app.use(passport.session()); // persistent login sessions
 //load passport strategies
 require("./services/passport/passport.js")(passport, models.Users);
 
+//serialize user into session by its _id only : might be a security issue tho.
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async function(id, done) {
+  let user = await model.Users.findOne({
+    where: { _id: id }
+  });
+
+  done(null, user); //should error instead of null
+});
+
 /**
  * SETS UP ROUTES
  *

@@ -24,7 +24,7 @@ class Login extends React.Component {
   handleRegisterInput(event) {
     axios
       .post("http://localhost:3000/login", {
-        username: this.state.email,
+        email: this.state.email,
         password: this.state.password
       })
       .then(function(response) {
