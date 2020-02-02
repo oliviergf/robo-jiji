@@ -21,6 +21,8 @@ router.post("/", async function(req, res, next) {
     password: req.body.password
   };
 
+  console.log(userInfo);
+
   await registerController.registerUser(userInfo);
   res.send("register that damn user!");
 });

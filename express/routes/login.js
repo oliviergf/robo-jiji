@@ -13,7 +13,12 @@ router.get("/", function(req, res, next) {
 });
 
 /* POST React home page. */
-router.post("/", async function(req, res, next) {
+router.post("/", passport.authenticate("local"), async function(
+  req,
+  res,
+  next
+) {
+  console.log("we got her!");
   let userInfo = {
     email: req.body.email,
     password: req.body.password
