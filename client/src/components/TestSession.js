@@ -14,7 +14,13 @@ class Register extends React.Component {
   handleChange(evt) {
     var self = this;
     axios
-      .get("http://localhost:3000/db")
+      .get("http://localhost:3000/db", {
+        withCredentials: true,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      })
       .then(function(response) {
         // handle success
         console.log(this);

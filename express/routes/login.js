@@ -20,15 +20,16 @@ router.post("/", passport.authenticate("local"), async function(
 ) {
   // console.log("req.session.passport.user");
   // console.log(req.session.passport.user);
-  // console.log("req.user");
-  // console.log(req.user);
+  console.log("req.user");
+  console.log(req.user);
   let userInfo = {
     email: req.body.email,
     password: req.body.password
   };
 
   await loginController.login(userInfo);
-  res.send("login");
+
+  res.send(`THE USER HAS LOGGED IN!${userInfo}`);
 });
 
 module.exports = router;

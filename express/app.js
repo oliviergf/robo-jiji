@@ -13,8 +13,8 @@ const rss = require("./services/rss/rss");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const app = express();
 const models = require("./models");
+const app = express();
 
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
@@ -22,6 +22,7 @@ const models = require("./models");
  * / TravisCI pour source management TravisCI
  * / AWS pour déploiements
  */
+
 /**
  * SYNC DB
  *
@@ -54,13 +55,45 @@ app.use(
     credentials: true
   })
 );
+// // Add headers
+// app.use(function(req, res, next) {
+//   // Website you wish to allow to connect
+//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+
+//   // Request methods you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+
+//   // Request headers you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,content-type"
+//   );
+
+//   // Set to true if you need the website to include cookies in the requests sent
+//   // to the API (e.g. in case you use sessions)
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+
+//   // Pass to next layer of middleware
+//   next();
+// });
+
 app.use(express.static(`${__dirname}/build`));
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(session({ secret: "keyboard cat" })); // session secret
+app.use(
+  session({
+    secret: "keyboard cat",
+    cookie: {
+      secure: false
+    }
+  })
+); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
@@ -71,6 +104,8 @@ require("./services/passport/passport.js")(passport, models.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
 passport.serializeUser(function(user, done) {
+  console.log("serialising user");
+  console.log(user);
   done(null, user._id);
 });
 
