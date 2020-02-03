@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../services/axios";
 
 class Login extends React.Component {
   constructor(props) {
@@ -23,14 +23,10 @@ class Login extends React.Component {
 
   handleRegisterInput(event) {
     axios
-      .post(
-        "http://localhost:3000/login",
-
-        {
-          email: this.state.email,
-          password: this.state.password
-        }
-      )
+      .post("http://localhost:3000/login", {
+        email: this.state.email,
+        password: this.state.password
+      })
       .then(function(response) {
         console.log(response);
       })

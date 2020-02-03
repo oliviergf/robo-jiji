@@ -10,6 +10,7 @@ module.exports = function(passport, Users) {
         passReqToCallback: true
       },
       async function(req, username, password, done) {
+        console.log("it got here");
         if (req.user) {
           return done(null, req.user);
         }

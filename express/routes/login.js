@@ -3,7 +3,7 @@ var router = express.Router();
 var passport = require("passport");
 const loginController = require("../controllers/loginController");
 
-/* GET React home page. */
+/* GET   */
 router.get("/", function(req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
@@ -12,16 +12,12 @@ router.get("/", function(req, res, next) {
   );
 });
 
-/* POST React home page. */
+/* POST  */
 router.post("/", passport.authenticate("local"), async function(
   req,
   res,
   next
 ) {
-  // console.log("req.session.passport.user");
-  // console.log(req.session.passport.user);
-  console.log("req.user");
-  console.log(req.user);
   let userInfo = {
     email: req.body.email,
     password: req.body.password

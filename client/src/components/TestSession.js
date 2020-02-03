@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../services/axios";
 
 class Register extends React.Component {
   constructor(props) {
@@ -14,16 +14,9 @@ class Register extends React.Component {
   handleChange(evt) {
     var self = this;
     axios
-      .get("http://localhost:3000/db", {
-        withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
-        }
-      })
+      .get("http://localhost:3000/db", { withCredentials: true })
       .then(function(response) {
         // handle success
-        console.log(this);
         self.setState({ isLogged: true });
       })
       .catch(function(error) {

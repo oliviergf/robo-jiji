@@ -55,30 +55,6 @@ app.use(
     credentials: true
   })
 );
-// // Add headers
-// app.use(function(req, res, next) {
-//   // Website you wish to allow to connect
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
-
-//   // Request methods you wish to allow
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-
-//   // Request headers you wish to allow
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type"
-//   );
-
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-
-//   // Pass to next layer of middleware
-//   next();
-// });
 
 app.use((req, res, next) => {
   console.log("req.headers", req.headers);
@@ -109,19 +85,15 @@ require("./services/passport/passport.js")(passport, models.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
 passport.serializeUser(function(user, done) {
-  console.log("serialising user");
-  console.log(user);
   done(null, user._id);
 });
 
 passport.deserializeUser(async function(id, done) {
-  let user = await model.Users.findOne({
+  let user = await models.Users.findOne({
     where: { _id: id }
   });
-
-  console.log("deseralized user", user);
-
-  done(null, user.dataValues); //should error instead of null
+  console.log("deserialise user", user.dataValues);
+  done(null, user.dataValues); //should error instead of null?
 });
 
 /**
