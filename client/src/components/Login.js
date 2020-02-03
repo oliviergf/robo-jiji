@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../services/axios";
 
 class Login extends React.Component {
   constructor(props) {

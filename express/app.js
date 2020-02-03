@@ -13,8 +13,8 @@ const rss = require("./services/rss/rss");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const app = express();
 const models = require("./models");
+const app = express();
 
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
@@ -23,54 +23,83 @@ const models = require("./models");
  * / AWS pour déploiements
  */
 
+/**
+ * SYNC DB
+ *
+ * --------------------------------------------------------------------------------
+ */
+
+//creates new models if not in there; will be deleted later
+models.sequelize.sync();
+
+// sequelize
+//   .authenticate()
+//   .then(() => console.log("Connection has been established successfully."))
+//   .catch(err => console.error("Unable to connect to the database:", err));
+
+/**
+ * SETS UP EXPRESS
+ *
+ * --------------------------------------------------------------------------------
+ */
+
+//to be looked over when ready to deploy
 app.use(
   cors({
     origin: true,
     credentials: true
   })
 );
+
 app.use(express.static(`${__dirname}/build`));
-
-// // view engine setup
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "jade");
-
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-//passport
-// For Passport
 app.use(
-  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
-); // session secret
+  session({
+    secret: "keyboard cat",
+    cookie: {
+      secure: false //to allow HTTP over HTTPS
+    }
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-models.users;
-
-//Sync Database: will create any tables that are missing
-models.sequelize
-  .sync()
-  .then(function() {
-    console.log("Nice! Database looks fine");
-  })
-  .catch(function(err) {
-    console.log(err, "Something went wrong with the Database Update!");
-  });
-
 //load passport strategies
-require("./services/passport/passport.js")(passport, models.user);
+require("./services/passport/passport.js")(passport, models.Users);
 
-// REGISTER ROUTES
+//serialize user into session by its _id only : might be a security issue tho.
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async function(id, done) {
+  let user = await models.Users.findOne({
+    where: { _id: id }
+  });
+  done(null, user.dataValues);
+});
+
+/**
+ * SETS UP ROUTES
+ *
+ * --------------------------------------------------------------------------------
+ */
+
 app.use("/", indexRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/db", dbTestRouter);
 
+/**
+ * ERROR HANDELING
+ *
+ * --------------------------------------------------------------------------------
+ */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -81,13 +110,17 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
+  console.log({
+    message: err.message,
+    error: err
+  });
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.json({
+    message: err.message,
+    error: err
+  });
 });
-
-// uncomment this to run RSS
-// rss();
 
 module.exports = app;

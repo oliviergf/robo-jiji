@@ -1,6 +1,7 @@
 import React from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import TestSession from "./components/TestSession";
 import "./App.css";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       bonjour hi!
       <Register />
       <Login />
+      <TestSession />
     </div>
   );
 }
