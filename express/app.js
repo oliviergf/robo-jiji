@@ -29,14 +29,8 @@ const app = express();
  * --------------------------------------------------------------------------------
  */
 
-models.sequelize
-  .sync()
-  .then(function() {
-    console.log("Nice! Database looks fine");
-  })
-  .catch(function(err) {
-    console.log(err, "Something went wrong with the Database Update!");
-  });
+//creates new models if not in there; will be deleted later
+models.sequelize.sync();
 
 // sequelize
 //   .authenticate()
@@ -49,17 +43,13 @@ models.sequelize
  * --------------------------------------------------------------------------------
  */
 
+//to be looked over when ready to deploy
 app.use(
   cors({
     origin: true,
     credentials: true
   })
 );
-
-app.use((req, res, next) => {
-  console.log("req.headers", req.headers);
-  return next();
-});
 
 app.use(express.static(`${__dirname}/build`));
 app.use(logger("dev"));
@@ -71,14 +61,12 @@ app.use(
   session({
     secret: "keyboard cat",
     cookie: {
-      secure: false
+      secure: false //to allow HTTP over HTTPS
     }
   })
-); // session secret
+);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-
-// VISIT THIS LINK: https://levelup.gitconnected.com/everything-you-need-to-know-about-the-passport-local-passport-js-strategy-633bbab6195
 
 //load passport strategies
 require("./services/passport/passport.js")(passport, models.Users);
@@ -92,8 +80,7 @@ passport.deserializeUser(async function(id, done) {
   let user = await models.Users.findOne({
     where: { _id: id }
   });
-  console.log("deserialise user", user.dataValues);
-  done(null, user.dataValues); //should error instead of null?
+  done(null, user.dataValues);
 });
 
 /**
