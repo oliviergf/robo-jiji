@@ -1,5 +1,6 @@
 const request = require("request-promise");
 const parser = require("fast-xml-parser");
+const TIMER = 60000 * 5; // 5minutes
 const rssQuery = link => {
   let count = 0;
   let lastQuery = [];
@@ -11,12 +12,12 @@ const rssQuery = link => {
       let aparts = parser.parse(response).rss.channel.item;
 
       //select new items
-      new_aparts = aparts.filter(apart => lastQuery.includes(apart));
+      let new_aparts = aparts.filter(apart => lastQuery.includes(apart));
 
       //assign last items to old query array
       lastQuery = aparts;
 
-      console.log(new_aparts);
+      console.log("new_aparts", new_aparts);
     } catch (err) {
       console.log(err);
     }
@@ -25,7 +26,7 @@ const rssQuery = link => {
   //make query every 5 seconds
   setInterval(function() {
     call();
-  }, 5000);
+  }, TIMER);
   //initial call where server boots
   call();
 };
