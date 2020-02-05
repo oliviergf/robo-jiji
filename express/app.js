@@ -14,6 +14,7 @@ const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const models = require("./models");
+const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
 /**   TECHSTACK CHEZ SOFDESK
@@ -31,11 +32,6 @@ const app = express();
 
 //creates new models if not in there; will be deleted later
 models.sequelize.sync();
-
-// sequelize
-//   .authenticate()
-//   .then(() => console.log("Connection has been established successfully."))
-//   .catch(err => console.error("Unable to connect to the database:", err));
 
 /**
  * SETS UP EXPRESS
@@ -65,6 +61,13 @@ app.use(
     }
   })
 );
+
+/**
+ * SETS UP PASSPORT
+ *
+ * --------------------------------------------------------------------------------
+ */
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
@@ -94,6 +97,14 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/db", dbTestRouter);
+
+/**
+ * launches RSS worker
+ *
+ * --------------------------------------------------------------------------------
+ */
+
+RSSPoolWorkers();
 
 /**
  * ERROR HANDELING
