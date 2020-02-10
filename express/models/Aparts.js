@@ -30,7 +30,8 @@ module.exports = function(sequelize, Sequelize) {
     },
 
     creation_date: {
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
+      defaultValue: sequelize.NOW
     },
 
     rooms: {
