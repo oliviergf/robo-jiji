@@ -23,8 +23,11 @@ const rssQuery = link => {
       //assign last items to old query array
       aparts.map(appart => lastQuery.push(appart.guid));
 
-      //adds new appart to db : todo: finish this
+      //todo: handle room size
+      //inserts new appart in db
       new_aparts.map(apart => {
+        //skip appart with no price?
+        if (apart.price === undefined) continue;
         models.Aparts.create({
           title: apart.title,
           price: apart["g-core:price"],
@@ -34,6 +37,8 @@ const rssQuery = link => {
             type: "Point",
             coordinates: [apart["geo:lat"], apart["geo:long"]]
           }
+        }).catch(err => {
+          console.log(err.original.sqlMessage);
         });
       });
 
