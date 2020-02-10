@@ -1,22 +1,54 @@
 const request = require("request-promise");
 const parser = require("fast-xml-parser");
+const models = require("../../models");
+const TIMER = 60000 * 5; // 5minutes
+
 const rssQuery = link => {
   let count = 0;
   let lastQuery = [];
 
   let call = async () => {
     try {
-      //make query to link
+      //sends a get query to link
       const response = await request(link);
-      let aparts = parser.parse(response).rss.channel.item;
+      const aparts = parser.parse(response).rss.channel.item;
 
-      //select new items
-      new_aparts = aparts.filter(apart => lastQuery.includes(apart));
+      console.log("last query: ", lastQuery);
+
+      //filter for new items
+      const new_aparts = aparts.filter(
+        apart => !lastQuery.includes(apart.guid)
+      );
 
       //assign last items to old query array
-      lastQuery = aparts;
+      aparts.map(appart => lastQuery.push(appart.guid));
 
-      console.log(new_aparts);
+      //todo: handle room size
+      //inserts new appart in db
+      new_aparts.map(apart => {
+        //skip appart with no price?
+        if (apart.price === undefined) continue;
+        models.Aparts.create({
+          title: apart.title,
+          price: apart["g-core:price"],
+          description: apart.description,
+          link: apart.link,
+          localisation: {
+            type: "Point",
+            coordinates: [apart["geo:lat"], apart["geo:long"]]
+          }
+        }).catch(err => {
+          console.log(err.original.sqlMessage);
+        });
+      });
+
+      //query for what zones are affected
+
+      //append new appart to user's zones
+
+      console.log("new apparts founded: ", new_aparts.length);
+      console.log("query count :", count);
+      count++;
     } catch (err) {
       console.log(err);
     }
@@ -25,7 +57,7 @@ const rssQuery = link => {
   //make query every 5 seconds
   setInterval(function() {
     call();
-  }, 5000);
+  }, TIMER);
   //initial call where server boots
   call();
 };

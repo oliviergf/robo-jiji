@@ -21,16 +21,13 @@ module.exports = function(sequelize, Sequelize) {
     },
 
     link: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      unique: true
     },
 
     description: {
       type: Sequelize.TEXT,
       allowNull: false
-    },
-
-    creation_date: {
-      type: Sequelize.DATE
     },
 
     rooms: {
