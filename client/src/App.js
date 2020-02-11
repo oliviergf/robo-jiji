@@ -1,12 +1,11 @@
 import React from "react";
+import axios from "./services/axios";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import TestSession from "./components/TestSession";
 import Home from "./components/Home";
 import "typeface-roboto";
 import "./App.css";
 import Button from "@material-ui/core/Button";
-
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -25,8 +24,6 @@ const styles = theme => ({
   }
 });
 
-//todo: sur une méthode genre 'beforecomponent mount' appeler le serveur pour voir si on a un cookie
-// si oui logger le user direct
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +31,7 @@ class App extends React.Component {
       isLoggedIn: false,
       userFirstName: ""
     };
+    this.testBrowserSession();
   }
 
   logUser = user => {
@@ -41,6 +39,19 @@ class App extends React.Component {
       isLoggedIn: true,
       userFirstName: user.firstname
     });
+  };
+
+  //test whether the current browser contains a valid session
+  testBrowserSession = () => {
+    let self = this;
+    axios
+      .get("http://localhost:3000/sessionLogin")
+      .then(function(response) {
+        self.logUser(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   render() {
@@ -77,14 +88,6 @@ class App extends React.Component {
                   register
                 </Link>
               </Button>
-              <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/testSession"
-                >
-                  testSesh
-                </Link>
-              </Button>
               <Typography variant="h6" className={classes.title}>
                 Kijiji Bot App
               </Typography>
@@ -101,9 +104,6 @@ class App extends React.Component {
             </Route>
             <Route path="/login">
               <Login logUserIn={this.logUser} />
-            </Route>
-            <Route path="/testSession">
-              <TestSession />
             </Route>
             <Route path="/">
               <Home />

@@ -3,6 +3,9 @@ import axios from "../services/axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 import { Redirect } from "react-router";
 
+/**
+ * TODO: ajouter validation du input et afficher a l'utilisateur why son nom fuck
+ */
 class Login extends React.Component {
   constructor(props) {
     super(props);

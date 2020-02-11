@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 
+/**
+ * TODO: implement validation and redirect correctly to somewhere when user is logged in
+ */
 class Register extends React.Component {
   constructor(props) {
     super(props);

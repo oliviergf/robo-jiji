@@ -8,10 +8,12 @@ router.get("/", async function(req, res, next) {
   console.log("req user", req.user);
   console.log("req session", req.session);
 
+  //TODO: might want to send more info here
+  //todo: update user last loggedin
   if (req.isAuthenticated()) {
-    res.send("<h1>You are authenticated</h1>");
+    res.send({ firstname: req.user.firstname });
   } else {
-    res.send("<h1>You are not authenticated</h1>");
+    res.send(401);
   }
 });
 
