@@ -1,13 +1,15 @@
 import React from "react";
 import axios from "../services/axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
+import { Redirect } from "react-router";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      fireRedirect: false
     };
   }
 
@@ -27,6 +29,9 @@ class Login extends React.Component {
       .then(function(response) {
         //send back userdata to App component
         self.props.logUserIn(response.data);
+        self.setState({ fireRedirect: true });
+        //redirects to home
+        // history.push("/home");
       })
       .catch(function(error) {
         console.log(error);
@@ -36,36 +41,40 @@ class Login extends React.Component {
   };
 
   render() {
+    const { fireRedirect } = this.state;
     return (
-      <form onSubmit={this.handleRegisterInput}>
-        <div>
-          <FormControl>
-            <InputLabel htmlFor="component-simple">email</InputLabel>
-            <Input
-              id="component-simple"
-              name="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </FormControl>
-        </div>
-        <div>
-          <FormControl>
-            <InputLabel htmlFor="component-simple">password</InputLabel>
-            <Input
-              id="component-simple"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </FormControl>
-        </div>
-        <div>
-          <Button type="submit" value="login">
-            login
-          </Button>
-        </div>
-      </form>
+      <div>
+        <form onSubmit={this.handleRegisterInput}>
+          <div>
+            <FormControl>
+              <InputLabel htmlFor="component-simple">email</InputLabel>
+              <Input
+                id="component-simple"
+                name="email"
+                value={this.state.email}
+                onChange={this.handleChange}
+              />
+            </FormControl>
+          </div>
+          <div>
+            <FormControl>
+              <InputLabel htmlFor="component-simple">password</InputLabel>
+              <Input
+                id="component-simple"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+            </FormControl>
+          </div>
+          <div>
+            <Button type="submit" value="login">
+              login
+            </Button>
+          </div>
+        </form>
+        {fireRedirect && <Redirect to={"/home"} />}
+      </div>
     );
   }
 }

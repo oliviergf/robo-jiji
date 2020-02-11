@@ -25,6 +25,8 @@ const styles = theme => ({
   }
 });
 
+//todo: sur une méthode genre 'beforecomponent mount' appeler le serveur pour voir si on a un cookie
+// si oui logger le user direct
 class App extends React.Component {
   constructor(props) {
     super(props);
