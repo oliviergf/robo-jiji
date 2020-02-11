@@ -13,6 +13,7 @@ router.get("/", function(req, res, next) {
  */
 router.post("/", async function(req, res, next) {
   //TODO: add event validation to protect from creating a shitton of Users
+  //TODO: CATCH ERROR THAT VALIDATION IS ALREADY USED
 
   const userInfo = {
     firstname: req.body.firstname,

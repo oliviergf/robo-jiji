@@ -2,18 +2,22 @@ const model = require("../models");
 
 LoginController = {
   login: async userinfo => {
-    //check that no user has the same email provided
-    let userCount = await model.Users.count({
+    //todo: check that no user has the same email provided
+    //todo: handle all exceptions
+    let user = await model.Users.findAll({
       where: {
         email: userinfo.email,
         password: userinfo.password
       }
     });
 
-    if (userCount === 1) {
-      console.log("user exist create session and send back JWT?");
+    //todo: implements last_login update :)
+
+    //todo: we may want to send more info than that.
+    if (user.length === 1) {
+      return user[0].dataValues.firstname;
     } else {
-      console.log("user doesnt exist");
+      return null;
     }
   }
 };

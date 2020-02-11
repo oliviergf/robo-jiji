@@ -1,7 +1,20 @@
 .App {
   text-align: center;
+  max-height: 100vh;
+  height: 100vh;
+}
+.body {
+  height: 90%;
 }
 
+.logoimg {
+  max-width: 15%;
+  max-height: 15%;
+}
+
+.makeStyles-root-1 {
+  height: 10%;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -26,6 +39,11 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.home {
+  background-color: #61dafb;
+  height: 100%;
 }
 
 @keyframes App-logo-spin {
