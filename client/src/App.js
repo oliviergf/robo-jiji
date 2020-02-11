@@ -28,11 +28,32 @@ const styles = theme => ({
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoggedIn: false,
+      userFirstName: ""
+    };
   }
+
+  logUser = user => {
+    this.setState({
+      isLoggedIn: true,
+      userFirstName: user.firstname
+    });
+  };
 
   render() {
     const { classes } = this.props;
-
+    let loginArea = (
+      <Link style={{ textDecoration: "none", color: "white" }} to="/login">
+        login
+      </Link>
+    );
+    if (this.state.isLoggedIn)
+      loginArea = (
+        <Link style={{ textDecoration: "none", color: "white" }} to="/home">
+          {this.state.userFirstName}
+        </Link>
+      );
     return (
       <div className="App">
         <div className={classes.root}>
@@ -66,12 +87,7 @@ class App extends React.Component {
                 Kijiji Bot App
               </Typography>
               <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/login"
-                >
-                  login
-                </Link>
+                {loginArea}
               </Button>
             </Toolbar>
           </AppBar>
@@ -82,7 +98,7 @@ class App extends React.Component {
               <Register />
             </Route>
             <Route path="/login">
-              <Login />
+              <Login logUserIn={this.logUser} />
             </Route>
             <Route path="/testSession">
               <TestSession />

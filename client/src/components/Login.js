@@ -18,13 +18,15 @@ class Login extends React.Component {
   };
 
   handleRegisterInput = evt => {
+    let self = this;
     axios
       .post("http://localhost:3000/login", {
         email: this.state.email,
         password: this.state.password
       })
       .then(function(response) {
-        //sends back username
+        //send back userdata to App component
+        self.props.logUserIn(response.data);
       })
       .catch(function(error) {
         console.log(error);

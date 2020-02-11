@@ -20,7 +20,7 @@ class Home extends React.Component {
           <Button>
             <Link
               style={{ textDecoration: "none", color: "white" }}
-              to="/register"
+              to="/login"
             >
               Login
             </Link>
