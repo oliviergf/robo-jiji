@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 
 class Register extends React.Component {
   constructor(props) {
@@ -14,11 +15,9 @@ class Register extends React.Component {
   }
 
   handleChange = evt => {
-    const value = evt.target.value;
     this.setState({
-      [evt.target.name]: value
+      [evt.target.name]: evt.target.value
     });
-    console.log(this.state);
   };
 
   handleRegisterInput = evt => {
@@ -42,52 +41,66 @@ class Register extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleRegisterInput}>
-        <label>
-          firstname:
-          <input
-            type="text"
-            name="firstname"
-            value={this.state.firstname}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          lastname:
-          <input
-            type="text"
-            name="lastname"
-            value={this.state.lastname}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          email:
-          <input
-            type="text"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          password :
-          <input
-            type="text"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          confirmation :
-          <input
-            type="text"
-            name="confirmation"
-            value={this.state.confirmation}
-            onChange={this.handleChange}
-          />
-        </label>
-        <input type="submit" value="Submit" />
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">firstname</InputLabel>
+            <Input
+              id="component-simple"
+              name="firstname"
+              value={this.state.firstname}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">lastname</InputLabel>
+            <Input
+              id="component-simple"
+              name="lastname"
+              value={this.state.lastname}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">email</InputLabel>
+            <Input
+              id="component-simple"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">password</InputLabel>
+            <Input
+              id="component-simple"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">confirmation</InputLabel>
+            <Input
+              id="component-simple"
+              name="confirmation"
+              value={this.state.confirmation}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <Button type="submit" value="Submit">
+            Submit
+          </Button>
+        </div>
       </form>
     );
   }

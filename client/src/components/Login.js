@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "../services/axios";
+import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 
 class Login extends React.Component {
   constructor(props) {
@@ -8,17 +9,12 @@ class Login extends React.Component {
       email: "",
       password: ""
     };
-
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleRegisterInput = this.handleRegisterInput.bind(this);
   }
 
   handleChange = evt => {
-    const value = evt.target.value;
     this.setState({
-      [evt.target.name]: value
+      [evt.target.name]: evt.target.value
     });
-    console.log(this.state);
   };
 
   handleRegisterInput = evt => {
@@ -28,7 +24,7 @@ class Login extends React.Component {
         password: this.state.password
       })
       .then(function(response) {
-        console.log(response);
+        //sends back username
       })
       .catch(function(error) {
         console.log(error);
@@ -40,26 +36,33 @@ class Login extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleRegisterInput}>
-        <label>
-          email:
-          <input
-            type="text"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          password:
-          <input
-            type="text"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-          />
-        </label>
-
-        <input type="submit" value="Login" />
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">email</InputLabel>
+            <Input
+              id="component-simple"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl>
+            <InputLabel htmlFor="component-simple">password</InputLabel>
+            <Input
+              id="component-simple"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChange}
+            />
+          </FormControl>
+        </div>
+        <div>
+          <Button type="submit" value="login">
+            login
+          </Button>
+        </div>
       </form>
     );
   }
