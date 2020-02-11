@@ -15,9 +15,9 @@ const rssQuery = link => {
 
       console.log("last query: ", lastQuery);
 
-      //filter for new items
+      //filter for new items and has price listed
       const new_aparts = aparts.filter(
-        apart => !lastQuery.includes(apart.guid)
+        apart => !lastQuery.includes(apart.guid) && apart["g-core:price"]
       );
 
       //assign last items to old query array
@@ -27,7 +27,6 @@ const rssQuery = link => {
       //inserts new appart in db
       new_aparts.map(apart => {
         //skip appart with no price?
-        if (apart.price === undefined) continue;
         models.Aparts.create({
           title: apart.title,
           price: apart["g-core:price"],

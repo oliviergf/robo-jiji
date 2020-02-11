@@ -7,11 +7,9 @@ class Register extends React.Component {
     this.state = {
       isLogged: false
     };
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(evt) {
+  handleChange = () => {
     var self = this;
     axios
       .get("http://localhost:3000/db", { withCredentials: true })
@@ -26,7 +24,7 @@ class Register extends React.Component {
       .then(function() {
         // always executed
       });
-  }
+  };
 
   render() {
     let divToAppear = <div>not logged in</div>;

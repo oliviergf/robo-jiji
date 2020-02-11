@@ -9,19 +9,19 @@ class Login extends React.Component {
       password: ""
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRegisterInput = this.handleRegisterInput.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleRegisterInput = this.handleRegisterInput.bind(this);
   }
 
-  handleChange(evt) {
+  handleChange = evt => {
     const value = evt.target.value;
     this.setState({
       [evt.target.name]: value
     });
     console.log(this.state);
-  }
+  };
 
-  handleRegisterInput(event) {
+  handleRegisterInput = evt => {
     axios
       .post("http://localhost:3000/login", {
         email: this.state.email,
@@ -34,8 +34,8 @@ class Login extends React.Component {
         console.log(error);
       });
 
-    event.preventDefault();
-  }
+    evt.preventDefault();
+  };
 
   render() {
     return (

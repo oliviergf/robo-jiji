@@ -104,7 +104,7 @@ app.use("/db", dbTestRouter);
  * --------------------------------------------------------------------------------
  */
 
-RSSPoolWorkers();
+// RSSPoolWorkers();
 
 /**
  * ERROR HANDELING

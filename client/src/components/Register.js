@@ -11,20 +11,17 @@ class Register extends React.Component {
       password: "",
       confirmation: ""
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRegisterInput = this.handleRegisterInput.bind(this);
   }
 
-  handleChange(evt) {
+  handleChange = evt => {
     const value = evt.target.value;
     this.setState({
       [evt.target.name]: value
     });
     console.log(this.state);
-  }
+  };
 
-  handleRegisterInput(event) {
+  handleRegisterInput = evt => {
     axios
       .post("http://localhost:3000/register", {
         firstname: this.state.firstname,
@@ -39,8 +36,8 @@ class Register extends React.Component {
         console.log(error);
       });
 
-    event.preventDefault();
-  }
+    evt.preventDefault();
+  };
 
   render() {
     return (
