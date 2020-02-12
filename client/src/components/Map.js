@@ -33,6 +33,7 @@ const MyMapComponent = compose(
           zIndex: 1
         }
       }}
+      onPolygonComplete={value => props.complete(value)}
     />
   </GoogleMap>
 ));

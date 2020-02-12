@@ -1,14 +1,18 @@
 import React from "react";
 import Map from "./Map";
-import { Container, Box, Button } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 
 class ZoneMenu extends React.Component {
+  onPolygonComplete = value => {
+    console.log("in zone menu");
+    console.log(value);
+  };
   render() {
     return (
       <Container className="home">
         thats our boy
-        <Map isMarkerShown />
-        // Map with a Marker
+        <Map isMarkerShown complete={this.onPolygonComplete} />
+        // Map with a drawing manager
       </Container>
     );
   }
