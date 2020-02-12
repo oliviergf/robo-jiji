@@ -3,6 +3,7 @@ import axios from "./services/axios";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import ZoneMenu from "./components/ZoneMenu";
 import "typeface-roboto";
 import "./App.css";
 import Button from "@material-ui/core/Button";
@@ -83,9 +84,9 @@ class App extends React.Component {
               <Button edge="start" color="inherit">
                 <Link
                   style={{ textDecoration: "none", color: "white" }}
-                  to="/register"
+                  to="/map"
                 >
-                  register
+                  Map
                 </Link>
               </Button>
               <Typography variant="h6" className={classes.title}>
@@ -104,6 +105,9 @@ class App extends React.Component {
             </Route>
             <Route path="/login">
               <Login logUserIn={this.logUser} />
+            </Route>
+            <Route path="/map">
+              <ZoneMenu />
             </Route>
             <Route path="/">
               <Home />
