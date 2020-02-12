@@ -1,13 +1,10 @@
 import React from "react";
-import { compose, withProps } from "recompose";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
+const { compose, withProps } = require("recompose");
+const { withScriptjs, withGoogleMap, GoogleMap } = require("react-google-maps");
+const {
+  DrawingManager
+} = require("react-google-maps/lib/components/drawing/DrawingManager");
 
-//is a higher-order component (HOC), needs to be wraped in functions to work.
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
@@ -20,11 +17,23 @@ const MyMapComponent = compose(
   withGoogleMap
 )(props => (
   <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-    {/* everything on the google maps need to be rendered here */}
-    {/* when we dont need to see it, trash it */}
-    {props.isMarkerShown && (
-      <Marker position={{ lat: -34.397, lng: 150.644 }} />
-    )}
+    <DrawingManager
+      defaultOptions={{
+        drawingControl: true,
+        drawingControlOptions: {
+          position: "",
+          drawingModes: ["polygon", "rectangle"]
+        },
+        circleOptions: {
+          fillColor: `#ffff00`,
+          fillOpacity: 1,
+          strokeWeight: 5,
+          clickable: false,
+          editable: true,
+          zIndex: 1
+        }
+      }}
+    />
   </GoogleMap>
 ));
 
