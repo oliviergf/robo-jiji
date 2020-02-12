@@ -1,4 +1,5 @@
 import React from "react";
+import { Polygon } from "react-google-maps";
 const { compose, withProps } = require("recompose");
 const { withScriptjs, withGoogleMap, GoogleMap } = require("react-google-maps");
 const {
@@ -17,24 +18,22 @@ const MyMapComponent = compose(
   withGoogleMap
 )(props => (
   <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-    <DrawingManager
-      defaultOptions={{
-        drawingControl: true,
-        drawingControlOptions: {
-          position: "",
-          drawingModes: ["polygon", "rectangle"]
-        },
-        circleOptions: {
-          fillColor: `#ffff00`,
-          fillOpacity: 1,
-          strokeWeight: 5,
-          clickable: false,
-          editable: true,
-          zIndex: 1
-        }
-      }}
-      onPolygonComplete={value => props.complete(value)}
-    />
+    {props.showDrawManager && (
+      <DrawingManager
+        defaultDrawingMode={"polygon"}
+        defaultOptions={{
+          drawingControl: true,
+          drawingControlOptions: {
+            position: "",
+            drawingModes: ["polygon"]
+          },
+          polygonOptions: {
+            editable: false
+          }
+        }}
+        onPolygonComplete={value => props.complete(value)}
+      />
+    )}
   </GoogleMap>
 ));
 
