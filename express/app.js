@@ -7,6 +7,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const registerRouter = require("./routes/register");
+const zoneRouter = require("./routes/zone");
 const sessionLoginRouter = require("./routes/sessionLogin");
 const loginRouter = require("./routes/login");
 const rss = require("./services/rss/rss");
@@ -97,6 +98,7 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/sessionLogin", sessionLoginRouter);
+app.use("/zone", zoneRouter);
 
 /**
  * launches RSS worker

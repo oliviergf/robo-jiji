@@ -3,6 +3,7 @@ import Map from "./Map";
 import ZoneList from "./ZoneList";
 import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
+import axios from "../services/axios";
 import { Polygon } from "react-google-maps";
 
 class ZoneMenu extends React.Component {
@@ -31,12 +32,8 @@ class ZoneMenu extends React.Component {
    * allows the user to draw on the map
    */
   create = () => {
-    this.appendPolygon();
-
     //allowdraw
     this.setState({ allowDraw: true });
-
-    //todo: send request to backend: should be {userId: 'blablabla',zoneid: id, coords: [...]}
   };
 
   delete = zoneId => {
@@ -51,14 +48,32 @@ class ZoneMenu extends React.Component {
 
     //todo: send request to DELETE backend: should be {userId: 'blablabla',zoneid: id, coords: [...]}
   };
-  //will be called when a polygon is complete
+  //will be called when a polygon is complete; value is the gmaps formated polygon
   onPolygonComplete = value => {
-    let newZone = { id: uuidv4(), polygone: value };
-
+    //create a new zone to be used in state
+    let newZone = { id: uuidv4(), polygon: value };
     this.setState({
       zones: [...this.state.zones, newZone],
       allowDraw: false
     });
+
+    let points = [];
+    //adds the path of the newly created zone
+    value
+      .getPath()
+      .g.map(pos => points.push({ lat: pos.lat(), lng: pos.lng() }));
+
+    axios
+      .post("http://localhost:3000/zone", {
+        zoneId: newZone.id,
+        path: points
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   render() {
