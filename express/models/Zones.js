@@ -9,6 +9,11 @@ module.exports = function(sequelize, Sequelize) {
     polygon: {
       type: Sequelize.GEOMETRY("POLYGON"),
       notEmpty: true
+    },
+
+    zoneId: {
+      type: Sequelize.STRING,
+      notEmpty: true
     }
   });
 

@@ -18,6 +18,8 @@ const models = require("./models");
 const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
+//todo: MAKE THE SESSION LAST LIKE;  WEEKS
+
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
  * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github

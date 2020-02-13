@@ -12,6 +12,23 @@ class ZoneMenu extends React.Component {
     this.state = { test: {}, zones: [], allowDraw: false };
   }
 
+  componentDidMount = () => {
+    //todo: display the user zones if there is any
+    axios
+      .get("http://localhost:3000/zone")
+      .then(function(response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function(error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function() {
+        // always executed
+      });
+  };
+
   appendPolygon = () => {
     const coords = [
       { lat: 0, lng: 0 },
@@ -28,6 +45,7 @@ class ZoneMenu extends React.Component {
       strokeWeight: 2
     });
   };
+
   /**
    * allows the user to draw on the map
    */
@@ -59,9 +77,7 @@ class ZoneMenu extends React.Component {
 
     let points = [];
     //adds the path of the newly created zone
-    value
-      .getPath()
-      .g.map(pos => points.push({ lat: pos.lat(), lng: pos.lng() }));
+    value.getPath().g.map(pos => points.push([pos.lat(), pos.lng()]));
 
     axios
       .post("http://localhost:3000/zone", {

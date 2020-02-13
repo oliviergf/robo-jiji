@@ -1,26 +1,33 @@
 var express = require("express");
 var router = express.Router();
-const Models = require("../models");
-var passport = require("passport");
+var zoneController = require("../controllers/zoneController");
 
-/* GET React home page. */
+/* GET the users zone */
 router.get("/", async function(req, res, next) {
-  console.log("req user", req.user);
   if (req.isAuthenticated()) {
-    console.log(req.body);
-    res.send({ firstname: req.user.firstname });
+    //todo: test with multiple zones
+    let zones = await zoneController.getAllZones(req.user._id);
+    res.send(zones);
   } else {
     res.send(401);
   }
 });
 
-/* GET React home page. */
+/* POST new zone. */
 router.post("/", async function(req, res, next) {
-  console.log("req user", req.user);
   if (req.isAuthenticated()) {
-    req.body.path.map(object => console.log(object));
-    console.log(req.body);
-    res.send({ firstname: req.user.firstname });
+    const path = req.body.path;
+    const zoneId = req.body.zoneId;
+
+    let zoneInfo = {
+      path: req.body.path,
+      zoneId: req.body.zoneId,
+      userId: req.user._id
+    };
+
+    await zoneController.createZone(zoneInfo);
+
+    res.send(200);
   } else {
     res.send(401);
   }
