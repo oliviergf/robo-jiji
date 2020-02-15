@@ -45,8 +45,7 @@ module.exports = function(sequelize, Sequelize) {
       as: "aparts",
       foreignKey: "userId"
     });
-    // https://medium.com/@edtimmer/sequelize-associations-basics-bde90c0deeaa
-    Users.hasMany(models.Zones, { foreignKey: "_id" });
+    Users.hasMany(models.Zones);
   };
 
   return Users;
