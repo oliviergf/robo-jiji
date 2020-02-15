@@ -17,8 +17,9 @@ module.exports = function(sequelize, Sequelize) {
     }
   });
 
-  Zones.associate = models => {
-    Zones.belongsTo(models.Users);
+  //medium.com/@edtimmer/sequelize-associations-basics-bde90c0deeaa
+  https: Zones.associate = models => {
+    Zones.hasOne(models.Users);
   };
 
   return Zones;
