@@ -6,7 +6,7 @@ var zoneController = require("../controllers/zoneController");
 router.get("/", async function(req, res, next) {
   if (req.isAuthenticated()) {
     //todo: test with multiple zones
-    let zones = await zoneController.getAllZones(req.user._id);
+    const zones = await zoneController.getAllZones(req.user._id);
     res.send(zones);
   } else {
     res.send(401);
@@ -16,15 +16,14 @@ router.get("/", async function(req, res, next) {
 /* POST new zone. */
 router.post("/", async function(req, res, next) {
   if (req.isAuthenticated()) {
-    const path = req.body.path;
-    const zoneId = req.body.zoneId;
-
-    let zoneInfo = {
+    console.log(req.user);
+    const zoneInfo = {
       path: req.body.path,
       zoneId: req.body.zoneId,
       userId: req.user._id
     };
 
+    //add try catch here?
     await zoneController.createZone(zoneInfo);
 
     res.send(200);

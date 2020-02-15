@@ -18,8 +18,6 @@ const models = require("./models");
 const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
-//todo: MAKE THE SESSION LAST LIKE;  WEEKS
-
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
  * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github
@@ -60,14 +58,16 @@ app.use(
   session({
     secret: "keyboard cat",
     cookie: {
-      secure: false //to allow HTTP over HTTPS
+      secure: false, //to allow HTTP over HTTPS
+      maxAge: 100000 //to set cookie expiring date
     }
   })
 );
 
 /**
  * SETS UP PASSPORT
- *
+ * todo: quand on change de user login; le serveur ne reconnait pas le nouveau ''cookie'' et pense que cetais lautre personne avant
+ * todo: checker quand esceque le cookie devrais fail. maybe voir ligne 75?
  * --------------------------------------------------------------------------------
  */
 

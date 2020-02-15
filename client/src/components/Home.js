@@ -8,7 +8,6 @@ class Home extends React.Component {
       <Container className="home">
         <Box justifyContent="center" alignItems="center">
           <div>put nice image here</div>
-          <div>put nice image here</div>
           <div>description of what we do</div>
           <Button>
             <Link

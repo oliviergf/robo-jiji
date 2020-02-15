@@ -2,23 +2,24 @@ const model = require("../models");
 
 zoneController = {
   createZone: async zoneInfo => {
-    let firstpoint = zoneInfo.path[0];
     //google maps doesnt add the closing point on the polygon but mysql needs it
-    zoneInfo.path.push(firstpoint);
+    const firstPoint = zoneInfo.path[0];
+    zoneInfo.path.push(firstPoint);
 
-    const polygonZone = {
-      type: "Polygon",
-      coordinates: [zoneInfo.path]
-    };
+    console.log(zoneInfo);
+
     await model.Zones.create({
       zoneId: zoneInfo.zoneId,
       UserId: zoneInfo.userId,
-      polygon: polygonZone
+      polygon: {
+        type: "Polygon",
+        coordinates: [zoneInfo.path]
+      }
     });
   },
   getAllZones: async userId => {
     //query db
-    let result = await model.Zones.findAll({
+    const result = await model.Zones.findAll({
       where: {
         UserId: userId
       }
