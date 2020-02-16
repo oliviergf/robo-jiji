@@ -27,7 +27,8 @@ const app = express();
 
 /**
  * SYNC DB
- * todo: remplace UserApparts par une association belongsToMany :  https://sequelize.org/master/class/lib/associations/base.js~Association.html
+ * todo:  UserApparts  association belongsToMany :  https://sequelize.org/master/class/lib/associations/base.js~Association.html
+ * todo: check pour timezone. doesnt seem right
  * --------------------------------------------------------------------------------
  */
 

@@ -4,7 +4,6 @@ import ZoneList from "./ZoneList";
 import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
-import { Polygon } from "react-google-maps";
 
 class ZoneMenu extends React.Component {
   constructor(props) {
@@ -13,51 +12,65 @@ class ZoneMenu extends React.Component {
   }
 
   componentDidMount = () => {
-    //todo: display the user zones if there is any
-    axios
-      .get("http://localhost:3000/zone")
-      .then(function(response) {
-        // handle success
-        console.log(response);
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-      });
+    let self = this;
+
+    // total hack; we had to wait for map component to render before using the GoogleMap object,
+    // its necessary for appending new zones to the map
+    setTimeout(function() {
+      axios
+        .get("http://localhost:3000/zone")
+        .then(function(response) {
+          // handle success
+          self.initZones(response.data);
+        })
+        .catch(function(error) {
+          // handle error
+          console.log(error);
+        })
+        .then(function() {
+          // always executed
+        });
+    }, 100);
   };
 
-  appendPolygon = () => {
-    const coords = [
-      { lat: 0, lng: 0 },
-      { lat: 1, lng: 1 },
-      { lat: 2, lng: 2 }
-    ];
-
-    //creates a new polygon. That would be added to the state when querying the zones for a user!
-    var flightPath = new window.google.maps.Polygon({
-      path: coords,
-      geodesic: true,
-      strokeColor: "#FF0000",
-      strokeOpacity: 1.0,
-      strokeWeight: 2
+  /**
+   * Receives the zones the user has and append them to state to be displayed
+   */
+  initZones = zones => {
+    let zonesToDisplay = [];
+    zones.map(zone => {
+      const coords = zone.path.map(pos => ({
+        lat: pos[0],
+        lng: pos[1]
+      }));
+      const newPolygon = new window.google.maps.Polygon({
+        path: coords,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      });
+      //create a new zone to be used in state
+      zonesToDisplay.push({ id: zone.zoneId, polygon: newPolygon });
+    });
+    console.log("zonesToDisplay", zonesToDisplay);
+    this.setState({
+      zones: zonesToDisplay
     });
   };
 
   /**
    * allows the user to draw on the map
    */
-  create = () => {
+  onCreateClick = () => {
     //allowdraw
     this.setState({ allowDraw: true });
   };
 
-  delete = zoneId => {
+  onDeleteClick = zoneId => {
     //deletes the targeted zone
     let zoneToDelete = this.state.zones.find(zone => zone.id === zoneId);
-    zoneToDelete.polygone.setMap(null);
+    zoneToDelete.polygon.setMap(null);
 
     //removes it from state zones
     this.setState({
@@ -66,6 +79,7 @@ class ZoneMenu extends React.Component {
 
     //todo: send request to DELETE backend: should be {userId: 'blablabla',zoneid: id, coords: [...]}
   };
+
   //will be called when a polygon is complete; value is the gmaps formated polygon
   onPolygonComplete = value => {
     //create a new zone to be used in state
@@ -95,13 +109,17 @@ class ZoneMenu extends React.Component {
   render() {
     return (
       <Container className="home">
-        <Button onClick={this.create}>create</Button>
+        <Button onClick={this.onCreateClick}>create</Button>
         <Map
           isMarkerShown
           complete={this.onPolygonComplete}
           showDrawManager={this.state.allowDraw}
+          zonesToDisplay={this.state.zones}
         />
-        <ZoneList zoneList={this.state.zones} deleteZoneFunc={this.delete} />
+        <ZoneList
+          zoneList={this.state.zones}
+          deleteZoneFunc={this.onDeleteClick}
+        />
       </Container>
     );
   }

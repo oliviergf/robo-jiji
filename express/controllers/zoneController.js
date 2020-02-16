@@ -29,9 +29,11 @@ zoneController = {
     //todo: decide where to delete the last point of polygon?
     let userZones = [];
     result.map(zone => {
+      // removes the last element to be google formatted polygon in UI
+      zone.dataValues.polygon.coordinates[0].splice(-1, 1);
       userZones.push({
         zoneId: zone.dataValues.zoneId,
-        path: zone.dataValues.polygon.coordinates
+        path: zone.dataValues.polygon.coordinates[0]
       });
     });
     return userZones;
