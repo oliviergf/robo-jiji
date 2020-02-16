@@ -13,9 +13,9 @@ class ZoneMenu extends React.Component {
 
   componentDidMount = () => {
     let self = this;
-
     // total hack; we had to wait for map component to render before using the GoogleMap object,
     // its necessary for appending new zones to the map
+    // todo: fix this shit
     setTimeout(function() {
       axios
         .get("http://localhost:3000/zone")
@@ -53,7 +53,6 @@ class ZoneMenu extends React.Component {
       //create a new zone to be used in state
       zonesToDisplay.push({ id: zone.zoneId, polygon: newPolygon });
     });
-    console.log("zonesToDisplay", zonesToDisplay);
     this.setState({
       zones: zonesToDisplay
     });
