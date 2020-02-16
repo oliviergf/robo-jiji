@@ -68,16 +68,30 @@ class ZoneMenu extends React.Component {
   };
 
   onDeleteClick = zoneId => {
-    //deletes the targeted zone
-    let zoneToDelete = this.state.zones.find(zone => zone.id === zoneId);
-    zoneToDelete.polygon.setMap(null);
-
-    //removes it from state zones
-    this.setState({
-      zones: this.state.zones.filter(zone => zone.id !== zoneToDelete.id)
-    });
-
     //todo: send request to DELETE backend: should be {userId: 'blablabla',zoneid: id, coords: [...]}
+    let self = this;
+    axios
+      .delete("http://localhost:3000/zone", {
+        data: {
+          zoneId: zoneId
+        }
+      })
+      .then(function(response) {
+        //if everything is OK, delete the zone from state too
+        if (response.status === 200) {
+          //deletes the targeted zone
+          let zoneToDelete = self.state.zones.find(zone => zone.id === zoneId);
+          zoneToDelete.polygon.setMap(null);
+
+          //removes it from state zones
+          self.setState({
+            zones: self.state.zones.filter(zone => zone.id !== zoneToDelete.id)
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   //will be called when a polygon is complete; value is the gmaps formated polygon

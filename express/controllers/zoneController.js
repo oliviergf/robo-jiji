@@ -37,6 +37,14 @@ zoneController = {
       });
     });
     return userZones;
+  },
+  deleteZone: async zoneInfo => {
+    //Removes element from DB
+    await model.Zones.destroy({
+      where: {
+        zoneId: zoneInfo.zoneId
+      }
+    });
   }
 };
 

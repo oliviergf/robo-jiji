@@ -31,4 +31,22 @@ router.post("/", async function(req, res, next) {
     res.send(401);
   }
 });
+
+router.delete("/", async function(req, res, next) {
+  if (req.isAuthenticated()) {
+    console.log(req.user);
+    const zoneInfo = {
+      zoneId: req.body.zoneId
+    };
+
+    try {
+      await zoneController.deleteZone(zoneInfo);
+    } catch (error) {
+      res.send(500);
+    }
+    res.send(200);
+  } else {
+    res.send(401);
+  }
+});
 module.exports = router;
