@@ -33,7 +33,7 @@ db.Sequelize = Sequelize;
 
 module.exports = db;
 
-//script to drop all tables
+//script to drop all tables; needed when modifying the models
 // drop table UserAparts;
 // drop table Zones;
 // drop table Users;

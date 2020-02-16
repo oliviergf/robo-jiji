@@ -7,6 +7,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const registerRouter = require("./routes/register");
+const zoneRouter = require("./routes/zone");
 const sessionLoginRouter = require("./routes/sessionLogin");
 const loginRouter = require("./routes/login");
 const rss = require("./services/rss/rss");
@@ -26,7 +27,8 @@ const app = express();
 
 /**
  * SYNC DB
- *
+ * todo:  UserApparts  association belongsToMany :  https://sequelize.org/master/class/lib/associations/base.js~Association.html
+ * todo: check pour timezone. doesnt seem right
  * --------------------------------------------------------------------------------
  */
 
@@ -57,14 +59,16 @@ app.use(
   session({
     secret: "keyboard cat",
     cookie: {
-      secure: false //to allow HTTP over HTTPS
+      secure: false, //to allow HTTP over HTTPS
+      maxAge: 100000 //to set cookie expiring date
     }
   })
 );
 
 /**
  * SETS UP PASSPORT
- *
+ * todo: quand on change de user login; le serveur ne reconnait pas le nouveau ''cookie'' et pense que cetais lautre personne avant
+ * todo: checker quand esceque le cookie devrais fail. maybe voir ligne 75?
  * --------------------------------------------------------------------------------
  */
 
@@ -97,6 +101,7 @@ app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/sessionLogin", sessionLoginRouter);
+app.use("/zone", zoneRouter);
 
 /**
  * launches RSS worker

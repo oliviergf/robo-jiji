@@ -35,7 +35,7 @@ class App extends React.Component {
     this.testBrowserSession();
   }
 
-  logUser = user => {
+  logUserCredentials = user => {
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname
@@ -48,7 +48,7 @@ class App extends React.Component {
     axios
       .get("http://localhost:3000/sessionLogin")
       .then(function(response) {
-        self.logUser(response.data);
+        self.logUserCredentials(response.data);
       })
       .catch(function(error) {
         console.log(error);
@@ -104,7 +104,7 @@ class App extends React.Component {
               <Register />
             </Route>
             <Route path="/login">
-              <Login logUserIn={this.logUser} />
+              <Login logUserIn={this.logUserCredentials} />
             </Route>
             <Route path="/map">
               <ZoneMenu />

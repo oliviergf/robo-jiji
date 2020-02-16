@@ -23,6 +23,8 @@ router.post("/", passport.authenticate("local"), async function(
     password: req.body.password
   };
 
+  console.log("here, yuserinfo", userInfo);
+
   //todo: here we only send back userfirstname
   // we may want to send more info than that, to let the user changes his account settings and stuff.
   const userFirstName = await loginController.login(userInfo);

@@ -34,6 +34,9 @@ const MyMapComponent = compose(
         onPolygonComplete={value => props.complete(value)}
       />
     )}
+    {props.zonesToDisplay.map(zone => {
+      return <Polygon key={zone.id} path={zone.polygon.latLngs.g[0].g} />;
+    })}
   </GoogleMap>
 ));
 
