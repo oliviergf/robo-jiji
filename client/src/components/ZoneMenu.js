@@ -8,13 +8,30 @@ import axios from "../services/axios";
 class ZoneMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { test: {}, zones: [], allowDraw: false };
+    this.state = {
+      test: {},
+      zones: [],
+      allowDraw: false,
+      userLocation: this.findUserCoord()
+    };
   }
+
+  findUserCoord = () => {
+    let userPosition = {};
+    navigator.geolocation.getCurrentPosition(pos => {
+      console.log(pos.coords);
+      userPosition.lat = pos.coords.latitude;
+      userPosition.lng = pos.coords.longitude;
+    });
+
+    return userPosition;
+  };
 
   componentDidMount = () => {
     let self = this;
     // total hack; we had to wait for map component to render before using the GoogleMap object,
     // its necessary for appending new zones to the map
+
     // todo: fix this shit
     setTimeout(function() {
       axios
@@ -128,6 +145,7 @@ class ZoneMenu extends React.Component {
           complete={this.onPolygonComplete}
           showDrawManager={this.state.allowDraw}
           zonesToDisplay={this.state.zones}
+          userLocation={this.state.userLocation}
         />
         <ZoneList
           zoneList={this.state.zones}

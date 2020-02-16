@@ -26,7 +26,6 @@ const rssQuery = link => {
       //todo: handle room size
       //inserts new appart in db
       new_aparts.map(apart => {
-        //skip appart with no price?
         models.Aparts.create({
           title: apart.title,
           price: apart["g-core:price"],
