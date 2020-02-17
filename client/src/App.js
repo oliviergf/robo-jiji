@@ -4,15 +4,11 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
+import Bar from "./components/Bar";
 import "typeface-roboto";
 import "./App.css";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { Switch, Route, Link } from "react-router-dom";
+
+import { Switch, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
@@ -46,27 +42,8 @@ class App extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  handleLogOut = () => {
-    let self = this;
-    axios
-      .get("http://localhost:3000/logout")
-      .then(function(response) {
-        // handle success
-        self.setState({
-          anchorEl: null,
-          isLoggedIn: false,
-          userFirstName: "",
-          anchorEl: null
-        });
-        console.log("ici", self.state);
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-      });
+  logoutHandeler = () => {
+    this.setState({ isLoggedIn: false, userFirstName: "" });
   };
 
   logUserCredentials = user => {
@@ -91,70 +68,15 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let loginArea;
 
-    if (this.state.isLoggedIn) {
-      loginArea = (
-        <div>
-          <Button
-            style={{ textDecoration: "none", color: "white" }}
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={this.handleClick}
-          >
-            {this.state.userFirstName}
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={Boolean(this.state.anchorEl)}
-            onClose={this.handleClose}
-          >
-            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleClose}>My account</MenuItem>
-            <MenuItem onClick={this.handleLogOut}>
-              <Link to="/home">Logout</Link>
-            </MenuItem>
-          </Menu>
-        </div>
-      );
-    } else {
-      loginArea = (
-        <Button edge="start" color="inherit">
-          <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-            login
-          </Link>
-        </Button>
-      );
-    }
     return (
       <div className="App">
         <div className={classes.root}>
-          <AppBar position="static">
-            <Toolbar>
-              <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/home"
-                >
-                  home
-                </Link>
-              </Button>
-              <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/map"
-                >
-                  Map
-                </Link>
-              </Button>
-              <Typography variant="h6" className={classes.title}>
-                Kijiji Bot App
-              </Typography>
-              {loginArea}
-            </Toolbar>
-          </AppBar>
+          <Bar
+            userLoggedOut={this.logoutHandeler}
+            isLoggedIn={this.state.isLoggedIn}
+            userFirstName={this.state.userFirstName}
+          />
         </div>
         <div className="body">
           <Switch>
