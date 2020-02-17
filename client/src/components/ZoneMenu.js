@@ -5,6 +5,7 @@ import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
 
+// todo: implement select zone in list
 class ZoneMenu extends React.Component {
   constructor(props) {
     super(props);

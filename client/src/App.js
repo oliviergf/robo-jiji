@@ -7,6 +7,8 @@ import ZoneMenu from "./components/ZoneMenu";
 import "typeface-roboto";
 import "./App.css";
 import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -30,10 +32,42 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      userFirstName: ""
+      userFirstName: "",
+      anchorEl: null
     };
     this.testBrowserSession();
   }
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  handleLogOut = () => {
+    let self = this;
+    axios
+      .get("http://localhost:3000/logout")
+      .then(function(response) {
+        // handle success
+        self.setState({
+          anchorEl: null,
+          isLoggedIn: false,
+          userFirstName: "",
+          anchorEl: null
+        });
+        console.log("ici", self.state);
+      })
+      .catch(function(error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function() {
+        // always executed
+      });
+  };
 
   logUserCredentials = user => {
     this.setState({
@@ -57,17 +91,43 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let loginArea = (
-      <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-        login
-      </Link>
-    );
-    if (this.state.isLoggedIn)
+    let loginArea;
+
+    if (this.state.isLoggedIn) {
       loginArea = (
-        <Link style={{ textDecoration: "none", color: "white" }} to="/home">
-          {this.state.userFirstName}
-        </Link>
+        <div>
+          <Button
+            style={{ textDecoration: "none", color: "white" }}
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={this.handleClick}
+          >
+            {this.state.userFirstName}
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={this.state.anchorEl}
+            keepMounted
+            open={Boolean(this.state.anchorEl)}
+            onClose={this.handleClose}
+          >
+            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+            <MenuItem onClick={this.handleLogOut}>
+              <Link to="/home">Logout</Link>
+            </MenuItem>
+          </Menu>
+        </div>
       );
+    } else {
+      loginArea = (
+        <Button edge="start" color="inherit">
+          <Link style={{ textDecoration: "none", color: "white" }} to="/login">
+            login
+          </Link>
+        </Button>
+      );
+    }
     return (
       <div className="App">
         <div className={classes.root}>
@@ -92,9 +152,7 @@ class App extends React.Component {
               <Typography variant="h6" className={classes.title}>
                 Kijiji Bot App
               </Typography>
-              <Button edge="start" color="inherit">
-                {loginArea}
-              </Button>
+              {loginArea}
             </Toolbar>
           </AppBar>
         </div>

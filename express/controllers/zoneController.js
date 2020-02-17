@@ -16,6 +16,8 @@ zoneController = {
         coordinates: [zoneInfo.path]
       }
     });
+
+    //todo: checker quels apparts relativement recents sont dans la nouvelle zone?
   },
   getAllZones: async userId => {
     //query db

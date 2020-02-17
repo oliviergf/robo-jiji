@@ -90,6 +90,11 @@ passport.deserializeUser(async function(id, done) {
   done(null, user.dataValues);
 });
 
+// terminates user session and delete req.user
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
 /**
  * SETS UP ROUTES
  *
