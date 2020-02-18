@@ -28,7 +28,6 @@ zoneController = {
     });
 
     //formats result
-    //todo: decide where to delete the last point of polygon?
     let userZones = [];
     result.map(zone => {
       // removes the last element to be google formatted polygon in UI

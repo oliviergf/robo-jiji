@@ -19,7 +19,7 @@ const MyMapComponent = compose(
 )(props => (
   <GoogleMap
     defaultZoom={12}
-    defaultCenter={{ lat: props.userLocation.lat, lng: props.userLocation.lng }}
+    defaultCenter={{ lat: props.userLocation.lat, lng: props.userLocation.lng }} //todo: sometimes fucks, fix it
   >
     {props.showDrawManager && (
       <DrawingManager

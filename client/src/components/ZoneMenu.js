@@ -20,7 +20,6 @@ class ZoneMenu extends React.Component {
   findUserCoord = () => {
     let userPosition = {};
     navigator.geolocation.getCurrentPosition(pos => {
-      console.log(pos.coords);
       userPosition.lat = pos.coords.latitude;
       userPosition.lng = pos.coords.longitude;
     });
@@ -74,6 +73,13 @@ class ZoneMenu extends React.Component {
     this.setState({
       zones: zonesToDisplay
     });
+  };
+
+  onZoneSelect = zoneId => {
+    let zoneToHighlight = this.state.zones.find(zone => zone.id === zoneId);
+    //todo: doesnt work here. fix this shit
+    zoneToHighlight.polygon.setOptions({ fillColor: "green" });
+    //might want to trigger rerender to pass zones to zonelist?
   };
 
   /**
@@ -151,6 +157,7 @@ class ZoneMenu extends React.Component {
         <ZoneList
           zoneList={this.state.zones}
           deleteZoneFunc={this.onDeleteClick}
+          onSelect={this.onZoneSelect}
         />
       </Container>
     );
