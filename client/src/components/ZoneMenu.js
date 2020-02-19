@@ -13,16 +13,23 @@ class ZoneMenu extends React.Component {
       test: {},
       zones: [],
       allowDraw: false,
-      userLocation: this.findUserCoord()
+      userLocation: this.findUserCoord() //or call findUserCoord but fucks sometime...
     };
   }
 
   findUserCoord = () => {
     let userPosition = {};
-    navigator.geolocation.getCurrentPosition(pos => {
-      userPosition.lat = pos.coords.latitude;
-      userPosition.lng = pos.coords.longitude;
-    });
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        userPosition.lat = pos.coords.latitude;
+        userPosition.lng = pos.coords.longitude;
+      },
+      () => {
+        //error handeler
+        userPosition.lat = 45.496205;
+        userPosition.lng = -73.571895;
+      }
+    );
 
     return userPosition;
   };
@@ -32,7 +39,7 @@ class ZoneMenu extends React.Component {
     // total hack; we had to wait for map component to render before using the GoogleMap object,
     // its necessary for appending new zones to the map
 
-    // todo: fix this shit;
+    // todo: fix this shit; add
     setTimeout(function() {
       axios
         .get("http://localhost:3000/zone")
