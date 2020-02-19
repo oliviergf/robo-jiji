@@ -44,9 +44,17 @@ const rssQuery = link => {
       // });
 
       //query for what zones are affected
-      //todo: utiliser https://stackoverflow.com/questions/32920743/mysql-st-within-with-polygon ST_withn. avec un ANY ?
-      const users = await models.sequelize.query("SELECT * FROM `Aparts`");
+      //todo: ques qui arrive quand ya des values qui fuck avec le insert select?
+      const users = await models.sequelize.query(
+        "INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt) " +
+          "select Zones.UserId as userId, Aparts._id as appart_id, NOW(),Now() " +
+          "from Zones, Aparts " +
+          "where st_contains(Zones.polygon,Aparts.localisation);"
+      );
       console.log("users", users);
+
+      const bruh = await models.sequelize.query("select * from UserAparts");
+      console.log("bruh", bruh);
       console.log("table length", users[0].length);
       //append new appart to user's zones
 
