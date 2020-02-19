@@ -32,7 +32,7 @@ class ZoneMenu extends React.Component {
     // total hack; we had to wait for map component to render before using the GoogleMap object,
     // its necessary for appending new zones to the map
 
-    // todo: fix this shit
+    // todo: fix this shit;
     setTimeout(function() {
       axios
         .get("http://localhost:3000/zone")
@@ -47,7 +47,7 @@ class ZoneMenu extends React.Component {
         .then(function() {
           // always executed
         });
-    }, 100);
+    }, 300);
   };
 
   /**
@@ -76,9 +76,13 @@ class ZoneMenu extends React.Component {
   };
 
   onZoneSelect = zoneId => {
+    //doesnt work
     let zoneToHighlight = this.state.zones.find(zone => zone.id === zoneId);
-    //todo: doesnt work here. fix this shit
+    let others = this.state.zones.filter(zone => zone.id !== zoneId);
     zoneToHighlight.polygon.setOptions({ fillColor: "green" });
+    others.push(zoneToHighlight);
+    this.setState({ zones: others });
+
     //might want to trigger rerender to pass zones to zonelist?
   };
 
