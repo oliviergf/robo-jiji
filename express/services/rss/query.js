@@ -2,9 +2,7 @@ const request = require("request-promise");
 const parser = require("fast-xml-parser");
 const models = require("../../models");
 const moment = require("moment");
-const Sequelize = require("sequelize");
-const { Op } = require("sequelize");
-const TIMER = 60000 * 5; // 5minutes
+const QueryTimer = 60000 * 5; // 5minutes
 
 const rssQuery = link => {
   let count = 0;
@@ -25,7 +23,8 @@ const rssQuery = link => {
       //assign all response items to lastQuery
       aparts.map(appart => lastQuery.push(appart.guid));
 
-      //todo: handle room size and ADD BULKCREATE BECAUSE NOW IT MUST BE SLOW AS SHIT
+      //todo: handle room size and ADD BULKCREATE, but mainly the problem is that we need to be in a transaction here and only
+      // https://www.w3resource.com/mysql/mysql-transaction.php
       //creates new aparts in DB
       await newAparts.map(async apart => {
         //inserts new appart in db
@@ -42,10 +41,11 @@ const rssQuery = link => {
           console.log(err.original.sqlMessage);
         });
       });
+
       const newApartsLinks = newAparts.map(apart => apart.link);
-      console.log(newApartsLinks);
 
       // query for what zones are affected
+      //todo: if one querie here fucks, errthang blowup
       let UserAparts = [];
       try {
         UserAparts = await models.sequelize.query(
@@ -73,7 +73,7 @@ const rssQuery = link => {
 
   setInterval(function() {
     launchRequest();
-  }, TIMER);
+  }, QueryTimer);
   launchRequest();
 };
 
