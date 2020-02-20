@@ -10,7 +10,6 @@ const registerRouter = require("./routes/register");
 const zoneRouter = require("./routes/zone");
 const sessionLoginRouter = require("./routes/sessionLogin");
 const loginRouter = require("./routes/login");
-const rss = require("./services/rss/rss");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -89,13 +88,17 @@ passport.deserializeUser(async function(id, done) {
   });
   done(null, user.dataValues);
 });
+// terminates user session and delete req.user
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.redirect("/");
+});
 
 /**
  * SETS UP ROUTES
  *
  * --------------------------------------------------------------------------------
  */
-
 app.use("/", indexRouter);
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
@@ -109,7 +112,7 @@ app.use("/zone", zoneRouter);
  * --------------------------------------------------------------------------------
  */
 
-// RSSPoolWorkers();
+RSSPoolWorkers();
 
 /**
  * ERROR HANDELING

@@ -4,13 +4,11 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
+import Bar from "./components/Bar";
 import "typeface-roboto";
 import "./App.css";
-import Button from "@material-ui/core/Button";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { Switch, Route, Link } from "react-router-dom";
+
+import { Switch, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
@@ -30,10 +28,23 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      userFirstName: ""
+      userFirstName: "",
+      anchorEl: null
     };
     this.testBrowserSession();
   }
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  logoutHandeler = () => {
+    this.setState({ isLoggedIn: false, userFirstName: "" });
+  };
 
   logUserCredentials = user => {
     this.setState({
@@ -57,46 +68,15 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let loginArea = (
-      <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-        login
-      </Link>
-    );
-    if (this.state.isLoggedIn)
-      loginArea = (
-        <Link style={{ textDecoration: "none", color: "white" }} to="/home">
-          {this.state.userFirstName}
-        </Link>
-      );
+
     return (
       <div className="App">
         <div className={classes.root}>
-          <AppBar position="static">
-            <Toolbar>
-              <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/home"
-                >
-                  home
-                </Link>
-              </Button>
-              <Button edge="start" color="inherit">
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to="/map"
-                >
-                  Map
-                </Link>
-              </Button>
-              <Typography variant="h6" className={classes.title}>
-                Kijiji Bot App
-              </Typography>
-              <Button edge="start" color="inherit">
-                {loginArea}
-              </Button>
-            </Toolbar>
-          </AppBar>
+          <Bar
+            userLoggedOut={this.logoutHandeler}
+            isLoggedIn={this.state.isLoggedIn}
+            userFirstName={this.state.userFirstName}
+          />
         </div>
         <div className="body">
           <Switch>

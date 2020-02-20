@@ -16,6 +16,8 @@ zoneController = {
         coordinates: [zoneInfo.path]
       }
     });
+
+    //todo: checker quels apparts relativement recents sont dans la nouvelle zone?
   },
   getAllZones: async userId => {
     //query db
@@ -26,7 +28,6 @@ zoneController = {
     });
 
     //formats result
-    //todo: decide where to delete the last point of polygon?
     let userZones = [];
     result.map(zone => {
       // removes the last element to be google formatted polygon in UI

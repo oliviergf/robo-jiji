@@ -12,6 +12,11 @@ import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+const selected = (zoneId, onSelect) => {
+  //passes zone id to ZoneMenu to change color
+  onSelect(zoneId);
+};
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -25,10 +30,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function generate(zoneList, deleteZoneFunc) {
+function generate(zoneList, deleteZoneFunc, onSelect) {
   if (zoneList.length !== 0) {
     return zoneList.map(zone => (
-      <ListItem key={zone.id}>
+      <ListItem
+        button={true}
+        name={zone.id}
+        key={zone.id}
+        onClick={() => {
+          selected(zone.id, onSelect);
+        }}
+      >
         <ListItemAvatar>
           <Avatar>
             <FolderIcon />
@@ -71,7 +83,9 @@ export default function InteractiveList(props) {
             Selected Zones
           </Typography>
           <div className={classes.demo}>
-            <List>{generate(props.zoneList, props.deleteZoneFunc)}</List>
+            <List>
+              {generate(props.zoneList, props.deleteZoneFunc, props.onSelect)}
+            </List>
           </div>
         </Grid>
       </Grid>

@@ -5,17 +5,41 @@ import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
 
+// todo: implement select zone in list
 class ZoneMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { test: {}, zones: [], allowDraw: false };
+    this.state = {
+      test: {},
+      zones: [],
+      allowDraw: false,
+      userLocation: this.findUserCoord() //or call findUserCoord but fucks sometime...
+    };
   }
+
+  findUserCoord = () => {
+    let userPosition = {};
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        userPosition.lat = pos.coords.latitude;
+        userPosition.lng = pos.coords.longitude;
+      },
+      () => {
+        //error handeler
+        userPosition.lat = 45.496205;
+        userPosition.lng = -73.571895;
+      }
+    );
+
+    return userPosition;
+  };
 
   componentDidMount = () => {
     let self = this;
     // total hack; we had to wait for map component to render before using the GoogleMap object,
     // its necessary for appending new zones to the map
-    // todo: fix this shit
+
+    // todo: fix this shit; add
     setTimeout(function() {
       axios
         .get("http://localhost:3000/zone")
@@ -30,7 +54,7 @@ class ZoneMenu extends React.Component {
         .then(function() {
           // always executed
         });
-    }, 100);
+    }, 300);
   };
 
   /**
@@ -56,6 +80,33 @@ class ZoneMenu extends React.Component {
     this.setState({
       zones: zonesToDisplay
     });
+  };
+
+  //todo:does not work :  shit it
+  onZoneSelect = zoneId => {
+    console.log(zoneId);
+    // //doesnt work
+    // const zonesColored = this.state.zones.map(zone => {
+    //   if (zone.id === zoneId) {
+    //     let poly = zone.polygon;
+    //     poly.setOptions({ fillColor: "#FF00FF" });
+    //     return {
+    //       polygon: poly,
+    //       id: zone.id
+    //     };
+    //   } else {
+    //     let poly = zone.polygon;
+    //     poly.setOptions({ fillColor: "#FF00FF" });
+    //     return {
+    //       polygon: poly,
+    //       id: zone.id
+    //     };
+    //   }
+    // });
+
+    // this.setState({ zones: zonesColored });
+
+    //might want to trigger rerender to pass zones to zonelist?
   };
 
   /**
@@ -128,10 +179,12 @@ class ZoneMenu extends React.Component {
           complete={this.onPolygonComplete}
           showDrawManager={this.state.allowDraw}
           zonesToDisplay={this.state.zones}
+          userLocation={this.state.userLocation}
         />
         <ZoneList
           zoneList={this.state.zones}
           deleteZoneFunc={this.onDeleteClick}
+          onSelect={this.onZoneSelect}
         />
       </Container>
     );

@@ -6,6 +6,8 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
+//https://blog.logrocket.com/using-recompose-to-write-clean-higher-order-components-3019a6daf44c/
+//todo: transform this with recompose and highorder component.... need to learn bout that shit. and call useeffect to call component didmount in zonemenu
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
@@ -17,7 +19,10 @@ const MyMapComponent = compose(
   withScriptjs,
   withGoogleMap
 )(props => (
-  <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
+  <GoogleMap
+    defaultZoom={12}
+    defaultCenter={{ lat: props.userLocation.lat, lng: props.userLocation.lng }}
+  >
     {props.showDrawManager && (
       <DrawingManager
         defaultDrawingMode={"polygon"}
