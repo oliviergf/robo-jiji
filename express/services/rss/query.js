@@ -48,23 +48,26 @@ const rssQuery = link => {
 insertApartsIntoDb = async responseAparts => {
   try {
     const result = await models.sequelize.transaction(async t => {
+      let UserAparts = [];
+
       //only select apart that arent in DB
       let apartsToCreate = await selectUniqueLinks(responseAparts);
 
-      //bulk create new aparts
-      await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
+      if (apartsToCreate.length !== 0) {
+        //bulk create new aparts
+        await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
 
-      //create new UserAparts from newly added aparts
-      let UserAparts = await models.sequelize.query(
-        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-      select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
-      from Zones, Aparts
-      where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
-        apart => `'${apart.link}'` //thats to format links like 'kijiji.ca/sdfsd','kijij...',...
-      )})`,
-        { transaction: t }
-      );
-
+        //create new UserAparts from newly added aparts
+        UserAparts = await models.sequelize.query(
+          `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
+            select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+            from Zones, Aparts
+            where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
+              apart => `'${apart.link}'`
+            )})`,
+          { transaction: t }
+        );
+      }
       return UserAparts;
     });
 
