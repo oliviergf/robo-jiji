@@ -145,3 +145,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+//todo: remove --inspect in start for prod

@@ -13,57 +13,22 @@ const rssQuery = link => {
       //sends a get query to link
       const response = await request(link);
       //parse response
-      const aparts = parser.parse(response).rss.channel.item;
+      const fetchedAparts = parser.parse(response).rss.channel.item;
 
-      //filter for new items and has price listed
-      const newAparts = aparts.filter(
+      //filter aparts in lastQuery and no price listed
+      const newAparts = fetchedAparts.filter(
         apart => !lastQuery.includes(apart.guid) && apart["g-core:price"]
       );
 
-      //assign all response items to lastQuery
-      aparts.map(appart => lastQuery.push(appart.guid));
+      // assign all response items to lastQuery
+      fetchedAparts.map(appart => lastQuery.push(appart.guid));
 
-      //todo: handle room size and ADD BULKCREATE, but mainly the problem is that we need to be in a transaction here and only
-      // https://www.w3resource.com/mysql/mysql-transaction.php
-      //creates new aparts in DB
-      await newAparts.map(async apart => {
-        //inserts new appart in db
-        await models.Aparts.create({
-          title: apart.title,
-          price: apart["g-core:price"],
-          description: apart.description,
-          link: apart.link,
-          localisation: {
-            type: "Point",
-            coordinates: [apart["geo:lat"], apart["geo:long"]]
-          }
-        }).catch(err => {
-          console.log(err.original.sqlMessage);
-        });
-      });
+      // insert new aparts in db via transaction
+      const result = await insertApartsIntoDb(newAparts);
 
-      const newApartsLinks = newAparts.map(apart => apart.link);
-
-      // query for what zones are affected
-      //todo: if one querie here fucks, errthang blowup
-      let UserAparts = [];
-      try {
-        UserAparts = await models.sequelize.query(
-          `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-          select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
-          from Zones, Aparts
-          where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${newApartsLinks.map(
-            link => `'${link}'` //thats to format links like 'kijiji.ca/sdfsd','kijij...',...
-          )})`
-        );
-      } catch (err) {
-        // todo: handle errors properly
-        console.log("UserAparts insert query has fucked");
-      }
-
-      console.log("UserAparts count generated ", UserAparts);
       console.log("time ", moment().format("MMMM Do YYYY, h:mm:ss a"));
-      console.log("new apparts count: ", newAparts.length);
+      console.log("UserAparts created count :", result[1]);
+      console.log("new apparts count : ", newAparts.length);
       console.log("query count :", count);
       count++;
     } catch (err) {
@@ -75,6 +40,73 @@ const rssQuery = link => {
     launchRequest();
   }, QueryTimer);
   launchRequest();
+};
+
+/**
+ * Adds the new Aparts in the DB via a transaction
+ */
+insertApartsIntoDb = async responseAparts => {
+  try {
+    const result = await models.sequelize.transaction(async t => {
+      //only select apart that arent in DB
+      let apartsToCreate = await selectUniqueLinks(responseAparts);
+
+      //bulk create new aparts
+      await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
+
+      //create new UserAparts from newly added aparts
+      let UserAparts = await models.sequelize.query(
+        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
+      select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+      from Zones, Aparts
+      where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
+        apart => `'${apart.link}'` //thats to format links like 'kijiji.ca/sdfsd','kijij...',...
+      )})`,
+        { transaction: t }
+      );
+
+      return UserAparts;
+    });
+
+    return result;
+  } catch (error) {
+    console.log("---Transaction Failed!");
+    console.log(error);
+    // If the execution reaches this line, an error occurred.
+    // The transaction has already been rolled back automatically by Sequelize!
+  }
+};
+
+/**
+ * returns an array of unique apartements that arent un DB
+ */
+selectUniqueLinks = async newAparts => {
+  let uniqueAparts = [];
+  //make sure newAparts aren't already in databse
+  await Promise.all(
+    newAparts.map(async apart => {
+      let count = await models.Aparts.count({
+        where: {
+          link: apart.link
+        }
+      });
+
+      if (count === 0) {
+        //formats the aparts for bulk create
+        uniqueAparts.push({
+          title: apart.title,
+          price: apart["g-core:price"],
+          description: apart.description,
+          link: apart.link,
+          localisation: {
+            type: "Point",
+            coordinates: [apart["geo:lat"], apart["geo:long"]]
+          }
+        });
+      }
+    })
+  );
+  return uniqueAparts;
 };
 
 module.exports = rssQuery;

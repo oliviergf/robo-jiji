@@ -118,7 +118,6 @@ class ZoneMenu extends React.Component {
   };
 
   onDeleteClick = zoneId => {
-    //todo: send request to DELETE backend: should be {userId: 'blablabla',zoneid: id, coords: [...]}
     let self = this;
     axios
       .delete("http://localhost:3000/zone", {
