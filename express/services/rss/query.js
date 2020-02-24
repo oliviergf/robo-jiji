@@ -53,11 +53,15 @@ insertApartsIntoDb = async responseAparts => {
       //only select apart that arent in DB
       let apartsToCreate = await selectUniqueLinks(responseAparts);
 
+      //if theres aparts to handle
       if (apartsToCreate.length !== 0) {
         //bulk create new aparts
         await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
 
-        //create new UserAparts from newly added aparts
+        /**
+         * creates a new UserAparts for every new appart that fits into a zone
+         * speficied by a user.
+         */
         UserAparts = await models.sequelize.query(
           `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
             select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
@@ -85,7 +89,7 @@ insertApartsIntoDb = async responseAparts => {
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
-  //make sure newAparts aren't already in databse
+  //make sure newAparts aren't already in database
   await Promise.all(
     newAparts.map(async apart => {
       let count = await models.Aparts.count({
@@ -106,6 +110,8 @@ selectUniqueLinks = async newAparts => {
             coordinates: [apart["geo:lat"], apart["geo:long"]]
           }
         });
+
+        //fetch aparts images?
       }
     })
   );
