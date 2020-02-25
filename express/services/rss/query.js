@@ -1,5 +1,6 @@
 const request = require("request-promise");
 const parser = require("fast-xml-parser");
+const classifier = require("../crawler/classifier");
 const models = require("../../models");
 const moment = require("moment");
 const QueryTimer = 60000 * 5; // 5minutes
@@ -112,6 +113,7 @@ selectUniqueLinks = async newAparts => {
         });
 
         //fetch aparts images?
+        classifier(apart.link);
       }
     })
   );

@@ -3,8 +3,7 @@
 const links = [
   // "https://www.kijiji.ca/rss-srp-for-rent/quebec/c30349001l9001",
   // "https://www.kijiji.ca/rss-srp-appartement-condo/quebec/c37l9001",
-  "https://www.kijiji.ca/rss-srp-a-louer/ville-de-montreal/c30349001l1700281?radius=37.0&address=5843+Saint+Urbain+Street%2C+Montr%C3%A9al%2C+QC&ll=45.526659,-73.603921",
-  "https://www.kijiji.ca/rss-srp-appartement-condo/ville-de-montreal/c37l1700281?radius=20.0&address=Montr%C3%A9al%2C+QC&ll=45.501689,-73.567256"
+  "https://www.kijiji.ca/b-appartement-condo/ville-de-montreal/c37l1700281?ll=45.536765%2C-73.602646&address=Nacho+Libre%2C+Rue+Beaubien+Est%2C+Montr%C3%A9al%2C+QC&radius=4.0"
 ];
 
 module.exports = links;
