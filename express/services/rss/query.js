@@ -47,12 +47,12 @@ const rssQuery = link => {
  * Adds the new Aparts in the DB via a transaction
  */
 insertApartsIntoDb = async responseAparts => {
+  let apartsToCreate = [];
+  let UserApartsCreated = [];
   try {
     const result = await models.sequelize.transaction(async t => {
-      let UserAparts = [];
-
       //only select apart that arent in DB
-      let apartsToCreate = await selectUniqueLinks(responseAparts);
+      apartsToCreate = await selectUniqueLinks(responseAparts);
 
       //if theres aparts to handle
       if (apartsToCreate.length !== 0) {
@@ -63,18 +63,25 @@ insertApartsIntoDb = async responseAparts => {
          * creates a new UserAparts for every new appart that fits into a zone
          * speficied by a user.
          */
-        UserAparts = await models.sequelize.query(
+        UserApartsCreated = await models.sequelize.query(
           `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-            select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
-            from Zones, Aparts
-            where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
-              apart => `'${apart.link}'`
-            )})`,
+          select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+          from Zones, Aparts
+          where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
+            apart => `'${apart.link}'`
+          )})`,
           { transaction: t }
         );
       }
-      return UserAparts;
+      return UserApartsCreated;
     });
+
+    //queries to get aparts images & info
+    apartsToCreate.map(apart => {
+      console.log("link to send to classifier", apart.link);
+      // classifier(apart.link);
+    });
+    console.log("Aparts inserted in db count :", apartsToCreate.length);
 
     return result;
   } catch (error) {
@@ -86,7 +93,7 @@ insertApartsIntoDb = async responseAparts => {
 };
 
 /**
- * returns an array of unique apartements that arent un DB
+ * returns an array of unique apartements that arent in DB
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
@@ -111,9 +118,6 @@ selectUniqueLinks = async newAparts => {
             coordinates: [apart["geo:lat"], apart["geo:long"]]
           }
         });
-
-        //fetch aparts images?
-        classifier(apart.link);
       }
     })
   );
