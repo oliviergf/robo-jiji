@@ -26,8 +26,10 @@ const query = async link => {
 
   //the array that constains the photos url
   const photoGallery = data.viewItemPage.viewItemData.media;
-  fetchPhotos(link, photoGallery);
+  const attributes = data.viewItemPage.viewItemData.adAttributes;
 
+  // fetchPhotos(link, photoGallery);
+  updateApartsInfo(attributes);
   //todo: use data to get more info on appart? YES theres a shitton of info to get xD
 };
 
@@ -49,5 +51,10 @@ fetchPhotos = async (link, gallery) => {
     request(photo.href).pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
   });
 };
+
+/**
+ * updates apparts attributes like animals allowed or parking or whatever
+ */
+updateApartsInfo = attributes => {};
 
 module.exports = query;
