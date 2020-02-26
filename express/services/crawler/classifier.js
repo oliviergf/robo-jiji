@@ -21,8 +21,8 @@ const query = async link => {
     //the array that constains the photos url
     const photoGallery = data.viewItemPage.viewItemData.media;
     const attributes = data.viewItemPage.viewItemData.adAttributes;
-    fetchPhotos(link, photoGallery);
-    // // updateApartsInfo(attributes);
+    // fetchPhotos(link, photoGallery);
+    updateApartsInfo(attributes);
     // //todo: use data to get more info on appart? YES theres a shitton of info to get xD
   } catch (error) {
     console.log(error);
@@ -34,8 +34,9 @@ const query = async link => {
  * inside of the /pictures directory.
  * the strategy is the replace all the / of the link from a .
  */
-fetchPhotos = async (link2, gallery) => {
-  //remove https//kijiji.ca from dir
+fetchPhotos = async (linky, gallery) => {
+  //remove https//kijiji.ca/ from dir and turns / into .
+  let shortlink = linky.substring(22);
   const dir = `./pictures/${link2.replace(/\//g, ".")}`;
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -60,9 +61,17 @@ fetchPhotos = async (link2, gallery) => {
   }
 };
 
+query(
+  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/7-1-2-rdc-et-s-s-dun-duplex-4ch-cour-metro-diberville/1489587759"
+);
 /**
  * updates apparts attributes like animals allowed or parking or whatever
  */
-updateApartsInfo = attributes => {};
+updateApartsInfo = info => {
+  info.attributes.map(att => {
+    if (att.machineKey === "numberbedrooms")
+      console.log(att.localeSpecificValues);
+  });
+};
 
 module.exports = query;
