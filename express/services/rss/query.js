@@ -77,12 +77,11 @@ insertApartsIntoDb = async responseAparts => {
     });
 
     //queries to get aparts images & info
-    // apartsToCreate.map(apart => {
-    //   console.log("link to send to classifier", apart.link);
-    // });
+    apartsToCreate.map(apart => {
+      console.log("link to send to classifier", apart.link);
+      classifier(apart.link);
+    });
     console.log("Aparts inserted in db count :", apartsToCreate.length);
-    classifier(apartsToCreate[0].link);
-
     return result;
   } catch (error) {
     console.log("---Transaction Failed!");

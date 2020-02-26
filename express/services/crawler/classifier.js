@@ -39,7 +39,6 @@ fetchPhotos = async (link2, gallery) => {
   const dir = `../../pictures/${link2.replace(/\//g, ".")}`;
 
   if (!fs.existsSync(dir)) {
-    console.log("mkdir!", dir);
     fs.mkdirSync(dir, { recursive: true });
   }
 
@@ -50,7 +49,6 @@ fetchPhotos = async (link2, gallery) => {
         url: photo.href,
         responseType: "stream"
       });
-      console.log("trying to pipe");
       pic.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
     } catch (error) {
       console.log(error);
@@ -59,9 +57,7 @@ fetchPhotos = async (link2, gallery) => {
   });
 };
 
-// query(
-//   "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/4-1-2-dans-un-duplex/1489510796"
-// );
+// query("https://www.kijiji.ca/v-view-details.html?adId=1489516221");
 
 /**
  * updates apparts attributes like animals allowed or parking or whatever
