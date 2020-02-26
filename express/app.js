@@ -26,6 +26,8 @@ const sessionTimeOutMinutes = 60 * 3; //3 hours
  * / AWS pour déploiements
  */
 
+// use this for drawing logos! https://excalidraw.com/
+
 //  metttre un temps prefere pour shut down les notificatiosn?
 
 /**

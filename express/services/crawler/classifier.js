@@ -36,28 +36,29 @@ const query = async link => {
  */
 fetchPhotos = async (link2, gallery) => {
   //remove https//kijiji.ca from dir
-  const dir = `../../pictures/${link2.replace(/\//g, ".")}`;
-
+  const dir = `./pictures/${link2.replace(/\//g, ".")}`;
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 
-  gallery.map(async (photo, index) => {
-    try {
-      const pic = await axios({
-        method: "get",
-        url: photo.href,
-        responseType: "stream"
-      });
-      pic.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
-    } catch (error) {
-      console.log(error);
-      console.log("pic failed");
-    }
-  });
+  if (fs.existsSync(dir)) {
+    gallery.map(async (photo, index) => {
+      try {
+        const pic = await axios({
+          method: "get",
+          url: photo.href,
+          responseType: "stream"
+        });
+        pic.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+      } catch (error) {
+        console.log(error);
+        console.log("pic failed");
+      }
+    });
+  } else {
+    console.log("doesnt exist.....");
+  }
 };
-
-// query("https://www.kijiji.ca/v-view-details.html?adId=1489516221");
 
 /**
  * updates apparts attributes like animals allowed or parking or whatever

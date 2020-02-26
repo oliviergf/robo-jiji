@@ -5,7 +5,7 @@ const models = require("../../models");
 const moment = require("moment");
 const QueryTimer = 60000 * 5; // 5minutes
 
-const rssQuery = link => {
+rssQuery = link => {
   let count = 0;
   let lastQuery = [];
 
@@ -16,9 +16,12 @@ const rssQuery = link => {
       //parse response
       const fetchedAparts = parser.parse(response).rss.channel.item;
 
-      //filter aparts in lastQuery and no price listed
+      //filter aparts in lastQuery , has no price listed and doesnt have valid geo point
       const newAparts = fetchedAparts.filter(
-        apart => !lastQuery.includes(apart.guid) && apart["g-core:price"]
+        apart =>
+          !lastQuery.includes(apart.guid) &&
+          apart["g-core:price"] &&
+          hasValidGeo(apart)
       );
 
       // assign all response items to lastQuery
@@ -75,15 +78,10 @@ insertApartsIntoDb = async responseAparts => {
       }
       return UserApartsCreated;
     });
-
-    //queries to get aparts images & info
-    apartsToCreate.map(apart => {
-      console.log("link to send to classifier", apart.link);
-      classifier(apart.link);
-    });
-    console.log("Aparts inserted in db count :", apartsToCreate.length);
+    sendApartsToClassifier(apartsToCreate);
     return result;
   } catch (error) {
+    //todo: thats bad tho
     console.log("---Transaction Failed!");
     console.log(error);
     // If the execution reaches this line, an error occurred.
@@ -91,6 +89,13 @@ insertApartsIntoDb = async responseAparts => {
   }
 };
 
+sendApartsToClassifier = apartsToCreate => {
+  //queries to get aparts images & info
+  apartsToCreate.map(apart => {
+    classifier(apart.link);
+  });
+  console.log("Aparts inserted in db count :", apartsToCreate.length);
+};
 /**
  * returns an array of unique apartements that arent in DB
  */
@@ -121,6 +126,17 @@ selectUniqueLinks = async newAparts => {
     })
   );
   return uniqueAparts;
+};
+
+hasValidGeo = apart => {
+  if (
+    typeof apart["geo:long"] === "number" &&
+    typeof apart["geo:lat"] === "number"
+  ) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 module.exports = rssQuery;
