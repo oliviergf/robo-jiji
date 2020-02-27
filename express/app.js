@@ -17,6 +17,8 @@ const models = require("./models");
 const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
+const sessionTimeOutMinutes = 60 * 3; //3 hours
+
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
  * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github
@@ -24,9 +26,12 @@ const app = express();
  * / AWS pour déploiements
  */
 
+// use this for drawing logos! https://excalidraw.com/
+
+//  metttre un temps prefere pour shut down les notificatiosn?
+
 /**
  * SYNC DB
- * todo:  UserApparts  association belongsToMany :  https://sequelize.org/master/class/lib/associations/base.js~Association.html
  * todo: check pour timezone. doesnt seem right
  * --------------------------------------------------------------------------------
  */
@@ -59,15 +64,14 @@ app.use(
     secret: "keyboard cat",
     cookie: {
       secure: false, //to allow HTTP over HTTPS
-      maxAge: 100000 //to set cookie expiring date
+      maxAge: 1000 * 60 * sessionTimeOutMinutes //in millisec
     }
   })
 );
 
 /**
  * SETS UP PASSPORT
- * todo: quand on change de user login; le serveur ne reconnait pas le nouveau ''cookie'' et pense que cetais lautre personne avant
- * todo: checker quand esceque le cookie devrais fail. maybe voir ligne 75?
+ *
  * --------------------------------------------------------------------------------
  */
 
@@ -143,3 +147,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+//todo: remove --inspect in start for prod
