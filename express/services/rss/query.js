@@ -7,7 +7,7 @@ const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
 rssQuery = researchLink => {
   let count = 0;
-  let lastQuery = [];
+  let lastQueryLinks = [];
 
   let startService = async () => {
     try {
@@ -18,13 +18,14 @@ rssQuery = researchLink => {
       //filters aparts in lastQuery
       const newAparts = fetchedAparts.filter(
         apart =>
-          !lastQuery.includes(apart.guid) &&
+          !lastQueryLinks.includes(apart.guid) &&
           apart["g-core:price"] &&
           hasValidGeo(apart)
       );
 
-      // assign all response items to lastQuery
-      lastQuery = fetchedAparts; //todos: fucks here
+      // empties last query links and add new links
+      lastQueryLinks = [];
+      fetchedAparts.map(apart => lastQueryLinks.push(apart.link));
 
       // insert new aparts in db via transaction
       const result = await insertApartsIntoDb(newAparts);
