@@ -19,12 +19,13 @@ const classifySingleApartment = async link => {
 
     //loads ups the first script in the Fesloader div. its supposed to have the URL of the pictures.
     const rawData = $("#FesLoader").children()[0].children[0].data;
-    const ApartInfo = JSON.parse(rawData.substring(14, rawData.length - 1));
+    const apartInfo = JSON.parse(rawData.substring(14, rawData.length - 1));
 
     //elements of kijiji apart response
-    const photoGallery = ApartInfo.viewItemPage.viewItemData.media;
-    const attributes = ApartInfo.viewItemPage.viewItemData.adAttributes;
+    const photoGallery = apartInfo.viewItemPage.viewItemData.media;
+    const attributes = apartInfo.viewItemPage.viewItemData.adAttributes;
 
+    console.log(attributes);
     //fetch every images on the post
     if (photoGallery) fetchPhotos(link, photoGallery);
     if (attributes) updateApartsAttributes(attributes);
@@ -67,13 +68,14 @@ fetchPhotos = async (postLink, gallery) => {
  *
  */
 classifySingleApartment(
-  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/7-1-2-rdc-et-s-s-dun-duplex-4ch-cour-metro-diberville/1489587759"
+  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/designer-5-1-2-montreal-metro-a-pied-verdun/1486524017"
 );
 
 /**
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
  */
 updateApartsAttributes = info => {
+  console.log(info);
   info.attributes.map(att => {
     if (att.machineKey === "numberbedrooms")
       console.log(att.localeSpecificValues);
