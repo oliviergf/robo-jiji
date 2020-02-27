@@ -31,7 +31,38 @@ module.exports = function(sequelize, Sequelize) {
     },
 
     rooms: {
-      type: Sequelize.ENUM("1", "2", "3", "4", "5", "6", "7")
+      type: Sequelize.STRING,
+      defaultValue: null
+    },
+
+    petsAllowed: {
+      type: Sequelize.STRING,
+      defaultValue: null
+    },
+
+    numberBedrooms: {
+      type: Sequelize.INTEGER,
+      defaultValue: null
+    },
+
+    dateAvailable: {
+      type: Sequelize.DATE,
+      defaultValue: null
+    },
+
+    furnished: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: null
+    },
+
+    wheelchairAccessible: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: null
+    },
+
+    parkingSpots: {
+      type: Sequelize.INTEGER,
+      defaultValue: null
     }
   });
 

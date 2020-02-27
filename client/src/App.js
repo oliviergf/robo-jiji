@@ -23,6 +23,9 @@ const styles = theme => ({
   }
 });
 
+/**
+ * watch this video for push notifications : https://www.youtube.com/watch?v=N9zpRvFRmj8
+ */
 class App extends React.Component {
   constructor(props) {
     super(props);

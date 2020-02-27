@@ -10,11 +10,11 @@ const log = new logger();
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be
  * displayed to the user
- * @param {string} link
+ * @param {string} postLink
  */
-const classifySingleApartment = async link => {
+const classifySingleApartment = async postLink => {
   try {
-    const response = await axios.get(link);
+    const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);
 
     //loads ups the first script in the Fesloader div. its supposed to have the URL of the pictures.
@@ -25,12 +25,13 @@ const classifySingleApartment = async link => {
     const photoGallery = apartInfo.viewItemPage.viewItemData.media;
     const attributes = apartInfo.viewItemPage.viewItemData.adAttributes;
 
-    console.log(attributes);
-    //fetch every images on the post
-    if (photoGallery) fetchPhotos(link, photoGallery);
-    if (attributes) updateApartsAttributes(attributes);
+    //fetch every images & info on the post
+    // if (photoGallery) fetchPhotos(photoGallery, postLink);
+    if (attributes) updateApartsAttributes(attributes, postLink);
+
+    //todo: fire up notification and await photos and attributes
   } catch (err) {
-    log.err(`could not fetch appart link ${link} `, err);
+    log.err(`could not fetch appart link ${postLink} `, err);
   }
 };
 
@@ -39,7 +40,7 @@ const classifySingleApartment = async link => {
  * inside of the /pictures directory.
  * the strategy is the replace all the / of the link from a .
  */
-fetchPhotos = async (postLink, gallery) => {
+fetchPhotos = async (gallery, postLink) => {
   //remove https//kijiji.ca/ from dir and turns / into .
   const shortlink = postLink.substring(22);
   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
@@ -55,7 +56,7 @@ fetchPhotos = async (postLink, gallery) => {
         url: photo.href,
         responseType: "stream"
       });
-      picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+      // picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
     } catch (error) {
       log.err(`could not fetch img ${photo.href} `, err);
     }
@@ -68,18 +69,47 @@ fetchPhotos = async (postLink, gallery) => {
  *
  */
 classifySingleApartment(
-  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/designer-5-1-2-montreal-metro-a-pied-verdun/1486524017"
+  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/3-1-2-meuble-golden-square-mile-universite-mcgill-et-concordia/1489789602"
 );
 
 /**
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
  */
-updateApartsAttributes = info => {
-  console.log(info);
-  info.attributes.map(att => {
-    if (att.machineKey === "numberbedrooms")
-      console.log(att.localeSpecificValues);
+updateApartsAttributes = async (info, postLink) => {
+  const apartToUpdate = await models.Aparts.findOne({
+    where: { link: postLink }
   });
+
+  info.attributes.map(att => {
+    switch (att.machineKey) {
+      case "numberbedrooms":
+        if (att.localeSpecificValues.fr.value && att.machineValue) {
+          apartToUpdate.rooms = att.localeSpecificValues.fr.value;
+          apartToUpdate.numberBedrooms = att.machineValue;
+        }
+        break;
+      case "dateavailable":
+        if (att.machineValue)
+          apartToUpdate.dateAvailable = moment(att.machineValue);
+        break;
+      case "petsallowed":
+        if (att.machineValue) apartToUpdate.petsAllowed = att.machineValue;
+        break;
+      case "furnished":
+        if (att.machineValue)
+          apartToUpdate.furnished = att.machineValue === "1";
+        break;
+      case "wheelchairaccessible":
+        if (att.machineValue)
+          apartToUpdate.wheelchairAccessible = att.machineValue === "1";
+        break;
+      case "numberparkingspots":
+        if (att.machineValue) apartToUpdate.parkingSpots = att.machineValue;
+      default:
+    }
+  });
+
+  await apartToUpdate.save();
 };
 
 module.exports = classifySingleApartment;
