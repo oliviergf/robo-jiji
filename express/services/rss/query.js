@@ -2,21 +2,20 @@ const request = require("request-promise");
 const parser = require("fast-xml-parser");
 const classifier = require("../crawler/classifier");
 const models = require("../../models");
-const moment = require("moment");
+const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
-
-rssQuery = link => {
+const log = new Logger();
+rssQuery = researchLink => {
   let count = 0;
   let lastQuery = [];
 
-  let launchRequest = async () => {
+  let startService = async () => {
     try {
-      //sends a get query to link
-      const response = await request(link);
-      //parse response
+      //ping to RSS link
+      const response = await request(researchLink);
       const fetchedAparts = parser.parse(response).rss.channel.item;
 
-      //filter aparts in lastQuery , has no price listed and doesnt have valid geo point
+      //filters aparts in lastQuery
       const newAparts = fetchedAparts.filter(
         apart =>
           !lastQuery.includes(apart.guid) &&
@@ -25,25 +24,22 @@ rssQuery = link => {
       );
 
       // assign all response items to lastQuery
-      fetchedAparts.map(appart => lastQuery.push(appart.guid));
+      lastQuery = fetchedAparts;
 
       // insert new aparts in db via transaction
       const result = await insertApartsIntoDb(newAparts);
 
-      console.log("time ", moment().format("MMMM Do YYYY, h:mm:ss a"));
-      console.log("UserAparts created count :", result[1]);
-      console.log("new apparts count : ", newAparts.length);
-      console.log("query count :", count);
+      log.zoneRequestEnded(result[1], newAparts.length, count);
       count++;
     } catch (err) {
-      console.log(err);
+      log.err("zone query failed", err);
     }
   };
 
   setInterval(function() {
-    launchRequest();
+    startService();
   }, QueryTimer);
-  launchRequest();
+  startService();
 };
 
 /**
@@ -78,30 +74,33 @@ insertApartsIntoDb = async responseAparts => {
       }
       return UserApartsCreated;
     });
+
     sendApartsToClassifier(apartsToCreate);
+    log.msg("Aparts inserted in db count :", apartsToCreate.length);
     return result;
   } catch (error) {
-    //todo: thats bad tho
-    console.log("---Transaction Failed!");
-    console.log(error);
+    log.err("---Transaction Failed!", error);
     // If the execution reaches this line, an error occurred.
     // The transaction has already been rolled back automatically by Sequelize!
   }
 };
 
+/**
+ * dispatch each appart to a classifier
+ */
 sendApartsToClassifier = apartsToCreate => {
   //queries to get aparts images & info
   apartsToCreate.map(apart => {
     classifier(apart.link);
   });
-  console.log("Aparts inserted in db count :", apartsToCreate.length);
 };
+
 /**
  * returns an array of unique apartements that arent in DB
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
-  //make sure newAparts aren't already in database
+  //make sure all new Aparts aren't already in database
   await Promise.all(
     newAparts.map(async apart => {
       let count = await models.Aparts.count({
@@ -129,14 +128,10 @@ selectUniqueLinks = async newAparts => {
 };
 
 hasValidGeo = apart => {
-  if (
+  return (
     typeof apart["geo:long"] === "number" &&
     typeof apart["geo:lat"] === "number"
-  ) {
-    return true;
-  } else {
-    return false;
-  }
+  );
 };
 
 module.exports = rssQuery;

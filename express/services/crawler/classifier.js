@@ -2,7 +2,9 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const axios = require("axios");
 const models = require("../../models");
+const logger = require("../../utils/logger");
 const moment = require("moment");
+const log = new logger();
 
 /**
  * This function queries the URL of the appartement.
@@ -26,8 +28,8 @@ const classifySingleApartment = async link => {
     //fetch every images on the post
     if (photoGallery) fetchPhotos(link, photoGallery);
     if (attributes) updateApartsAttributes(attributes);
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    log.err(`could not fetch appart link ${link} `, err);
   }
 };
 
@@ -54,8 +56,7 @@ fetchPhotos = async (postLink, gallery) => {
       });
       picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
     } catch (error) {
-      console.log(error);
-      console.log("pic failed");
+      log.err(`could not fetch img ${photo.href} `, err);
     }
   });
 };
