@@ -24,7 +24,7 @@ rssQuery = researchLink => {
       );
 
       // assign all response items to lastQuery
-      lastQuery = fetchedAparts;
+      lastQuery = fetchedAparts; //todos: fucks here
 
       // insert new aparts in db via transaction
       const result = await insertApartsIntoDb(newAparts);
@@ -77,6 +77,7 @@ insertApartsIntoDb = async responseAparts => {
 
     sendApartsToClassifier(apartsToCreate);
     log.msg("Aparts inserted in db count :", apartsToCreate.length);
+    log.msg("result", result);
     return result;
   } catch (error) {
     log.err("---Transaction Failed!", error);

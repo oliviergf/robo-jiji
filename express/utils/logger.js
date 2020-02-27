@@ -6,7 +6,7 @@ class logger {
   zoneRequestEnded(UserAparts, newApartsCreated, queryCount) {
     console.log("time ", moment().format("MMMM Do YYYY, h:mm:ss a"));
     console.log("UserAparts created count :", UserAparts);
-    console.log("new apparts count : ", newApartsCreated);
+    console.log("newly seen appart count : ", newApartsCreated);
     console.log("query count :", queryCount);
   }
 
