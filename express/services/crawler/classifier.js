@@ -10,20 +10,22 @@ const moment = require("moment");
  * displayed to the user
  * @param {string} link
  */
-const query = async link => {
+const classifySingleApartment = async link => {
   try {
-    // const response = await request(options);
     const response = await axios.get(link);
     const $ = cheerio.load(response.data);
+
     //loads ups the first script in the Fesloader div. its supposed to have the URL of the pictures.
     const rawData = $("#FesLoader").children()[0].children[0].data;
-    const data = JSON.parse(rawData.substring(14, rawData.length - 1));
-    //the array that constains the photos url
-    const photoGallery = data.viewItemPage.viewItemData.media;
-    const attributes = data.viewItemPage.viewItemData.adAttributes;
-    // fetchPhotos(link, photoGallery);
-    updateApartsInfo(attributes);
-    // //todo: use data to get more info on appart? YES theres a shitton of info to get xD
+    const ApartInfo = JSON.parse(rawData.substring(14, rawData.length - 1));
+
+    //elements of kijiji apart response
+    const photoGallery = ApartInfo.viewItemPage.viewItemData.media;
+    const attributes = ApartInfo.viewItemPage.viewItemData.adAttributes;
+
+    //fetch every images on the post
+    if (photoGallery) fetchPhotos(link, photoGallery);
+    if (attributes) updateApartsAttributes(attributes);
   } catch (error) {
     console.log(error);
   }
@@ -34,44 +36,47 @@ const query = async link => {
  * inside of the /pictures directory.
  * the strategy is the replace all the / of the link from a .
  */
-fetchPhotos = async (linky, gallery) => {
+fetchPhotos = async (postLink, gallery) => {
   //remove https//kijiji.ca/ from dir and turns / into .
-  let shortlink = linky.substring(22);
-  const dir = `./pictures/${link2.replace(/\//g, ".")}`;
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+  const shortlink = postLink.substring(22);
+  const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
 
-  if (fs.existsSync(dir)) {
-    gallery.map(async (photo, index) => {
-      try {
-        const pic = await axios({
-          method: "get",
-          url: photo.href,
-          responseType: "stream"
-        });
-        pic.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
-      } catch (error) {
-        console.log(error);
-        console.log("pic failed");
-      }
-    });
-  } else {
-    console.log("doesnt exist.....");
-  }
+  //creates new directory for post
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+  //query image and save to fs
+  gallery.map(async (photo, index) => {
+    try {
+      const picture = await axios({
+        method: "get",
+        url: photo.href,
+        responseType: "stream"
+      });
+      picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+    } catch (error) {
+      console.log(error);
+      console.log("pic failed");
+    }
+  });
 };
 
-query(
+/**
+ *
+ * debug
+ *
+ */
+classifySingleApartment(
   "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/7-1-2-rdc-et-s-s-dun-duplex-4ch-cour-metro-diberville/1489587759"
 );
+
 /**
- * updates apparts attributes like animals allowed or parking or whatever
+ * updates apart attributes in DB like  # of rooms, animals allowed, parking
  */
-updateApartsInfo = info => {
+updateApartsAttributes = info => {
   info.attributes.map(att => {
     if (att.machineKey === "numberbedrooms")
       console.log(att.localeSpecificValues);
   });
 };
 
-module.exports = query;
+module.exports = classifySingleApartment;
