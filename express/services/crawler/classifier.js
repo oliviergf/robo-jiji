@@ -109,7 +109,13 @@ updateApartsAttributes = async (info, postLink) => {
     }
   });
 
-  await apartToUpdate.save();
+  try {
+    await apartToUpdate.save();
+  } catch (error) {
+    console.log(error);
+    console.log(info);
+    console.log(postLink);
+  }
 };
 
 module.exports = classifySingleApartment;
