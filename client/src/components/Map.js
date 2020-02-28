@@ -40,7 +40,8 @@ const MyMapComponent = compose(
       />
     )}
     {props.zonesToDisplay.map(zone => {
-      return <Polygon key={zone.id} path={zone.polygon.latLngs.g[0].g} />;
+      console.log(zone.polygon);
+      return <Polygon key={zone.id} path={zone.polygon.getPath()} />;
     })}
   </GoogleMap>
 ));
