@@ -154,7 +154,7 @@ class ZoneMenu extends React.Component {
 
     let points = [];
     //adds the path of the newly created zone
-    value.getPath().g.map(pos => points.push([pos.lat(), pos.lng()]));
+    value.getPath().i.map(pos => points.push([pos.lat(), pos.lng()]));
 
     axios
       .post("http://localhost:3000/zone", {

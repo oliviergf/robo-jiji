@@ -76,7 +76,7 @@ classifySingleApartment(
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
  */
 updateApartsAttributes = async (info, postLink) => {
-  const apartToUpdate = await models.Aparts.findOne({
+  const Apart = await models.Aparts.findOne({
     where: { link: postLink }
   });
 
@@ -84,32 +84,36 @@ updateApartsAttributes = async (info, postLink) => {
     switch (att.machineKey) {
       case "numberbedrooms":
         if (att.localeSpecificValues.fr.value && att.machineValue) {
-          apartToUpdate.rooms = att.localeSpecificValues.fr.value;
-          apartToUpdate.numberBedrooms = att.machineValue;
+          Apart.rooms = att.localeSpecificValues.fr.value;
+          Apart.numberBedrooms = att.machineValue;
         }
         break;
       case "dateavailable":
-        if (att.machineValue)
-          apartToUpdate.dateAvailable = moment(att.machineValue);
+        if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
-        if (att.machineValue) apartToUpdate.petsAllowed = att.machineValue;
+        if (att.machineValue) Apart.petsAllowed = att.machineValue;
         break;
       case "furnished":
-        if (att.machineValue)
-          apartToUpdate.furnished = att.machineValue === "1";
+        if (att.machineValue) Apart.furnished = att.machineValue === "1";
         break;
       case "wheelchairaccessible":
         if (att.machineValue)
-          apartToUpdate.wheelchairAccessible = att.machineValue === "1";
+          Apart.wheelchairAccessible = att.machineValue === "1";
         break;
       case "numberparkingspots":
-        if (att.machineValue) apartToUpdate.parkingSpots = att.machineValue;
+        if (att.machineValue) Apart.parkingSpots = att.machineValue;
       default:
     }
   });
 
-  await apartToUpdate.save();
+  try {
+    await Apart.save();
+  } catch (error) {
+    console.log(error);
+    console.log(info);
+    console.log(postLink);
+  }
 };
 
 module.exports = classifySingleApartment;
