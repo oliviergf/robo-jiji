@@ -72,8 +72,6 @@ updateApartsAttributes = async (info, postLink) => {
     where: { link: postLink }
   });
 
-  console.log("appart for rooms nulls", Apart)
-
   info.attributes.map(att => {
     switch (att.machineKey) {
       case "numberbedrooms":
@@ -96,7 +94,7 @@ updateApartsAttributes = async (info, postLink) => {
           Apart.wheelchairAccessible = att.machineValue === "1";
         break;
       case "numberparkingspots":
-        if (att.machineValue) Apart.parkingSpots = att.machineValue;
+        if (att.machineValue) Apart.parkingSpots = att.machineValue === 'Not Available' ? 0 : 1;
       default:
     }
   });
