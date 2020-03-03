@@ -72,8 +72,9 @@ insertApartsIntoDb = async responseAparts => {
       }
       return UserApartsCreated;
     });
+    console.log("apartsToCreate length ************************",apartsToCreate.length)
 
-    if (apartsToCreate) sendApartsToClassifier(apartsToCreate);
+    if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
     log.msg("Aparts inserted in db count :", apartsToCreate.length);
     log.msg("result", result);
     return result;
