@@ -27,6 +27,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
-    "sequelize": "^5.21.3"
+    "sequelize": "^5.21.3",
+    "wkx": "^0.4.8"
   }
 }
