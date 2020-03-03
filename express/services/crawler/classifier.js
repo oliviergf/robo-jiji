@@ -80,6 +80,8 @@ updateApartsAttributes = async (info, postLink) => {
     where: { link: postLink }
   });
 
+  console.log("appart for rooms nulls", Apart)
+
   info.attributes.map(att => {
     switch (att.machineKey) {
       case "numberbedrooms":
