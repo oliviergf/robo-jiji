@@ -63,14 +63,6 @@ fetchPhotos = async (gallery, postLink) => {
   });
 };
 
-/**
- *
- * debug
- *
- */
-classifySingleApartment(
-  "https://www.kijiji.ca/v-appartement-condo/ville-de-montreal/3-1-2-meuble-golden-square-mile-universite-mcgill-et-concordia/1489789602"
-);
 
 /**
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
@@ -102,7 +94,7 @@ updateApartsAttributes = async (info, postLink) => {
           Apart.wheelchairAccessible = att.machineValue === "1";
         break;
       case "numberparkingspots":
-        if (att.machineValue) Apart.parkingSpots = att.machineValue;
+        if (att.machineValue) Apart.parkingSpots = att.machineValue === 'Not Available' ? 0 : 1;
       default:
     }
   });

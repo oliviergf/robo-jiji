@@ -30,7 +30,7 @@ rssQuery = researchLink => {
       // insert new aparts in db via transaction
       const result = await insertApartsIntoDb(newAparts);
 
-      log.zoneRequestEnded(result[1], newAparts.length, count);
+      log.zoneRequestEnded(result[1] ?result[1] : 0 , newAparts.length, count);
       count++;
     } catch (err) {
       log.err("zone query failed", err);
@@ -51,12 +51,9 @@ insertApartsIntoDb = async responseAparts => {
   let UserApartsCreated = [];
   try {
     const result = await models.sequelize.transaction(async t => {
-      //only select apart that arent in DB
       apartsToCreate = await selectUniqueLinks(responseAparts);
 
-      //if theres aparts to handle
       if (apartsToCreate.length !== 0) {
-        //bulk create new aparts
         await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
 
         /**
@@ -76,7 +73,7 @@ insertApartsIntoDb = async responseAparts => {
       return UserApartsCreated;
     });
 
-    sendApartsToClassifier(apartsToCreate);
+    if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
     log.msg("Aparts inserted in db count :", apartsToCreate.length);
     log.msg("result", result);
     return result;
