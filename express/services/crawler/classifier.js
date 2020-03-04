@@ -26,7 +26,7 @@ const classifySingleApartment = async postLink => {
     const attributes = apartInfo.viewItemPage.viewItemData.adAttributes;
 
     //fetch every images & info on the post
-    // if (photoGallery) fetchPhotos(photoGallery, postLink);
+    if (photoGallery) fetchPhotos(photoGallery, postLink);
     if (attributes) updateApartsAttributes(attributes, postLink);
 
     //todo: fire up notification and await photos and attributes

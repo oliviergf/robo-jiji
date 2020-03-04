@@ -5,6 +5,7 @@ const models = require("../../models");
 const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
+
 rssQuery = researchLink => {
   let count = 0;
   let lastQueryLinks = [];
@@ -45,6 +46,7 @@ rssQuery = researchLink => {
 
 /**
  * Adds the new Aparts in the DB via a transaction
+ * too much waiting in the transaction; pullout aparts.
  */
 insertApartsIntoDb = async responseAparts => {
   let apartsToCreate = [];
@@ -54,7 +56,7 @@ insertApartsIntoDb = async responseAparts => {
       apartsToCreate = await selectUniqueLinks(responseAparts);
 
       if (apartsToCreate.length !== 0) {
-        await models.Aparts.bulkCreate(apartsToCreate, { transaction: t });
+        await models.Aparts.bulkCreate(apartsToCreate, { transaction: t, ignoreDuplicates: true });
 
         /**
          * creates a new UserAparts for every new appart that fits into a zone
