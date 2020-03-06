@@ -1,12 +1,15 @@
 const recurrentLinkService = require("./query.js");
 const links = require("./links");
 
-const startRSSService = () => {
-  //startup connection pool for sequelize?
+const startRSSService = (workerId, cpuCount) => {
+  const nblinks = Math.ceil(links.length / cpuCount);
+  linkToQuery = links.slice(workerId, workerId + nblinks);
+  console.log("links to woffload", linkToQuery);
+  console.log("wr id", workerId);
 
-  links.map(link => {
+  linkToQuery.map(link => {
+    console.log(`worker id : ${workerId} just took link: ${link}`);
     recurrentLinkService(link);
-    //mettre un set timeout pour que les query soient décalés?
   });
 };
 

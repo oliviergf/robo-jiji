@@ -14,7 +14,6 @@ const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const models = require("./models");
-const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
 const sessionTimeOutMinutes = 60 * 3; //3 hours
@@ -118,7 +117,7 @@ app.use("/zone", zoneRouter);
  * --------------------------------------------------------------------------------
  */
 
-RSSPoolWorkers();
+// RSSPoolWorkers();
 
 /**
  * ERROR HANDELING
