@@ -28,6 +28,8 @@ const sessionTimeOutMinutes = 60 * 3; //3 hours
 
 // use this for drawing logos! https://excalidraw.com/
 
+// forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
+
 //  metttre un temps prefere pour shut down les notificatiosn?
 
 /**
