@@ -2,6 +2,7 @@ const request = require("request-promise");
 const parser = require("fast-xml-parser");
 const classifier = require("../crawler/classifier");
 const models = require("../../models");
+const { Op } = require("sequelize");
 const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
@@ -31,7 +32,7 @@ rssQuery = researchLink => {
       // insert new aparts in db via transaction
       const result = await insertApartsIntoDb(newAparts);
 
-      log.zoneRequestEnded(result[1] ?result[1] : 0 , newAparts.length, count);
+      log.zoneRequestEnded(result[1] ? result[1] : 0, newAparts.length, count);
       count++;
     } catch (err) {
       log.err("zone query failed", err);
@@ -56,7 +57,10 @@ insertApartsIntoDb = async responseAparts => {
       apartsToCreate = await selectUniqueLinks(responseAparts);
 
       if (apartsToCreate.length !== 0) {
-        await models.Aparts.bulkCreate(apartsToCreate, { transaction: t, ignoreDuplicates: true });
+        await models.Aparts.bulkCreate(apartsToCreate, {
+          transaction: t,
+          ignoreDuplicates: true
+        });
 
         /**
          * creates a new UserAparts for every new appart that fits into a zone
@@ -98,33 +102,34 @@ sendApartsToClassifier = apartsToCreate => {
 
 /**
  * returns an array of unique apartements that arent in DB
+ * todo: that shit slow AF; how about; querying find all instance of id in this array, and then filtering
+ * returning item. that way u only do one  query. instead of possibly 20.
+ * SPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
-  //make sure all new Aparts aren't already in database
-  await Promise.all(
-    newAparts.map(async apart => {
-      let count = await models.Aparts.count({
-        where: {
-          link: apart.link
+
+  const newApartslinks = newAparts.map(apart => apart.link);
+  const apartsInDb = await models.Aparts.findAll({
+    attributes: ["link"],
+    where: { link: { [Op.in]: [newApartslinks] } }
+  });
+
+  const apartsInDbLinks = apartsInDb.map(apt => apt.dataValues.link);
+  newAparts.map(apart => {
+    if (!apartsInDbLinks.includes(apart.link)) {
+      uniqueAparts.push({
+        title: apart.title,
+        price: apart["g-core:price"],
+        description: apart.description,
+        link: apart.link,
+        localisation: {
+          type: "Point",
+          coordinates: [apart["geo:lat"], apart["geo:long"]]
         }
       });
-
-      if (count === 0) {
-        //formats the aparts for bulk create
-        uniqueAparts.push({
-          title: apart.title,
-          price: apart["g-core:price"],
-          description: apart.description,
-          link: apart.link,
-          localisation: {
-            type: "Point",
-            coordinates: [apart["geo:lat"], apart["geo:long"]]
-          }
-        });
-      }
-    })
-  );
+    }
+  });
   return uniqueAparts;
 };
 

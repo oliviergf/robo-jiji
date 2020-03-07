@@ -50,19 +50,21 @@ fetchPhotos = async (gallery, postLink) => {
 
   //query image and save to fs
   gallery.map(async (photo, index) => {
-    try {
-      const picture = await axios({
-        method: "get",
-        url: photo.href,
-        responseType: "stream"
-      });
-      // picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
-    } catch (error) {
-      log.err(`could not fetch img ${photo.href} `, err);
+    if (photo.type !== "video") {
+      try {
+        const picture = await axios({
+          method: "get",
+          url: photo.href,
+          responseType: "stream"
+        });
+        picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+      } catch (error) {
+        log.err("gallery", gallery);
+        log.err(`could not fetch img ${photo.href} `, error);
+      }
     }
   });
 };
-
 
 /**
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
@@ -94,7 +96,8 @@ updateApartsAttributes = async (info, postLink) => {
           Apart.wheelchairAccessible = att.machineValue === "1";
         break;
       case "numberparkingspots":
-        if (att.machineValue) Apart.parkingSpots = att.machineValue === 'Not Available' ? 0 : 1;
+        if (att.machineValue)
+          Apart.parkingSpots = att.machineValue === "Not Available" ? 0 : 1;
       default:
     }
   });

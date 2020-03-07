@@ -8,6 +8,7 @@ class logger {
     console.log("UserAparts created count :", UserAparts);
     console.log("newly seen appart count : ", newApartsCreated);
     console.log("query count :", queryCount);
+    console.log("\n\n\n\n");
   }
 
   err(message, err) {

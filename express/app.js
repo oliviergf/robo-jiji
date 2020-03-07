@@ -25,6 +25,8 @@ const sessionTimeOutMinutes = 60 * 3; //3 hours
  * / AWS pour déploiements
  */
 
+// http://legisquebec.gouv.qc.ca/fr/ShowDoc/cs/C-1.1
+// http://www.blogueducrl.com/2019/11/chronique-du-cti-banques-de-donnees.html
 // use this for drawing logos! https://excalidraw.com/
 
 // forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
