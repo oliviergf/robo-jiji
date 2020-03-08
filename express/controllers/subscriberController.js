@@ -1,9 +1,12 @@
 const model = require("../models");
 
 subscriberController = {
-  subscribeUser: async userinfo => {
+  subscribeUser: async (userinfo, payload) => {
     //check that no user has the same email provided
-    console.log("here in subscriber");
+
+    webpush.sendNotification(subscription, payload).catch(error => {
+      console.error(error.stack);
+    });
   }
 };
 

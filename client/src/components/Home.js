@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import pushManager from "../services/pushManager";
 
 class Home extends React.Component {
   render() {
@@ -25,6 +26,7 @@ class Home extends React.Component {
               Login
             </Link>
           </Button>
+          <Button onClick={pushManager}>push test</Button>
         </Box>
       </Container>
     );
