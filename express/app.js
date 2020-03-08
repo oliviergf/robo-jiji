@@ -14,7 +14,6 @@ const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const models = require("./models");
-const RSSPoolWorkers = require("./services/rss/index");
 const app = express();
 
 const sessionTimeOutMinutes = 60 * 3; //3 hours
@@ -26,7 +25,11 @@ const sessionTimeOutMinutes = 60 * 3; //3 hours
  * / AWS pour déploiements
  */
 
+// http://legisquebec.gouv.qc.ca/fr/ShowDoc/cs/C-1.1
+// http://www.blogueducrl.com/2019/11/chronique-du-cti-banques-de-donnees.html
 // use this for drawing logos! https://excalidraw.com/
+
+// forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
 
 //  metttre un temps prefere pour shut down les notificatiosn?
 
@@ -116,7 +119,7 @@ app.use("/zone", zoneRouter);
  * --------------------------------------------------------------------------------
  */
 
-RSSPoolWorkers();
+// RSSPoolWorkers();
 
 /**
  * ERROR HANDELING
