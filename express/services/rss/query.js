@@ -33,9 +33,10 @@ rssQuery = researchLink => {
       if (newAparts.length > 0) {
         const result = await insertApartsIntoDb(newAparts);
         log.zoneRequestEnded(
-          result[1] ? result[1] : 0,
+          result.result[1] ? result.result[1] : 0,
           newAparts.length,
-          count
+          count,
+          result.insertInDb
         );
       } else {
         log.msg("no new aparts to handle");
@@ -87,9 +88,7 @@ insertApartsIntoDb = async responseAparts => {
     });
 
     if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
-    log.msg("Aparts inserted in db count :", apartsToCreate.length);
-    log.msg("result", result);
-    return result;
+    return { result: result, insertInDb: apartsToCreate.length };
   } catch (error) {
     log.err("---Transaction Failed!", error);
     // If the execution reaches this line, an error occurred.
