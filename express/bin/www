@@ -2,7 +2,7 @@
 const cluster = require("cluster");
 const os = require("os");
 const cpuCount = os.cpus().length;
-
+require("dotenv").config();
 /**
  * Module dependencies.
  */

@@ -93,6 +93,10 @@ insertApartsIntoDb = async responseAparts => {
     log.err("---Transaction Failed!", error);
     // If the execution reaches this line, an error occurred.
     // The transaction has already been rolled back automatically by Sequelize!
+
+    //if theres a deadlock
+    if (error.parent.code === "ER_LOCK_DEADLOCK") {
+    }
   }
 };
 
