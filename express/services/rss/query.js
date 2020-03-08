@@ -30,9 +30,16 @@ rssQuery = researchLink => {
       fetchedAparts.map(apart => lastQueryLinks.push(apart.link));
 
       // insert new aparts in db via transaction
-      const result = await insertApartsIntoDb(newAparts);
-
-      log.zoneRequestEnded(result[1] ? result[1] : 0, newAparts.length, count);
+      if (newAparts.length > 0) {
+        const result = await insertApartsIntoDb(newAparts);
+        log.zoneRequestEnded(
+          result[1] ? result[1] : 0,
+          newAparts.length,
+          count
+        );
+      } else {
+        log.msg("no new aparts to handle");
+      }
       count++;
     } catch (err) {
       log.err("zone query failed", err);
@@ -102,9 +109,6 @@ sendApartsToClassifier = apartsToCreate => {
 
 /**
  * returns an array of unique apartements that arent in DB
- * todo: that shit slow AF; how about; querying find all instance of id in this array, and then filtering
- * returning item. that way u only do one  query. instead of possibly 20.
- * SPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
