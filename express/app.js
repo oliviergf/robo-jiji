@@ -10,6 +10,7 @@ const registerRouter = require("./routes/register");
 const zoneRouter = require("./routes/zone");
 const sessionLoginRouter = require("./routes/sessionLogin");
 const loginRouter = require("./routes/login");
+const subscribeNotifRouter = require("./routes/subscribeNotif");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -112,6 +113,7 @@ app.use("/login", loginRouter);
 app.use("/users", usersRouter);
 app.use("/sessionLogin", sessionLoginRouter);
 app.use("/zone", zoneRouter);
+app.use("/subscribeNotif", subscribeNotifRouter);
 
 /**
  * launches RSS worker

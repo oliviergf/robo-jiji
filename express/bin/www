@@ -3,6 +3,9 @@ const cluster = require("cluster");
 const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
+
 /**
  * Module dependencies.
  */
@@ -15,7 +18,16 @@ if (cluster.isMaster) {
   var debug = require("debug")("express:server");
   var http = require("http");
   let RSSPoolWorkers = require("../services/rss/index");
+  const webpush = require("web-push");
 
+  /**
+   * sets web-push
+   */
+  webpush.setVapidDetails(
+    "mailto:olivier.gauthier.farley@hotmail.com",
+    publicVapidKey,
+    privateVapidKey
+  );
   /**
    * set crawler workload for each cluster.
    */
