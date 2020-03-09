@@ -20,26 +20,67 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-export default async function startPushNotification() {
-  let registration = await navigator.serviceWorker.ready;
-  try {
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      // The `urlBase64ToUint8Array()` function is the same as in
-      // https://www.npmjs.com/package/web-push#using-vapid-key-for-applicationserverkey
-      applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+/**
+ * Let User know somehow that if they push ''block'' they'll need to disable it
+ * in settings.
+ */
+export async function askPushPermission() {
+  console.log("asking Permission");
+  return new Promise(function(resolve, reject) {
+    const permissionResult = Notification.requestPermission(function(result) {
+      resolve(result);
     });
-    console.log("Registered push");
-    console.log("Sending push");
-    await fetch("/subscribeNotif", {
-      method: "POST",
-      body: JSON.stringify(subscription),
-      headers: {
-        "content-type": "application/json"
+
+    if (permissionResult) {
+      permissionResult.then(resolve, reject);
+    }
+  }).then(function(permissionResult) {
+    if (permissionResult !== "granted") {
+      throw new Error("We weren't granted permission.");
+    }
+  });
+}
+
+export function subscribeUserToPush() {
+  return navigator.serviceWorker
+    .register("/service-worker.js")
+    .then(function(registration) {
+      const subscribeOptions = {
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+      };
+
+      return registration.pushManager.subscribe(subscribeOptions);
+    })
+    .then(function(pushSubscription) {
+      console.log(
+        "Received PushSubscription: ",
+        JSON.stringify(pushSubscription)
+      );
+      sendSubscriptionToBackEnd(pushSubscription);
+      return pushSubscription;
+    })
+    .catch(err => console.log(err));
+}
+
+function sendSubscriptionToBackEnd(subscription) {
+  return fetch("http://localhost:3000/subscribeNotif", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(subscription)
+  })
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error("Bad status code from server.");
+      }
+
+      return response.json();
+    })
+    .then(function(responseData) {
+      if (!(responseData.data && responseData.data.success)) {
+        throw new Error("Bad response from server.");
       }
     });
-    console.log("Sent push");
-  } catch (error) {
-    console.log(error);
-  }
 }

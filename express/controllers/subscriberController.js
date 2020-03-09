@@ -1,13 +1,13 @@
 const model = require("../models");
-
 subscriberController = {
   subscribeUser: async (userinfo, payload) => {
     //check that no user has the same email provided
-
-    webpush.sendNotification(subscription, payload).catch(error => {
-      console.error(error.stack);
-    });
+    console.log("in sub controller payload", payload);
+    console.log("in sub controller userinfo", userinfo);
+    // webpush.sendNotification(subscription, payload).catch(error => {
+    //   console.error(error.stack);
+    // });
   }
 };
 
-module.exports = registerController;
+module.exports = subscriberController;
