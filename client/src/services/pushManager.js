@@ -1,4 +1,5 @@
 //public vapid of our server!
+import axios from "../services/axios";
 const publicVapidKey =
   "BFkjlGMNKytjD2oOnED0Zb9ENXZqopsSRAQjZMun-RQDzjy6AX7qOpMHNjeVnYgBXSdgnf783Y1nSt9DwmqG8ko";
 
@@ -64,23 +65,19 @@ export function subscribeUserToPush() {
 }
 
 function sendSubscriptionToBackEnd(subscription) {
-  return fetch("http://localhost:3000/subscribeNotif", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(subscription)
-  })
+  return axios
+    .post("http://localhost:3000/subscribeNotif", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: JSON.stringify(subscription)
+    })
     .then(function(response) {
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Bad status code from server.");
       }
 
-      return response.json();
-    })
-    .then(function(responseData) {
-      if (!(responseData.data && responseData.data.success)) {
-        throw new Error("Bad response from server.");
-      }
+      return response;
     });
 }
