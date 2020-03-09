@@ -14,7 +14,8 @@ subscriberController = {
   }
 };
 
-saveSubToDatabase = async () => {
+//developers.google.com/web/fundamentals/push-notifications/sending-messages-with-web-push-libraries
+saveSubToDatabase = async payload => {
   //todo: implement this shit
 };
 module.exports = subscriberController;
