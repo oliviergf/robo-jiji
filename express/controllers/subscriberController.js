@@ -17,8 +17,8 @@ subscriberController = {
 //developers.google.com/web/fundamentals/push-notifications/sending-messages-with-web-push-libraries
 saveSubToDatabase = async (payload, UserId) => {
   try {
-    model.Subscribtion.create({
-      endPoint: payload.endPoint,
+    await model.Subscription.create({
+      endPoint: payload.endpoint,
       p256dh: payload.keys.p256dh,
       auth: payload.keys.auth,
       expirationTime: payload.expirationTime,
