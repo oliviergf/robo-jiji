@@ -5,7 +5,7 @@ subscriberController = {
     console.log("in sub controller payload", payload);
 
     //save the payload to db
-    saveSubToDatabase(payload);
+    saveSubToDatabase(payload, userinfo._id);
 
     console.log("in sub controller userinfo", userinfo);
     // webpush.sendNotification(subscription, payload).catch(error => {
@@ -15,7 +15,17 @@ subscriberController = {
 };
 
 //developers.google.com/web/fundamentals/push-notifications/sending-messages-with-web-push-libraries
-saveSubToDatabase = async payload => {
-  //todo: implement this shit
+saveSubToDatabase = async (payload, UserId) => {
+  try {
+    model.Subscribtion.create({
+      endPoint: payload.endPoint,
+      p256dh: payload.keys.p256dh,
+      auth: payload.keys.auth,
+      expirationTime: payload.expirationTime,
+      UserId: UserId
+    });
+  } catch (error) {
+    console.log("crap");
+  }
 };
 module.exports = subscriberController;
