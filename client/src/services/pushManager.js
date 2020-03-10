@@ -1,7 +1,7 @@
 //public vapid of our server!
 import axios from "../services/axios";
 const publicVapidKey =
-  "BFkjlGMNKytjD2oOnED0Zb9ENXZqopsSRAQjZMun-RQDzjy6AX7qOpMHNjeVnYgBXSdgnf783Y1nSt9DwmqG8ko";
+  "BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A";
 
 /**
  * urlBase64ToUint8Array

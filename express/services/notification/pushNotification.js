@@ -2,10 +2,11 @@ const axios = require("axios");
 const models = require("../../models");
 const logger = require("../../utils/logger");
 const moment = require("moment");
+const webpush = require("web-push");
 const log = new logger();
 
 // todo: mad fuck,checker dans firebase.js
-const firebase = require("./firebase");
+// const firebase = require("./firebase");
 /**
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be
@@ -16,6 +17,7 @@ const pushNotification = async (userId, apartId) => {
   try {
     console.log(process.env.PUBLIC_VAPID_KEY);
     console.log(process.env.PRIVATE_VAPID_KEY);
+    webpush.setGCMAPIKey("AIzaSyC9JEIuG4hy1njZN2ktyr93BTbs1A2PX3U");
     webpush.setVapidDetails(
       "mailto:olivier.gauthier.farley@hotmail.com",
       process.env.PUBLIC_VAPID_KEY,
@@ -24,12 +26,12 @@ const pushNotification = async (userId, apartId) => {
 
     const subscription = {
       endpoint:
-        "https://fcm.googleapis.com/fcm/send/ezV6tD6ITEE:APA91bEw7ml13yY4Fnf98Z9UomLxcIm0VF89M6tWUngePGVi9JhnzNQmNFKpfikMdc3GuSIYcTvqzbqhDpj8Bk42jJzUvkAWWzlr34G0AWXsoAkbbi6F8N2OhIDrdlTtKnVRhtkI3inV",
-      expirationTime: 100000,
+        "https://fcm.googleapis.com/fcm/send/cVsqd_wZ4xQ:APA91bFjqtD9iLIanMbU0Xq27dR0e-qeLRjRU0MsfaxxxhGtsv3QE6ug9gHyTVE6lgBN7nl_9fY2eAWbzR_Tc8rhqo72XHr3s4KA6sLvTPKCOCR5jDDPfoA54jXLeNzG4Jse44aAgs_w",
+      expirationTime: 1000,
       keys: {
         p256dh:
-          "BKSdA3OEziuW_5ypjGB9i1cctZDdrftzAyRe2ALuxFPNsTibKPwfxGhL965-GgJAVW1f6xoupWLh0H08S7jRD3g",
-        auth: "sLXzTeq5IgpxCHtOXdjRlg"
+          "BH7dRFp8Cwi3zyAfwvMmlsT-fRHiSWM5JM_0OtQoGZHu2EFdRtu8IjQSMebidwqGqmx2oOLJq4eIEi2J0HRAYo0",
+        auth: "dE0IvnY6a78RI18wb51f6g"
       }
     };
 
