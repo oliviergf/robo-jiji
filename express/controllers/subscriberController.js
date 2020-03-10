@@ -8,9 +8,6 @@ subscriberController = {
     saveSubToDatabase(payload, userinfo._id);
 
     console.log("in sub controller userinfo", userinfo);
-    // webpush.sendNotification(subscription, payload).catch(error => {
-    //   console.error(error.stack);
-    // });
   }
 };
 

@@ -20,6 +20,7 @@ router.post("/", async function(req, res, next) {
  */
 router.get("/", async function(req, res, next) {
   console.log("IT GO IN HERE");
+  console.log("req body", req.body);
   pushNotification("hello", "ok");
   res.send("register that damn user!");
 });

@@ -3,8 +3,7 @@ const models = require("../../models");
 const logger = require("../../utils/logger");
 const moment = require("moment");
 const log = new logger();
-const webpush = require("web-push");
-
+const firebase = require("./firebase");
 /**
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be
@@ -23,12 +22,12 @@ const pushNotification = async (userId, apartId) => {
 
     const subscription = {
       endpoint:
-        "https://fcm.googleapis.com/fcm/send/chuAaT8BxI4:APA91bE5vuImXqyCz3m5QyAkr6vD_-L63z89lWG1XN4hjq372Wx5BawPmYapu6IGuCLBKTu7ip63-lPlLVYMMG7v67ntTHGjI8h5rk2XFsaDsIoKMnp6xBF8FyEQDvuG1109UAJ4-FU9",
-      expirationTime: 1000,
+        "https://fcm.googleapis.com/fcm/send/ezV6tD6ITEE:APA91bEw7ml13yY4Fnf98Z9UomLxcIm0VF89M6tWUngePGVi9JhnzNQmNFKpfikMdc3GuSIYcTvqzbqhDpj8Bk42jJzUvkAWWzlr34G0AWXsoAkbbi6F8N2OhIDrdlTtKnVRhtkI3inV",
+      expirationTime: 100000,
       keys: {
         p256dh:
-          "BL9ijAiH1g6qwu8p-J61HH9kzdH5t1Hdgnh1Zg2imK6VZTJNRCGAbDZW-JWgUNXvEb7iiMz_q4qaLJV69rk6dHI",
-        auth: "gCb8yhvArxeHpplwxca0OA"
+          "BKSdA3OEziuW_5ypjGB9i1cctZDdrftzAyRe2ALuxFPNsTibKPwfxGhL965-GgJAVW1f6xoupWLh0H08S7jRD3g",
+        auth: "sLXzTeq5IgpxCHtOXdjRlg"
       }
     };
 
@@ -38,8 +37,7 @@ const pushNotification = async (userId, apartId) => {
         body: "est tres chouette"
       }
     };
-
-    webpush.sendNotification(subscription, JSON.stringify(dataToSend));
+    await webpush.sendNotification(subscription, JSON.stringify(dataToSend));
   } catch (err) {
     if (err.statusCode === 404 || err.statusCode === 410) {
       console.log("Subscription has expired or is no longer valid: ", err);
