@@ -3,6 +3,8 @@ const models = require("../../models");
 const logger = require("../../utils/logger");
 const moment = require("moment");
 const log = new logger();
+
+// todo: mad fuck,checker dans firebase.js
 const firebase = require("./firebase");
 /**
  * This function queries the URL of the appartement.

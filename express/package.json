@@ -18,7 +18,6 @@
     "express": "~4.16.1",
     "express-session": "^1.17.0",
     "fast-xml-parser": "^3.16.0",
-    "firebase": "^7.10.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "moment": "^2.24.0",
@@ -30,6 +29,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "sequelize": "^5.21.3",
+    "web-push": "^3.4.3",
     "wkx": "^0.4.8"
   }
 }
