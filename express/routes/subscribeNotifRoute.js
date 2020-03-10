@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var subscriberController = require("../controllers/subscriberController");
+const pushNotification = require("../services/notification/pushNotification");
 
 /* GET subscriber notification. */
 router.post("/", async function(req, res, next) {
@@ -12,6 +13,15 @@ router.post("/", async function(req, res, next) {
   } else {
     res.send(401);
   }
+});
+
+/**
+ * triggers notification testing purposes
+ */
+router.get("/", async function(req, res, next) {
+  console.log("IT GO IN HERE");
+  pushNotification("hello", "ok");
+  res.send("register that damn user!");
 });
 
 module.exports = router;

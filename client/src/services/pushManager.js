@@ -64,7 +64,10 @@ export function subscribeUserToPush() {
     .catch(err => console.log(err));
 }
 
-function sendSubscriptionToBackEnd(subscription) {
+/**
+ * saves subscription to db
+ */
+const sendSubscriptionToBackEnd = subscription => {
   return axios
     .post("http://localhost:3000/subscribeNotif", {
       method: "POST",
@@ -80,4 +83,4 @@ function sendSubscriptionToBackEnd(subscription) {
 
       return response;
     });
-}
+};
