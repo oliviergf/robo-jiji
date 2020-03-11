@@ -50,7 +50,7 @@ const pushNotification = async (userId, apartId) => {
     // };
     // await webpush.sendNotification(subscription, JSON.stringify(dataToSend));
     var registrationToken =
-      "dwBU5MPFxgRZ-0Q7Hc-Q50:APA91bFMGwqLbKlnXKcCoqcM5W6IKCLK7SCzoeehislm5vwUD2nZNmhDbmSFcUpkzLUFyGL_IrayVC3NyxTfkw2M0mUbSW5pyoQaIB-aWeCQASFPUnWdG5Gjql-hZ8PLUzn0gzr0FlIX";
+      "dwBU5MPFxgRZ-0Q7Hc-Q50:APA91bHFq6HwgLSYBnEomsx5lzsDDtx9adeiRT1yS5nA-mxV9dprpF6yzBXvTDm-2bFm9AYytgn6MCkXft0yd9bxf1AM6GTJvpnWa5XMqoc_9GeXKA_Wz3jJJcsXJTSl_zeiritnCEjW";
 
     var message = {
       data: {

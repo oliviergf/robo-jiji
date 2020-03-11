@@ -75,34 +75,6 @@ export async function askPushPermission() {
     console.log("Message received. ", payload);
     // ...
   });
-
-  // navigator.serviceWorker
-  //   .register("/service-worker.js")
-  //   .then(function(registration) {
-  //     const subscribeOptions = {
-  //       userVisibleOnly: true,
-  //       applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-  //     };
-
-  //     return registration.pushManager.subscribe(subscribeOptions);
-  //   })
-  // messaging.setBackgroundMessageHandler(function(payload) {
-  //   console.log(
-  //     "[firebase-messaging-sw.js] Received background message ",
-  //     payload
-  //   );
-  //   // // Customize notification here
-  //   // const notificationTitle = "Background Message Title";
-  //   // const notificationOptions = {
-  //   //   body: "Background Message body.",
-  //   //   icon: "/firebase-logo.png"
-  //   // };
-
-  //   // return self.registration.showNotification(
-  //   //   notificationTitle,
-  //   //   notificationOptions
-  //   // );
-  // });
 }
 
 export function subscribeUserToPush() {
