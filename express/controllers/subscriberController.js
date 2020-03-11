@@ -8,13 +8,19 @@ subscriberController = {
   }
 };
 
-//developers.google.com/web/fundamentals/push-notifications/sending-messages-with-web-push-libraries
 saveSubToDatabase = async (UserId, userToken) => {
   try {
-    await model.Subscription.create({
-      BrowserToken: userToken,
-      UserId: UserId
+    const [sub, created] = await model.Subscription.findOrCreate({
+      where: { UserId: UserId },
+      defaults: {
+        BrowserToken: userToken
+      }
     });
+
+    if (!created) {
+      sub.BrowserToken = BrowserToken;
+      await sub.save();
+    }
   } catch (error) {
     console.log(error);
   }
