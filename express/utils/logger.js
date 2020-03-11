@@ -22,5 +22,9 @@ class logger {
   msg(message, obj) {
     console.log(message, obj);
   }
+
+  o(message) {
+    console.log(message);
+  }
 }
 module.exports = logger;
