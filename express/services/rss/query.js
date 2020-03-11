@@ -31,7 +31,7 @@ rssQuery = researchLink => {
 
       // insert new aparts in db via transaction
       if (newAparts.length > 0) {
-        const result = await insertApartsIntoDb(newAparts);
+        const result = await insertApartsIntoDb(newAparts, 3);
         log.zoneRequestEnded(
           result.result[1] ? result.result[1] : 0,
           newAparts.length,
@@ -53,6 +53,9 @@ rssQuery = researchLink => {
   startService();
 };
 
+/**
+ * Makes transaction to DB
+ */
 processTransaction = responseAparts => {
   let apartsToCreate = [];
   let UserApartsCreated = [];
@@ -87,7 +90,7 @@ processTransaction = responseAparts => {
  * Adds the new Aparts in the DB via a transaction
  * too much waiting in the transaction; pullout aparts.
  */
-insertApartsIntoDb = async responseAparts => {
+insertApartsIntoDb = async (responseAparts, triesLeft) => {
   try {
     const result = await processTransaction(responseAparts);
     if (result.toCreate.length !== 0) sendApartsToClassifier(result.toCreate);
@@ -96,7 +99,9 @@ insertApartsIntoDb = async responseAparts => {
   } catch (error) {
     log.err("---Transaction Failed!", error);
     //if theres a deadlock
-    if (error.parent.code === "ER_LOCK_DEADLOCK") {
+    if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
+      log.msg(`DEADLOCKFOUND! RETRYING WITH ${triesLeft}`);
+      setTimeout(insertApartsIntoDb(responseAparts, triesLeft - 1), 500);
     }
   }
 };
