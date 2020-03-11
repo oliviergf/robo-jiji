@@ -48,6 +48,8 @@ export async function askPushPermission() {
   messaging.usePublicVapidKey(
     "BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A"
   );
+
+  //request permission
   messaging
     .getToken()
     .then(currentToken => {
