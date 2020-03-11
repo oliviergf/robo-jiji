@@ -6,21 +6,9 @@ module.exports = function(sequelize, Sequelize) {
       type: Sequelize.INTEGER
     },
 
-    endPoint: {
+    BrowserToken: {
       type: Sequelize.STRING,
       notEmpty: true
-    },
-    p256dh: {
-      type: Sequelize.STRING,
-      notEmpty: true
-    },
-    auth: {
-      type: Sequelize.STRING,
-      notEmpty: true
-    },
-
-    expirationTime: {
-      type: Sequelize.DATE
     }
   });
   Subscription.associate = models => {

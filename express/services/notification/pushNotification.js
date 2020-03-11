@@ -11,8 +11,6 @@ admin.initializeApp({
   databaseURL: "https://super-awesome-party.firebaseio.com"
 });
 
-// todo: mad fuck,checker dans firebase.js
-// const firebase = require("./firebase");
 /**
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be
@@ -21,34 +19,6 @@ admin.initializeApp({
  */
 const pushNotification = async (userId, apartId) => {
   try {
-    // //tried to add firebase vapid key but it failed
-    // console.log(process.env.PUBLIC_VAPID_KEY);
-    // console.log(process.env.PRIVATE_VAPID_KEY);
-    // webpush.setGCMAPIKey("AIzaSyC9JEIuG4hy1njZN2ktyr93BTbs1A2PX3U");
-    // webpush.setVapidDetails(
-    //   "mailto:olivier.gauthier.farley@hotmail.com",
-    //   process.env.PUBLIC_VAPID_KEY,
-    //   process.env.PRIVATE_VAPID_KEY
-    // );
-
-    // const subscription = {
-    //   endpoint:
-    //     "https://fcm.googleapis.com/fcm/send/cVsqd_wZ4xQ:APA91bFjqtD9iLIanMbU0Xq27dR0e-qeLRjRU0MsfaxxxhGtsv3QE6ug9gHyTVE6lgBN7nl_9fY2eAWbzR_Tc8rhqo72XHr3s4KA6sLvTPKCOCR5jDDPfoA54jXLeNzG4Jse44aAgs_w",
-    //   expirationTime: 1000,
-    //   keys: {
-    //     p256dh:
-    //       "BH7dRFp8Cwi3zyAfwvMmlsT-fRHiSWM5JM_0OtQoGZHu2EFdRtu8IjQSMebidwqGqmx2oOLJq4eIEi2J0HRAYo0",
-    //     auth: "dE0IvnY6a78RI18wb51f6g"
-    //   }
-    // };
-
-    // const dataToSend = {
-    //   notification: {
-    //     title: "bob",
-    //     body: "est tres chouette"
-    //   }
-    // };
-    // await webpush.sendNotification(subscription, JSON.stringify(dataToSend));
     var registrationToken =
       "dwBU5MPFxgRZ-0Q7Hc-Q50:APA91bHFq6HwgLSYBnEomsx5lzsDDtx9adeiRT1yS5nA-mxV9dprpF6yzBXvTDm-2bFm9AYytgn6MCkXft0yd9bxf1AM6GTJvpnWa5XMqoc_9GeXKA_Wz3jJJcsXJTSl_zeiritnCEjW";
 

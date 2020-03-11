@@ -1,28 +1,22 @@
 const model = require("../models");
 subscriberController = {
-  subscribeUser: async (userinfo, payload) => {
+  subscribeUser: async (userinfo, userToken) => {
     //check that no user has the same email provided
-    console.log("in sub controller payload", payload);
 
     //save the payload to db
-    saveSubToDatabase(payload, userinfo._id);
-
-    console.log("in sub controller userinfo", userinfo);
+    saveSubToDatabase(userinfo, userToken);
   }
 };
 
 //developers.google.com/web/fundamentals/push-notifications/sending-messages-with-web-push-libraries
-saveSubToDatabase = async (payload, UserId) => {
+saveSubToDatabase = async (UserId, userToken) => {
   try {
     await model.Subscription.create({
-      endPoint: payload.endpoint,
-      p256dh: payload.keys.p256dh,
-      auth: payload.keys.auth,
-      expirationTime: payload.expirationTime,
+      BrowserToken: userToken,
       UserId: UserId
     });
   } catch (error) {
-    console.log("crap");
+    console.log(error);
   }
 };
 module.exports = subscriberController;

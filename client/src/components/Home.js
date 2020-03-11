@@ -1,10 +1,7 @@
 import React from "react";
 import { Container, Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import {
-  askPushPermission,
-  subscribeUserToPush
-} from "../services/pushManager";
+import { askPushPermission } from "../services/pushManager";
 
 class Home extends React.Component {
   render() {
@@ -30,7 +27,6 @@ class Home extends React.Component {
             </Link>
           </Button>
           <Button onClick={askPushPermission}>push permission</Button>
-          <Button onClick={subscribeUserToPush}>push sub</Button>
         </Box>
       </Container>
     );
