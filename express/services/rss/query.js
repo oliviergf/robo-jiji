@@ -30,9 +30,17 @@ rssQuery = researchLink => {
       fetchedAparts.map(apart => lastQueryLinks.push(apart.link));
 
       // insert new aparts in db via transaction
-      const result = await insertApartsIntoDb(newAparts);
-
-      log.zoneRequestEnded(result[1] ? result[1] : 0, newAparts.length, count);
+      if (newAparts.length > 0) {
+        const result = await insertApartsIntoDb(newAparts);
+        log.zoneRequestEnded(
+          result.result[1] ? result.result[1] : 0,
+          newAparts.length,
+          count,
+          result.insertInDb
+        );
+      } else {
+        log.msg("no new aparts to handle");
+      }
       count++;
     } catch (err) {
       log.err("zone query failed", err);
@@ -80,13 +88,15 @@ insertApartsIntoDb = async responseAparts => {
     });
 
     if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
-    log.msg("Aparts inserted in db count :", apartsToCreate.length);
-    log.msg("result", result);
-    return result;
+    return { result: result, insertInDb: apartsToCreate.length };
   } catch (error) {
     log.err("---Transaction Failed!", error);
     // If the execution reaches this line, an error occurred.
     // The transaction has already been rolled back automatically by Sequelize!
+
+    //if theres a deadlock
+    if (error.parent.code === "ER_LOCK_DEADLOCK") {
+    }
   }
 };
 
@@ -102,9 +112,6 @@ sendApartsToClassifier = apartsToCreate => {
 
 /**
  * returns an array of unique apartements that arent in DB
- * todo: that shit slow AF; how about; querying find all instance of id in this array, and then filtering
- * returning item. that way u only do one  query. instead of possibly 20.
- * SPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED
  */
 selectUniqueLinks = async newAparts => {
   let uniqueAparts = [];
