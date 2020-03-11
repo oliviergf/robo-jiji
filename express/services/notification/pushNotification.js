@@ -11,6 +11,8 @@ admin.initializeApp({
   databaseURL: "https://super-awesome-party.firebaseio.com"
 });
 
+// sleep 3 ; curl http://localhost:3000/subscribeNotif
+
 /**
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be

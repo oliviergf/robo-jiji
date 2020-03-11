@@ -53,47 +53,48 @@ rssQuery = researchLink => {
   startService();
 };
 
+processTransaction = responseAparts => {
+  let apartsToCreate = [];
+  let UserApartsCreated = [];
+  return models.sequelize.transaction(async t => {
+    apartsToCreate = await selectUniqueLinks(responseAparts);
+
+    if (apartsToCreate.length !== 0) {
+      await models.Aparts.bulkCreate(apartsToCreate, {
+        transaction: t,
+        ignoreDuplicates: true
+      });
+
+      /**
+       * creates a new UserAparts for every new appart that fits into a zone
+       * speficied by a user.
+       */
+      UserApartsCreated = await models.sequelize.query(
+        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
+        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+        from Zones, Aparts
+        where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
+          apart => `'${apart.link}'`
+        )})`,
+        { transaction: t }
+      );
+    }
+    return { UPcreated: UserApartsCreated, toCreate: apartsToCreate };
+  });
+};
+
 /**
  * Adds the new Aparts in the DB via a transaction
  * too much waiting in the transaction; pullout aparts.
  */
 insertApartsIntoDb = async responseAparts => {
-  let apartsToCreate = [];
-  let UserApartsCreated = [];
   try {
-    const result = await models.sequelize.transaction(async t => {
-      apartsToCreate = await selectUniqueLinks(responseAparts);
+    const result = await processTransaction(responseAparts);
+    if (result.toCreate.length !== 0) sendApartsToClassifier(result.toCreate);
 
-      if (apartsToCreate.length !== 0) {
-        await models.Aparts.bulkCreate(apartsToCreate, {
-          transaction: t,
-          ignoreDuplicates: true
-        });
-
-        /**
-         * creates a new UserAparts for every new appart that fits into a zone
-         * speficied by a user.
-         */
-        UserApartsCreated = await models.sequelize.query(
-          `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-          select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
-          from Zones, Aparts
-          where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
-            apart => `'${apart.link}'`
-          )})`,
-          { transaction: t }
-        );
-      }
-      return UserApartsCreated;
-    });
-
-    if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
-    return { result: result, insertInDb: apartsToCreate.length };
+    return { result: result.UPcreated, insertInDb: result.toCreate.length };
   } catch (error) {
     log.err("---Transaction Failed!", error);
-    // If the execution reaches this line, an error occurred.
-    // The transaction has already been rolled back automatically by Sequelize!
-
     //if theres a deadlock
     if (error.parent.code === "ER_LOCK_DEADLOCK") {
     }
