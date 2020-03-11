@@ -1,5 +1,8 @@
 //public vapid of our server!
 import axios from "../services/axios";
+import * as firebase from "firebase/app";
+import "firebase/analytics";
+import "firebase/messaging";
 const publicVapidKey =
   "BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A";
 
@@ -26,20 +29,80 @@ function urlBase64ToUint8Array(base64String) {
  * in settings.
  */
 export async function askPushPermission() {
-  console.log("asking Permission");
-  return new Promise(function(resolve, reject) {
-    const permissionResult = Notification.requestPermission(function(result) {
-      resolve(result);
-    });
+  const firebaseConfig = {
+    apiKey: "AIzaSyC9JEIuG4hy1njZN2ktyr93BTbs1A2PX3U",
+    authDomain: "super-awesome-party.firebaseapp.com",
+    databaseURL: "https://super-awesome-party.firebaseio.com",
+    projectId: "super-awesome-party",
+    storageBucket: "super-awesome-party.appspot.com",
+    messagingSenderId: "875797832163",
+    appId: "1:875797832163:web:3393363537c816b546c0d6",
+    measurementId: "G-7GLFHNZGV7"
+  };
 
-    if (permissionResult) {
-      permissionResult.then(resolve, reject);
-    }
-  }).then(function(permissionResult) {
-    if (permissionResult !== "granted") {
-      throw new Error("We weren't granted permission.");
-    }
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  // Retrieve Firebase Messaging object.
+  const messaging = firebase.messaging();
+  // Add the public key generated from the console here.
+  messaging.usePublicVapidKey(
+    "BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A"
+  );
+  messaging
+    .getToken()
+    .then(currentToken => {
+      if (currentToken) {
+        console.log(currentToken);
+        console.log("also here");
+        // sendTokenToServer(currentToken);
+        // updateUIForPushEnabled(currentToken);
+      } else {
+        // Show permission request.
+        console.log(
+          "No Instance ID token available. Request permission to generate one."
+        );
+        // Show permission UI.
+        // updateUIForPushPermissionRequired();
+        // setTokenSentToServer(false);
+      }
+    })
+    .catch(err => {
+      console.log("An error occurred while retrieving token. ", err);
+      // showToken('Error retrieving Instance ID token. ', err);
+      // setTokenSentToServer(false);
+    });
+  messaging.onMessage(payload => {
+    console.log("Message received. ", payload);
+    // ...
   });
+
+  // navigator.serviceWorker
+  //   .register("/service-worker.js")
+  //   .then(function(registration) {
+  //     const subscribeOptions = {
+  //       userVisibleOnly: true,
+  //       applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+  //     };
+
+  //     return registration.pushManager.subscribe(subscribeOptions);
+  //   })
+  // messaging.setBackgroundMessageHandler(function(payload) {
+  //   console.log(
+  //     "[firebase-messaging-sw.js] Received background message ",
+  //     payload
+  //   );
+  //   // // Customize notification here
+  //   // const notificationTitle = "Background Message Title";
+  //   // const notificationOptions = {
+  //   //   body: "Background Message body.",
+  //   //   icon: "/firebase-logo.png"
+  //   // };
+
+  //   // return self.registration.showNotification(
+  //   //   notificationTitle,
+  //   //   notificationOptions
+  //   // );
+  // });
 }
 
 export function subscribeUserToPush() {
