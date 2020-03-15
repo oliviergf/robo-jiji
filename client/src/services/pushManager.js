@@ -52,6 +52,7 @@ export async function askPushPermission() {
       // showToken('Error retrieving Instance ID token. ', err);
       // setTokenSentToServer(false);
     });
+
   messaging.onTokenRefresh(() => {
     messaging
       .getToken()
