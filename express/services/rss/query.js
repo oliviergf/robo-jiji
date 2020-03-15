@@ -7,13 +7,16 @@ const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
 
+/**
+ * Performs a full sequence of events concerning a RSS link
+ */
 rssQuery = researchLink => {
   let count = 0;
   let lastQueryLinks = [];
 
   let startService = async () => {
     try {
-      //ping to RSS link
+      //ping the RSS link & parse stuff
       const response = await request(researchLink);
       const fetchedAparts = parser.parse(response).rss.channel.item;
 
@@ -31,7 +34,7 @@ rssQuery = researchLink => {
 
       // insert new aparts in db via transaction
       if (newAparts.length > 0) {
-        const result = await insertApartsIntoDb(newAparts);
+        const result = await insertApartsIntoDb(newAparts, 3);
         log.zoneRequestEnded(
           result.result[1] ? result.result[1] : 0,
           newAparts.length,
@@ -54,48 +57,56 @@ rssQuery = researchLink => {
 };
 
 /**
- * Adds the new Aparts in the DB via a transaction
- * too much waiting in the transaction; pullout aparts.
+ * Makes transaction to DB
  */
-insertApartsIntoDb = async responseAparts => {
-  let apartsToCreate = [];
+processTransaction = responseAparts => {
+  let ApartsToCreate = [];
   let UserApartsCreated = [];
+  return models.sequelize.transaction(async t => {
+    ApartsToCreate = await selectUniqueLinks(responseAparts);
+
+    if (ApartsToCreate.length !== 0) {
+      await models.Aparts.bulkCreate(ApartsToCreate, {
+        transaction: t,
+        ignoreDuplicates: true
+      });
+
+      /**
+       * creates a new UserAparts for every new appart that fits into a zone
+       */
+      UserApartsCreated = await models.sequelize.query(
+        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
+        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+        from Zones, Aparts
+        where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${ApartsToCreate.map(
+          apart => `'${apart.link}'`
+        )})`,
+        { transaction: t }
+      );
+    }
+    return { UPcreated: UserApartsCreated, toCreate: ApartsToCreate };
+  });
+};
+
+/**
+ * Adds the new Aparts in the DB via a transaction
+ * If the transaction fails for some reason, we should retry it after 500ms
+ * max retries = 3
+ */
+insertApartsIntoDb = async (responseAparts, triesLeft) => {
   try {
-    const result = await models.sequelize.transaction(async t => {
-      apartsToCreate = await selectUniqueLinks(responseAparts);
+    const result = await processTransaction(responseAparts);
+    if (result.toCreate.length !== 0) sendApartsToClassifier(result.toCreate);
 
-      if (apartsToCreate.length !== 0) {
-        await models.Aparts.bulkCreate(apartsToCreate, {
-          transaction: t,
-          ignoreDuplicates: true
-        });
-
-        /**
-         * creates a new UserAparts for every new appart that fits into a zone
-         * speficied by a user.
-         */
-        UserApartsCreated = await models.sequelize.query(
-          `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-          select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
-          from Zones, Aparts
-          where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${apartsToCreate.map(
-            apart => `'${apart.link}'`
-          )})`,
-          { transaction: t }
-        );
-      }
-      return UserApartsCreated;
-    });
-
-    if (apartsToCreate.length !== 0) sendApartsToClassifier(apartsToCreate);
-    return { result: result, insertInDb: apartsToCreate.length };
+    return { result: result.UPcreated, insertInDb: result.toCreate.length };
   } catch (error) {
     log.err("---Transaction Failed!", error);
-    // If the execution reaches this line, an error occurred.
-    // The transaction has already been rolled back automatically by Sequelize!
-
-    //if theres a deadlock
-    if (error.parent.code === "ER_LOCK_DEADLOCK") {
+    //if theres a deadlock, some
+    if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
+      log.o(`DEADLOCKFOUND! RETRYING WITH ${triesLeft}`);
+      setTimeout(() => {
+        insertApartsIntoDb(responseAparts, triesLeft - 1);
+      }, 500);
     }
   }
 };
