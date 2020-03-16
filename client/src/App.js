@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Bar from "./components/Bar";
+import SideMenu from "./components/SideMenu";
 import "typeface-roboto";
 import "./App.css";
 
@@ -85,7 +86,6 @@ class App extends React.Component {
             userLoggedOut={this.logoutHandeler}
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
-            testing={true}
             language={this.state.language}
             changeLanguage={this.changeLanguage}
           />

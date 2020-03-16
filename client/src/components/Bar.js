@@ -5,7 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -22,6 +21,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import SideMenu from "./SideMenu";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,7 +42,8 @@ export default function ButtonAppBar(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
-    anchorEl: null
+    anchorEl: null,
+    showMenu: false
   });
 
   useEffect(() => {
@@ -60,6 +61,13 @@ export default function ButtonAppBar(props) {
 
   const handleMenuClose = () => {
     setState({ ...state, anchorEl: null });
+  };
+
+  const triggerMenu = () => {
+    console.log("state before in bar", state);
+
+    setState({ ...state, [state.showMenu]: true });
+    console.log("state after in bar", state);
   };
 
   const handleLogOut = () => {
@@ -127,17 +135,7 @@ export default function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          {props.isLoggedIn && (
-            <Button
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              // onClick={props.triggerMenu(true)}
-            >
-              <MenuIcon />
-            </Button>
-          )}
+          {props.isLoggedIn && <SideMenu />}
 
           <Typography variant="h6" className={classes.title}>
             <IconButton edge="start">
@@ -153,7 +151,6 @@ export default function ButtonAppBar(props) {
           {loginArea()}
         </Toolbar>
       </AppBar>
-      {/* {renderMenu} */}
     </div>
   );
 }
