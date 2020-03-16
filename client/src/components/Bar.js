@@ -13,15 +13,7 @@ import axios from "../services/axios";
 import logo from "../assets/roboticon.png";
 import ApartmentIcon from "@material-ui/icons/Apartment";
 import ExploreIcon from "@material-ui/icons/Explore";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import SideMenu from "./SideMenu";
+import BurgerMenu from "./BurgerMenu";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,40 +44,6 @@ export default function ButtonAppBar(props) {
 
   const handleProfileMenuOpen = event => {
     setState({ ...state, anchorEl: event.currentTarget });
-  };
-
-  const handleLanguageChange = () => {
-    props.changeLanguage();
-    handleMenuClose();
-  };
-
-  const handleMenuClose = () => {
-    setState({ ...state, anchorEl: null });
-  };
-
-  const triggerMenu = () => {
-    console.log("state before in bar", state);
-
-    setState({ ...state, [state.showMenu]: true });
-    console.log("state after in bar", state);
-  };
-
-  const handleLogOut = () => {
-    let self = this;
-    axios
-      .get("http://localhost:3000/logout")
-      .then(function(response) {
-        // handle success
-        setState({ ...state, anchorEl: null });
-        props.userLoggedOut();
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-      });
   };
 
   const loginArea = () => {
@@ -135,8 +93,15 @@ export default function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          {props.isLoggedIn && <SideMenu />}
-
+          {props.isLoggedIn && (
+            <BurgerMenu
+              changeLanguage={() => {
+                props.changeLanguage();
+              }}
+              userLoggedOut={props.userLoggedOut}
+              language={props.language}
+            />
+          )}
           <Typography variant="h6" className={classes.title}>
             <IconButton edge="start">
               <Link

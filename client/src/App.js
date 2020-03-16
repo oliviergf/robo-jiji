@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Bar from "./components/Bar";
-import SideMenu from "./components/SideMenu";
+import SideMenu from "./components/BurgerMenu";
 import "typeface-roboto";
 import "./App.css";
 
@@ -39,6 +39,7 @@ class App extends React.Component {
   }
 
   changeLanguage = () => {
+    console.log("in change lan?");
     this.setState(prevState => ({
       language: prevState.language === 0 ? 1 : 0
     }));
@@ -84,10 +85,10 @@ class App extends React.Component {
         <div className={classes.root}>
           <Bar
             userLoggedOut={this.logoutHandeler}
+            changeLanguage={this.changeLanguage}
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             language={this.state.language}
-            changeLanguage={this.changeLanguage}
           />
         </div>
         <div className="body">
