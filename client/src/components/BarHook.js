@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/roboticon.png";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import dictio from "../assets/dictionary";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,6 +38,11 @@ export default function ButtonAppBar(props) {
     console.log("props", props);
   });
 
+  const handleLanguageChange = () => {
+    props.changeLanguage();
+    handleMenuClose();
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -53,6 +59,9 @@ export default function ButtonAppBar(props) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLanguageChange}>
+        {dictio.langue[props.language]}
+      </MenuItem>
     </Menu>
   );
 

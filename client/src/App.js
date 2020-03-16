@@ -31,10 +31,17 @@ class App extends React.Component {
       userFirstName: "",
       anchorEl: null,
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
+      language: 0
     };
     this.testBrowserSession();
   }
+
+  changeLanguage = () => {
+    this.setState(prevState => ({
+      language: prevState.language === 0 ? 1 : 0
+    }));
+  };
 
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -79,6 +86,8 @@ class App extends React.Component {
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             testing={true}
+            language={this.state.language}
+            changeLanguage={this.changeLanguage}
           />
         </div>
         <div className="body">
