@@ -1,17 +1,29 @@
-import React from "react";
-import axios from "../services/axios";
-import "typeface-roboto";
-import "../App.css";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import dictio from "../assets/dictionary";
+import axios from "../services/axios";
+import logo from "../assets/roboticon.png";
+import ApartmentIcon from "@material-ui/icons/Apartment";
+import ExploreIcon from "@material-ui/icons/Explore";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
@@ -20,35 +32,44 @@ const styles = theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  list: {
+    width: 250
   }
-});
+}));
 
-class Bar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      anchorEl: null
-    };
-  }
+export default function ButtonAppBar(props) {
+  const classes = useStyles();
+  const [state, setState] = React.useState({
+    left: false,
+    anchorEl: null
+  });
 
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  useEffect(() => {
+    console.log("props", props);
+  });
+
+  const handleProfileMenuOpen = event => {
+    setState({ ...state, anchorEl: event.currentTarget });
   };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
+  const handleLanguageChange = () => {
+    props.changeLanguage();
+    handleMenuClose();
   };
 
-  handleLogOut = () => {
+  const handleMenuClose = () => {
+    setState({ ...state, anchorEl: null });
+  };
+
+  const handleLogOut = () => {
     let self = this;
     axios
       .get("http://localhost:3000/logout")
       .then(function(response) {
         // handle success
-        self.setState({
-          anchorEl: null
-        });
-        self.props.userLoggedOut();
+        setState({ ...state, anchorEl: null });
+        props.userLoggedOut();
       })
       .catch(function(error) {
         // handle error
@@ -59,53 +80,80 @@ class Bar extends React.Component {
       });
   };
 
-  render() {
-    const { classes } = this.props;
-    let loginArea;
-
-    if (this.props.isLoggedIn) {
-      loginArea = (
+  const loginArea = () => {
+    let loginButton;
+    if (props.isLoggedIn) {
+      loginButton = (
         <div>
-          <Button
-            style={{ textDecoration: "none", color: "white" }}
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-            onClick={this.handleClick}
+          <IconButton
             edge="end"
+            aria-label="maps"
+            aria-haspopup="true"
+            color="inherit"
           >
-            {this.props.userFirstName}
-          </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={this.state.anchorEl}
-            keepMounted
-            open={Boolean(this.state.anchorEl)}
-            onClose={this.handleClose}
+            <Link style={{ textDecoration: "none", color: "white" }} to="/map">
+              <ExploreIcon />
+            </Link>
+          </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
           >
-            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleClose}>My account</MenuItem>
-            <MenuItem onClick={this.handleLogOut}>
-              <Link to="/home">Logout</Link>
-            </MenuItem>
-          </Menu>
+            <Link
+              style={{ textDecoration: "none", color: "white" }}
+              to="/dashboard"
+            >
+              <ApartmentIcon />
+            </Link>
+          </IconButton>
         </div>
       );
     } else {
-      loginArea = (
-        <Button edge="end" color="inherit">
+      loginButton = (
+        <Button color="inherit">
           <Link style={{ textDecoration: "none", color: "white" }} to="/login">
             login
           </Link>
         </Button>
       );
     }
-    return (
-      <AppBar position="static" className={styles.root}>
-        <Toolbar>{loginArea}</Toolbar>
-      </AppBar>
-    );
-  }
-}
+    return loginButton;
+  };
 
-//with Styles is passed as props.
-export default withStyles(styles, { withTheme: true })(Bar);
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          {props.isLoggedIn && (
+            <Button
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              // onClick={props.triggerMenu(true)}
+            >
+              <MenuIcon />
+            </Button>
+          )}
+
+          <Typography variant="h6" className={classes.title}>
+            <IconButton edge="start">
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to="/home"
+              >
+                {/* <img src={logo} alt="Logo"></img> */}
+                jijibot
+              </Link>
+            </IconButton>
+          </Typography>
+          {loginArea()}
+        </Toolbar>
+      </AppBar>
+      {/* {renderMenu} */}
+    </div>
+  );
+}

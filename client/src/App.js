@@ -4,7 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
-import Bar from "./components/BarHook";
+import Bar from "./components/Bar";
 import "typeface-roboto";
 import "./App.css";
 
@@ -92,6 +92,9 @@ class App extends React.Component {
         </div>
         <div className="body">
           <Switch>
+            <Route path="/dashboard">
+              <Home />
+            </Route>
             <Route path="/register">
               <Register />
             </Route>
@@ -103,8 +106,6 @@ class App extends React.Component {
             </Route>
             <Route path="/">
               <Home />
-              {this.state.width}
-              <div>{this.state.height}</div>
             </Route>
           </Switch>
         </div>

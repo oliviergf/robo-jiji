@@ -5,7 +5,8 @@
  */
 
 const dictionary = {
-  langue: ["Francais", "English"]
+  langue: ["Francais", "English"],
+  logout: ["Deconnexion", "logout"]
 };
 
 export default dictionary;
