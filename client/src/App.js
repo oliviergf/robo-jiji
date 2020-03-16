@@ -4,7 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
-import Bar from "./components/Bar";
+import Bar from "./components/BarHook";
 import "typeface-roboto";
 import "./App.css";
 
@@ -23,16 +23,15 @@ const styles = theme => ({
   }
 });
 
-/**
- * watch this video for push notifications : https://www.youtube.com/watch?v=N9zpRvFRmj8
- */
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
       userFirstName: "",
-      anchorEl: null
+      anchorEl: null,
+      width: window.innerWidth,
+      height: window.innerHeight
     };
     this.testBrowserSession();
   }
@@ -79,6 +78,7 @@ class App extends React.Component {
             userLoggedOut={this.logoutHandeler}
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
+            testing={true}
           />
         </div>
         <div className="body">
@@ -94,6 +94,8 @@ class App extends React.Component {
             </Route>
             <Route path="/">
               <Home />
+              {this.state.width}
+              <div>{this.state.height}</div>
             </Route>
           </Switch>
         </div>

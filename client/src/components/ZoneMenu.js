@@ -85,28 +85,6 @@ class ZoneMenu extends React.Component {
   //todo:does not work :  shit it
   onZoneSelect = zoneId => {
     console.log(zoneId);
-    // //doesnt work
-    // const zonesColored = this.state.zones.map(zone => {
-    //   if (zone.id === zoneId) {
-    //     let poly = zone.polygon;
-    //     poly.setOptions({ fillColor: "#FF00FF" });
-    //     return {
-    //       polygon: poly,
-    //       id: zone.id
-    //     };
-    //   } else {
-    //     let poly = zone.polygon;
-    //     poly.setOptions({ fillColor: "#FF00FF" });
-    //     return {
-    //       polygon: poly,
-    //       id: zone.id
-    //     };
-    //   }
-    // });
-
-    // this.setState({ zones: zonesColored });
-
-    //might want to trigger rerender to pass zones to zonelist?
   };
 
   /**

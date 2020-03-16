@@ -71,6 +71,7 @@ class Bar extends React.Component {
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={this.handleClick}
+            edge="end"
           >
             {this.props.userFirstName}
           </Button>
@@ -91,7 +92,7 @@ class Bar extends React.Component {
       );
     } else {
       loginArea = (
-        <Button edge="start" color="inherit">
+        <Button edge="end" color="inherit">
           <Link style={{ textDecoration: "none", color: "white" }} to="/login">
             login
           </Link>
@@ -99,23 +100,8 @@ class Bar extends React.Component {
       );
     }
     return (
-      <AppBar position="static">
-        <Toolbar>
-          <Button edge="start" color="inherit">
-            <Link style={{ textDecoration: "none", color: "white" }} to="/home">
-              home
-            </Link>
-          </Button>
-          <Button edge="start" color="inherit">
-            <Link style={{ textDecoration: "none", color: "white" }} to="/map">
-              Map
-            </Link>
-          </Button>
-          <Typography variant="h6" className={classes.title}>
-            Kijiji Bot App
-          </Typography>
-          {loginArea}
-        </Toolbar>
+      <AppBar position="static" className={styles.root}>
+        <Toolbar>{loginArea}</Toolbar>
       </AppBar>
     );
   }
