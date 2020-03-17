@@ -6,11 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import dictio from "../assets/dictionary";
-import axios from "../services/axios";
-import logo from "../assets/roboticon.png";
 import ApartmentIcon from "@material-ui/icons/Apartment";
 import ExploreIcon from "@material-ui/icons/Explore";
 import BurgerMenu from "./BurgerMenu";
@@ -36,10 +31,6 @@ export default function ButtonAppBar(props) {
     left: false,
     anchorEl: null,
     showMenu: false
-  });
-
-  useEffect(() => {
-    console.log("props", props);
   });
 
   const handleProfileMenuOpen = event => {

@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function TemporaryDrawer(props) {
+export default function SideBurgMenu(props) {
   const classes = useStyles();
 
   const [state, setState] = React.useState({
@@ -74,14 +74,17 @@ export default function TemporaryDrawer(props) {
    * todo: will need to be patching stuff up here as app goes
    * @param {*} text
    */
-  const returnSideItem = text => {
+  const returnSideItem = (text, index) => {
     switch (text) {
       case dictio.account[props.language]:
         return (
-          <Link style={{ textDecoration: "none", color: "inherit" }} to="/home">
+          <Link
+            key={index}
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/home"
+          >
             <ListItem
               button
-              key={text}
               onClick={() => {
                 handleSideClick(text);
               }}
@@ -95,10 +98,13 @@ export default function TemporaryDrawer(props) {
         );
       case dictio.maps[props.language]:
         return (
-          <Link style={{ textDecoration: "none", color: "inherit" }} to="/map">
+          <Link
+            key={index}
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/map"
+          >
             <ListItem
               button
-              key={text}
               onClick={() => {
                 handleSideClick(text);
               }}
@@ -115,10 +121,10 @@ export default function TemporaryDrawer(props) {
           <Link
             style={{ textDecoration: "none", color: "inherit" }}
             to="/dashboard"
+            key={index}
           >
             <ListItem
               button
-              key={text}
               onClick={() => {
                 handleSideClick(text);
               }}
@@ -135,10 +141,10 @@ export default function TemporaryDrawer(props) {
           <Link
             style={{ textDecoration: "none", color: "inherit" }}
             to="/settings"
+            key={index}
           >
             <ListItem
               button
-              key={text}
               onClick={() => {
                 handleSideClick(text);
               }}
@@ -154,7 +160,7 @@ export default function TemporaryDrawer(props) {
         return (
           <ListItem
             button
-            key={text}
+            key={index}
             onClick={() => {
               handleSideClick(text);
             }}
@@ -169,7 +175,7 @@ export default function TemporaryDrawer(props) {
         return (
           <ListItem
             button
-            key={text}
+            key={index}
             onClick={() => {
               handleSideClick(text);
             }}
@@ -191,7 +197,7 @@ export default function TemporaryDrawer(props) {
       onClick={toggleDrawer(side, false)}
       onKeyDown={toggleDrawer(side, false)}
     >
-      <List>{tabList.map(text => returnSideItem(text))}</List>
+      <List>{tabList.map((text, index) => returnSideItem(text, index))}</List>
     </div>
   );
 

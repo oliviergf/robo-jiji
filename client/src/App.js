@@ -4,8 +4,8 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
+import Informations from "./components/Information";
 import Bar from "./components/Bar";
-import SideMenu from "./components/BurgerMenu";
 import "typeface-roboto";
 import "./App.css";
 
@@ -39,7 +39,6 @@ class App extends React.Component {
   }
 
   changeLanguage = () => {
-    console.log("in change lan?");
     this.setState(prevState => ({
       language: prevState.language === 0 ? 1 : 0
     }));
@@ -58,6 +57,7 @@ class App extends React.Component {
   };
 
   logUserCredentials = user => {
+    console.log("logUserCredentials", user);
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname
@@ -79,7 +79,6 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className="App">
         <div className={classes.root}>
@@ -94,7 +93,10 @@ class App extends React.Component {
         <div className="body">
           <Switch>
             <Route path="/dashboard">
-              <Home />
+              <Home language={this.state.language} />
+            </Route>
+            <Route path="/informations">
+              <Informations language={this.state.language} />
             </Route>
             <Route path="/register">
               <Register />
@@ -106,7 +108,7 @@ class App extends React.Component {
               <ZoneMenu />
             </Route>
             <Route path="/">
-              <Home />
+              <Home language={this.state.language} />
             </Route>
           </Switch>
         </div>

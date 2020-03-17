@@ -8,8 +8,8 @@
 }
 
 .logoimg {
-  max-width: 15%;
-  max-height: 15%;
+  max-width: 35%;
+  max-height: 35%;
 }
 
 .makeStyles-root-1 {
@@ -21,7 +21,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,10 +32,10 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #ffffff;
 }
 
 .home {
-  background-color: #61dafb;
+  background-color: #f7edc3;
   height: 100%;
 }
