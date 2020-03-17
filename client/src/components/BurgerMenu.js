@@ -18,6 +18,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import TranslateIcon from "@material-ui/icons/Translate";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   list: {
@@ -77,63 +78,77 @@ export default function TemporaryDrawer(props) {
     switch (text) {
       case dictio.account[props.language]:
         return (
-          <ListItem
-            button
-            key={text}
-            onClick={() => {
-              handleSideClick(text);
-            }}
-          >
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+          <Link style={{ textDecoration: "none", color: "inherit" }} to="/home">
+            <ListItem
+              button
+              key={text}
+              onClick={() => {
+                handleSideClick(text);
+              }}
+            >
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
         );
       case dictio.maps[props.language]:
         return (
-          <ListItem
-            button
-            key={text}
-            onClick={() => {
-              handleSideClick(text);
-            }}
-          >
-            <ListItemIcon>
-              <ExploreIcon />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+          <Link style={{ textDecoration: "none", color: "inherit" }} to="/map">
+            <ListItem
+              button
+              key={text}
+              onClick={() => {
+                handleSideClick(text);
+              }}
+            >
+              <ListItemIcon>
+                <ExploreIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
         );
       case dictio.dashboard[props.language]:
         return (
-          <ListItem
-            button
-            key={text}
-            onClick={() => {
-              handleSideClick(text);
-            }}
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/dashboard"
           >
-            <ListItemIcon>
-              <ApartmentIcon />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+            <ListItem
+              button
+              key={text}
+              onClick={() => {
+                handleSideClick(text);
+              }}
+            >
+              <ListItemIcon>
+                <ApartmentIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
         );
       case dictio.settings[props.language]:
         return (
-          <ListItem
-            button
-            key={text}
-            onClick={() => {
-              handleSideClick(text);
-            }}
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/settings"
           >
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+            <ListItem
+              button
+              key={text}
+              onClick={() => {
+                handleSideClick(text);
+              }}
+            >
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
         );
       case dictio.logout[props.language]:
         return (
