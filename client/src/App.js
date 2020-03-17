@@ -99,13 +99,16 @@ class App extends React.Component {
               <Informations language={this.state.language} />
             </Route>
             <Route path="/register">
-              <Register />
+              <Register language={this.state.language} />
             </Route>
             <Route path="/login">
-              <Login logUserIn={this.logUserCredentials} />
+              <Login
+                logUserIn={this.logUserCredentials}
+                language={this.state.language}
+              />
             </Route>
             <Route path="/map">
-              <ZoneMenu />
+              <ZoneMenu language={this.state.language} />
             </Route>
             <Route path="/">
               <Home language={this.state.language} />

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "../services/axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 import { Redirect } from "react-router";
+import dictio from "../assets/dictionary";
 
 /**
  * TODO: ajouter validation du input et afficher a l'utilisateur why son nom fuck
@@ -72,7 +73,7 @@ class Login extends React.Component {
           </div>
           <div>
             <Button type="submit" value="login">
-              login
+              {dictio.enter[this.props.language]}
             </Button>
           </div>
         </form>

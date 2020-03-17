@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import ApartmentIcon from "@material-ui/icons/Apartment";
 import ExploreIcon from "@material-ui/icons/Explore";
 import BurgerMenu from "./BurgerMenu";
+import dictio from "../assets/dictionary";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -72,7 +73,7 @@ export default function ButtonAppBar(props) {
       loginButton = (
         <Button color="inherit">
           <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-            login
+            {dictio.login[props.language]}
           </Link>
         </Button>
       );

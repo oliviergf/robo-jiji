@@ -1,12 +1,7 @@
 import React from "react";
 import axios from "axios";
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Link
-} from "@material-ui/core/";
+import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
+import dictio from "../assets/dictionary";
 
 /**
  * TODO: implement validation and redirect correctly to somewhere when user is logged in
@@ -52,7 +47,9 @@ class Register extends React.Component {
       <form onSubmit={this.handleRegisterInput}>
         <div>
           <FormControl>
-            <InputLabel htmlFor="component-simple">firstname</InputLabel>
+            <InputLabel htmlFor="component-simple">
+              {dictio.firstname[this.props.language]}
+            </InputLabel>
             <Input
               id="component-simple"
               name="firstname"
@@ -63,7 +60,9 @@ class Register extends React.Component {
         </div>
         <div>
           <FormControl>
-            <InputLabel htmlFor="component-simple">lastname</InputLabel>
+            <InputLabel htmlFor="component-simple">
+              {dictio.lastname[this.props.language]}
+            </InputLabel>
             <Input
               id="component-simple"
               name="lastname"
@@ -74,7 +73,9 @@ class Register extends React.Component {
         </div>
         <div>
           <FormControl>
-            <InputLabel htmlFor="component-simple">email</InputLabel>
+            <InputLabel htmlFor="component-simple">
+              {dictio.email[this.props.language]}
+            </InputLabel>
             <Input
               id="component-simple"
               name="email"
@@ -85,7 +86,9 @@ class Register extends React.Component {
         </div>
         <div>
           <FormControl>
-            <InputLabel htmlFor="component-simple">password</InputLabel>
+            <InputLabel htmlFor="component-simple">
+              {dictio.password[this.props.language]}
+            </InputLabel>
             <Input
               id="component-simple"
               name="password"
@@ -96,7 +99,9 @@ class Register extends React.Component {
         </div>
         <div>
           <FormControl>
-            <InputLabel htmlFor="component-simple">confirmation</InputLabel>
+            <InputLabel htmlFor="component-simple">
+              {dictio.confirmation[this.props.language]}
+            </InputLabel>
             <Input
               id="component-simple"
               name="confirmation"
@@ -107,7 +112,7 @@ class Register extends React.Component {
         </div>
         <div>
           <Button type="submit" value="Submit">
-            Submit
+            {dictio.submit[this.props.language]}
           </Button>
         </div>
       </form>
