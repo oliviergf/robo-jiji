@@ -17,8 +17,6 @@ const bodyParser = require("body-parser");
 const models = require("./models");
 const app = express();
 
-const sessionTimeOutMinutes = 60 * 3; //3 hours
-
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
  * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github
@@ -63,12 +61,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+const expiryDate = new Date(Date.now() + 60 * 60 * 10000); //10 hours
+const sessionTimeOutMinutes = 60 * 3; //3 hours
+
 app.use(
   session({
     secret: "keyboard cat",
     cookie: {
       secure: false, //to allow HTTP over HTTPS
-      maxAge: 1000 * 60 * sessionTimeOutMinutes //in millisec
+      maxAge: 1000 * 1000 * 60 * sessionTimeOutMinutes, //in millisec
+      expires: expiryDate
     }
   })
 );
@@ -87,10 +90,13 @@ require("./services/passport/passport.js")(passport, models.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
 passport.serializeUser(function(user, done) {
+  console.log("serialising user", user);
   done(null, user._id);
 });
 
 passport.deserializeUser(async function(id, done) {
+  console.log("deserialising user id", id);
+
   let user = await models.Users.findOne({
     where: { _id: id }
   });
