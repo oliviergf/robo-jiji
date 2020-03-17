@@ -3,6 +3,8 @@ import axios from "../services/axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 import { Redirect } from "react-router";
 import dictio from "../assets/dictionary";
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 /**
  * TODO: ajouter validation du input et afficher a l'utilisateur why son nom fuck

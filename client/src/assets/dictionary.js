@@ -37,7 +37,15 @@ const dictionary = {
   confirmation: ["Confirmation", "Confirmation"],
   submit: ["Creer", "Submit"],
   login: ["se connecter", "login"],
-  enter: ["Entrer", "Enter"]
+  enter: ["Entrer", "Enter"],
+  pwConfirmError: [
+    "Mauvaise confirmation du mot de passe",
+    "Wrong password confirmation"
+  ],
+  emailConfirmError: [
+    "Mauvaise confirmation du courriel",
+    "Wrong email confirmation"
+  ]
 };
 
 export default dictionary;
