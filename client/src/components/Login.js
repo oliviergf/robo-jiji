@@ -3,8 +3,8 @@ import axios from "../services/axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 import { Redirect } from "react-router";
 import dictio from "../assets/dictionary";
-import MuiAlert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "./Alert";
 
 /**
  * TODO: ajouter validation du input et afficher a l'utilisateur why son nom fuck
@@ -15,9 +15,22 @@ class Login extends React.Component {
     this.state = {
       email: "",
       password: "",
-      fireRedirect: false
+      fireRedirect: false,
+      openLoginError: false
     };
   }
+
+  triggerError = () => {
+    this.setState({
+      openLoginError: true
+    });
+  };
+
+  handleClose = (event, reason) => {
+    this.setState({
+      openLoginError: false
+    });
+  };
 
   handleChange = evt => {
     this.setState({
@@ -26,22 +39,25 @@ class Login extends React.Component {
   };
 
   handleRegisterInput = evt => {
-    let self = this;
-    axios
-      .post("http://localhost:3000/login", {
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then(function(response) {
-        //send back userdata to App component
-        self.props.logUserIn(response.data);
-        self.setState({ fireRedirect: true });
-        //redirects to home
-        // history.push("/home");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    if (this.state.email !== "" && this.state.password !== "") {
+      let self = this;
+      axios
+        .post("http://localhost:3000/login", {
+          email: this.state.email,
+          password: this.state.password
+        })
+        .then(function(response) {
+          if (response.status === 200) {
+            self.props.logUserIn(response.data);
+            self.setState({ fireRedirect: true });
+          }
+        })
+        .catch(function(error) {
+          if (error.response.status === 401) {
+            self.triggerError();
+          }
+        });
+    }
 
     evt.preventDefault();
   };
@@ -79,6 +95,15 @@ class Login extends React.Component {
             </Button>
           </div>
         </form>
+        <Snackbar
+          open={this.state.openLoginError}
+          autoHideDuration={2000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error" onClose={this.handleClose}>
+            {dictio.badLogin[this.props.language]}
+          </Alert>
+        </Snackbar>
         {fireRedirect && <Redirect to={"/home"} />}
       </div>
     );

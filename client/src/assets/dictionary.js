@@ -58,7 +58,8 @@ const dictionary = {
   openUsedEmailError: [
     "Il y a deja un compte associer a ce courriel",
     "There's a user associated with this email"
-  ]
+  ],
+  badLogin: ["Compte invalide", "Invalid account"]
 };
 
 export default dictionary;
