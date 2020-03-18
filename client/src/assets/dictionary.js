@@ -54,7 +54,11 @@ const dictionary = {
     "Vous devez entrer un courriel valide",
     "You must enter a valid email"
   ],
-  registerSucces: ["Compte Creer", "Account Created"]
+  registerSucces: ["Compte Creer", "Account Created"],
+  openUsedEmailError: [
+    "Il y a deja un compte associer a ce courriel",
+    "There's a user associated with this email"
+  ]
 };
 
 export default dictionary;

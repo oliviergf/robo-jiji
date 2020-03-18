@@ -28,7 +28,8 @@ class Register extends React.Component {
       openValidEmailError: false,
       waitingRequest: false,
       registrationSucces: false,
-      fireRedirect: false
+      fireRedirect: false,
+      openUsedEmailError: false
     };
   }
 
@@ -41,6 +42,10 @@ class Register extends React.Component {
       this.state.password === "" ||
       this.state.confirmation === ""
     );
+  };
+
+  triggerErrorEmailUsed = () => {
+    this.setState({ openUsedEmailError: true });
   };
 
   triggerErrorValidEmail = () => {
@@ -64,7 +69,8 @@ class Register extends React.Component {
       openPassWordError: false,
       openEmailError: false,
       openRequiredFieldsError: false,
-      openValidEmailError: false
+      openValidEmailError: false,
+      openUsedEmailError: false
     });
   };
 
@@ -94,11 +100,15 @@ class Register extends React.Component {
           password: this.state.password
         })
         .then(function(response) {
-          self.setState({ waitingRequest: false, registrationSucces: true });
-          setTimeout(() => {
-            self.setState({ fireRedirect: true });
-          }, 1500);
-          console.log(response);
+          console.log("register response", response);
+          if (response.data === "success") {
+            self.setState({ waitingRequest: false, registrationSucces: true });
+            setTimeout(() => {
+              self.setState({ fireRedirect: true });
+            }, 1500);
+          } else if (response.data === "emailUsed") {
+            self.triggerErrorEmailUsed();
+          }
         })
         .catch(function(error) {
           this.setState({ waitingRequest: false });
@@ -233,6 +243,15 @@ class Register extends React.Component {
         >
           <Alert severity="error" onClose={this.handleClose}>
             {dictio.validEmailError[this.props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.openUsedEmailError}
+          autoHideDuration={2000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error" onClose={this.handleClose}>
+            {dictio.openUsedEmailError[this.props.language]}
           </Alert>
         </Snackbar>
         <Snackbar

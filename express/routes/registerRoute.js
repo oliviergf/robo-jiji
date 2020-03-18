@@ -24,8 +24,12 @@ router.post("/", async function(req, res, next) {
 
   console.log(userInfo);
 
-  await registerController.registerUser(userInfo);
-  res.send("register that damn user!");
+  let result = await registerController.registerUser(userInfo);
+  if (result === "emailUsed") {
+    res.send("emailUsed");
+  } else {
+    res.send("success");
+  }
 });
 
 module.exports = router;
