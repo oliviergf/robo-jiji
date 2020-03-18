@@ -49,7 +49,12 @@ const dictionary = {
   openRequiredFieldsError: [
     "Tout les champs sont obligatoire",
     "All fields are mandatory"
-  ]
+  ],
+  validEmailError: [
+    "Vous devez entrer un courriel valide",
+    "You must enter a valid email"
+  ],
+  registerSucces: ["Compte Creer", "Account Created"]
 };
 
 export default dictionary;

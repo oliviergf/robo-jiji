@@ -2,12 +2,11 @@ import React from "react";
 import axios from "axios";
 import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
 import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 import dictio from "../assets/dictionary";
-
-function Alert(props) {
-  return <MuiAlert elevation={12} variant="filled" {...props} />;
-}
+import isEmail from "isemail";
+import Alert from "./Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Redirect } from "react-router";
 
 /**
  * TODO: implement validation and redirect correctly to somewhere when user is logged in
@@ -25,7 +24,11 @@ class Register extends React.Component {
       confirmation: "",
       openPassWordError: false,
       openEmailError: false,
-      openRequiredFieldsError: false
+      openRequiredFieldsError: false,
+      openValidEmailError: false,
+      waitingRequest: false,
+      registrationSucces: false,
+      fireRedirect: false
     };
   }
 
@@ -38,6 +41,10 @@ class Register extends React.Component {
       this.state.password === "" ||
       this.state.confirmation === ""
     );
+  };
+
+  triggerErrorValidEmail = () => {
+    this.setState({ openValidEmailError: true });
   };
 
   triggerErrorRequired = () => {
@@ -53,15 +60,12 @@ class Register extends React.Component {
   };
 
   handleClose = (event, reason) => {
-    console.log("handlclose", reason);
-
     this.setState({
       openPassWordError: false,
       openEmailError: false,
-      openRequiredFieldsError: false
+      openRequiredFieldsError: false,
+      openValidEmailError: false
     });
-
-    console.log("state", this.state);
   };
 
   handleChange = evt => {
@@ -71,19 +75,17 @@ class Register extends React.Component {
   };
 
   handleRegisterInput = evt => {
-    let pushRequest = true;
     if (this.hasAnyBlankField()) {
-      pushRequest = false;
       this.triggerErrorRequired();
+    } else if (!isEmail.validate(this.state.email)) {
+      this.triggerErrorValidEmail();
     } else if (this.state.password !== this.state.confirmation) {
-      pushRequest = false;
       this.triggerErrorPassword();
     } else if (this.state.email !== this.state.emailConfirmation) {
-      pushRequest = false;
       this.triggerErrorEmail();
-    }
-
-    if (pushRequest) {
+    } else {
+      this.setState({ waitingRequest: true });
+      let self = this;
       axios
         .post("http://localhost:3000/register", {
           firstname: this.state.firstname,
@@ -92,9 +94,15 @@ class Register extends React.Component {
           password: this.state.password
         })
         .then(function(response) {
+          self.setState({ waitingRequest: false, registrationSucces: true });
+          setTimeout(() => {
+            self.setState({ fireRedirect: true });
+          }, 1500);
           console.log(response);
         })
         .catch(function(error) {
+          this.setState({ waitingRequest: false });
+
           console.log(error);
         });
     }
@@ -188,11 +196,12 @@ class Register extends React.Component {
             <Button type="submit" value="Submit">
               {dictio.submit[this.props.language]}
             </Button>
+            {this.state.waitingRequest && <CircularProgress />}
           </div>
         </form>
         <Snackbar
           open={this.state.openRequiredFieldsError}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           onClose={this.handleClose}
         >
           <Alert severity="error" onClose={this.handleClose}>
@@ -201,7 +210,7 @@ class Register extends React.Component {
         </Snackbar>
         <Snackbar
           open={this.state.openPassWordError}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           onClose={this.handleClose}
         >
           <Alert severity="error" onClose={this.handleClose}>
@@ -210,14 +219,32 @@ class Register extends React.Component {
         </Snackbar>
         <Snackbar
           open={this.state.openEmailError}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           onClose={this.handleClose}
-          TransitionComponent="Fade"
         >
           <Alert severity="error" onClose={this.handleClose}>
             {dictio.emailConfirmError[this.props.language]}
           </Alert>
         </Snackbar>
+        <Snackbar
+          open={this.state.openValidEmailError}
+          autoHideDuration={2000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error" onClose={this.handleClose}>
+            {dictio.validEmailError[this.props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.registrationSucces}
+          autoHideDuration={2000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="success" onClose={this.handleClose}>
+            {dictio.registerSucces[this.props.language]}
+          </Alert>
+        </Snackbar>
+        {this.state.fireRedirect && <Redirect to={"/home"} />}
       </div>
     );
   }
