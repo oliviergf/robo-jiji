@@ -53,7 +53,8 @@ class Login extends React.Component {
           }
         })
         .catch(function(error) {
-          if (error.response.status === 401) {
+          console.log(error);
+          if (error.response && error.response.status === 401) {
             self.triggerError();
           }
         });
