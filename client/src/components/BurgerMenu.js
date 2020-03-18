@@ -16,6 +16,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import TranslateIcon from "@material-ui/icons/Translate";
 import { Link } from "react-router-dom";
+import url from "../assets/serverURL";
 
 const useStyles = makeStyles({
   list: {
@@ -44,7 +45,7 @@ export default function SideBurgMenu(props) {
       props.changeLanguage();
     } else if (text === dictio.logout[props.language]) {
       axios
-        .get("http://localhost:3000/logout")
+        .get(`${url}/logout`)
         .then(function(response) {
           // handle success
           props.userLoggedOut();

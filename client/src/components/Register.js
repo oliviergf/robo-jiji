@@ -7,6 +7,7 @@ import isEmail from "isemail";
 import Alert from "./Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Redirect } from "react-router";
+import url from "../assets/serverURL";
 
 /**
  * TODO: implement validation and redirect correctly to somewhere when user is logged in
@@ -93,7 +94,7 @@ class Register extends React.Component {
       this.setState({ waitingRequest: true });
       let self = this;
       axios
-        .post("http://localhost:3000/register", {
+        .post(`${url}/register`, {
           firstname: this.state.firstname,
           lastname: this.state.lastname,
           email: this.state.email,

@@ -3,6 +3,7 @@ const cluster = require("cluster");
 const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
+const fs = require("fs");
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
@@ -16,7 +17,7 @@ if (cluster.isMaster) {
 } else {
   var app = require("../app");
   var debug = require("debug")("express:server");
-  var http = require("http");
+  var https = require("https");
   let RSSPoolWorkers = require("../services/rss/index");
   const webpush = require("web-push");
 
@@ -45,7 +46,13 @@ if (cluster.isMaster) {
    * Create HTTP server.
    */
 
-  var server = http.createServer(app);
+  var server = https.createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert")
+    },
+    app
+  );
 
   /**
    * Listen on provided port, on all network interfaces.

@@ -5,6 +5,7 @@ import { Redirect } from "react-router";
 import dictio from "../assets/dictionary";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "./Alert";
+import url from "../assets/serverURL";
 
 /**
  * TODO: ajouter validation du input et afficher a l'utilisateur why son nom fuck
@@ -42,7 +43,7 @@ class Login extends React.Component {
     if (this.state.email !== "" && this.state.password !== "") {
       let self = this;
       axios
-        .post("http://localhost:3000/login", {
+        .post(`${url}/login`, {
           email: this.state.email,
           password: this.state.password
         })

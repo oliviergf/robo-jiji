@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Informations from "./components/Information";
 import Bar from "./components/Bar";
+import url from "./assets/serverURL";
 import "typeface-roboto";
 import "./App.css";
 
@@ -68,7 +69,7 @@ class App extends React.Component {
   testBrowserSession = () => {
     let self = this;
     axios
-      .get("http://localhost:3000/sessionLogin")
+      .get(`${url}/sessionLogin`)
       .then(function(response) {
         self.logUserCredentials(response.data);
       })

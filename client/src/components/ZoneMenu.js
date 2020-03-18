@@ -4,6 +4,7 @@ import ZoneList from "./ZoneList";
 import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
+import url from "../assets/serverURL";
 
 // todo: implement select zone in list
 class ZoneMenu extends React.Component {
@@ -13,25 +14,18 @@ class ZoneMenu extends React.Component {
       test: {},
       zones: [],
       allowDraw: false,
-      userLocation: this.findUserCoord() //or call findUserCoord but fucks sometime...
+      userLocation: { lat: 45.496205, lng: -73.571895 } //or call findUserCoord but fucks sometime...
     };
+    this.findUserCoord();
   }
 
-  findUserCoord = () => {
-    let userPosition = {};
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        userPosition.lat = pos.coords.latitude;
-        userPosition.lng = pos.coords.longitude;
-      },
-      () => {
-        //error handeler
-        userPosition.lat = 45.496205;
-        userPosition.lng = -73.571895;
-      }
-    );
-
-    return userPosition;
+  findUserCoord = async () => {
+    let self = this;
+    await navigator.geolocation.getCurrentPosition(pos => {
+      self.setState({
+        userLocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }
+      });
+    });
   };
 
   componentDidMount = () => {
@@ -42,7 +36,7 @@ class ZoneMenu extends React.Component {
     // todo: fix this shit; add
     setTimeout(function() {
       axios
-        .get("http://localhost:3000/zone")
+        .get(`${url}/zone`)
         .then(function(response) {
           // handle success
           self.initZones(response.data);
@@ -98,7 +92,7 @@ class ZoneMenu extends React.Component {
   onDeleteClick = zoneId => {
     let self = this;
     axios
-      .delete("http://localhost:3000/zone", {
+      .delete(`${url}/zone`, {
         data: {
           zoneId: zoneId
         }
@@ -135,7 +129,7 @@ class ZoneMenu extends React.Component {
     value.getPath().i.map(pos => points.push([pos.lat(), pos.lng()]));
 
     axios
-      .post("http://localhost:3000/zone", {
+      .post(`${url}/zone`, {
         zoneId: newZone.id,
         path: points
       })
