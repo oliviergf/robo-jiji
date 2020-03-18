@@ -25,10 +25,17 @@ router.post("/", passport.authenticate("local"), async function(
 
   //todo: here we only send back userfirstname
   // we may want to send more info than that, to let the user changes his account settings and stuff.
-  const userFirstName = await loginController.login(userInfo);
-
-  if (userFirstName) res.send({ firstname: userFirstName });
-  else res.send(401);
+  const user = await loginController.login(userInfo);
+  if (user) {
+    // req.login(user, function(err) {
+    //   if (err) {
+    //     return next(err);
+    //   }
+    // });
+    res.send({ firstname: user.firstname });
+  } else {
+    res.send(401);
+  }
 });
 
 module.exports = router;

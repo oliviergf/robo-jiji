@@ -14,8 +14,9 @@ const subscribeNotifRouter = require("./routes/subscribeNotifRoute");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const models = require("./models");
+const db = require("./models");
 const app = express();
+var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 /**   TECHSTACK CHEZ SOFDESK
  * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
@@ -39,7 +40,12 @@ const app = express();
  */
 
 //creates new models if not in there; will be deleted later
-models.sequelize.sync();
+db.sequelize.sync();
+
+// initalize sequelize with session store
+var myStore = new SequelizeStore({
+  db: db.sequelize
+});
 
 /**
  * SETS UP EXPRESS
@@ -57,9 +63,9 @@ app.use(
 
 app.use(express.static(`${__dirname}/build`));
 app.use(logger("dev"));
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 const expiryDate = new Date(Date.now() + 60 * 60 * 10000); //10 hours
@@ -67,14 +73,20 @@ const sessionTimeOutMinutes = 60 * 3; //3 hours
 
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: "keyboardmousecatsniff",
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       secure: false, //to allow HTTP over HTTPS
       maxAge: 1000 * 1000 * 60 * sessionTimeOutMinutes, //in millisec
       expires: expiryDate
-    }
+    },
+    store: myStore
   })
 );
+
+//sync session store db stuff
+myStore.sync();
 
 /**
  * SETS UP PASSPORT
@@ -86,7 +98,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 //load passport strategies
-require("./services/passport/passport.js")(passport, models.Users);
+require("./services/passport/passport.js")(passport, db.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
 passport.serializeUser(function(user, done) {
@@ -97,7 +109,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(async function(id, done) {
   console.log("deserialising user id", id);
 
-  let user = await models.Users.findOne({
+  let user = await db.Users.findOne({
     where: { _id: id }
   });
   done(null, user.dataValues);
