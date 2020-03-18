@@ -45,6 +45,10 @@ const dictionary = {
   emailConfirmError: [
     "Mauvaise confirmation du courriel",
     "Wrong email confirmation"
+  ],
+  openRequiredFieldsError: [
+    "Tout les champs sont obligatoire",
+    "All fields are mandatory"
   ]
 };
 

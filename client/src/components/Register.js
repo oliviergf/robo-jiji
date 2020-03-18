@@ -6,7 +6,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import dictio from "../assets/dictionary";
 
 function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+  return <MuiAlert elevation={12} variant="filled" {...props} />;
 }
 
 /**
@@ -24,23 +24,44 @@ class Register extends React.Component {
       password: "",
       confirmation: "",
       openPassWordError: false,
-      openEmailError: false
+      openEmailError: false,
+      openRequiredFieldsError: false
     };
   }
+
+  hasAnyBlankField = () => {
+    return (
+      this.state.firstname === "" ||
+      this.state.lastname === "" ||
+      this.state.email === "" ||
+      this.state.emailConfirmation === "" ||
+      this.state.password === "" ||
+      this.state.confirmation === ""
+    );
+  };
+
+  triggerErrorRequired = () => {
+    this.setState({ openRequiredFieldsError: true });
+  };
 
   triggerErrorEmail = () => {
     this.setState({ openEmailError: true });
   };
+
   triggerErrorPassword = () => {
     this.setState({ openPassWordError: true });
   };
 
   handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    console.log("handlclose", reason);
 
-    this.setState({ openPassWordError: false, openEmailError: false });
+    this.setState({
+      openPassWordError: false,
+      openEmailError: false,
+      openRequiredFieldsError: false
+    });
+
+    console.log("state", this.state);
   };
 
   handleChange = evt => {
@@ -51,11 +72,13 @@ class Register extends React.Component {
 
   handleRegisterInput = evt => {
     let pushRequest = true;
-    if (this.state.password !== this.state.confirmation) {
+    if (this.hasAnyBlankField()) {
+      pushRequest = false;
+      this.triggerErrorRequired();
+    } else if (this.state.password !== this.state.confirmation) {
       pushRequest = false;
       this.triggerErrorPassword();
-    }
-    if (this.state.email !== this.state.emailConfirmation) {
+    } else if (this.state.email !== this.state.emailConfirmation) {
       pushRequest = false;
       this.triggerErrorEmail();
     }
@@ -82,7 +105,7 @@ class Register extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleRegisterInput}>
+        <form className="registerForm" onSubmit={this.handleRegisterInput}>
           <div>
             <FormControl>
               <InputLabel htmlFor="component-simple">
@@ -168,21 +191,30 @@ class Register extends React.Component {
           </div>
         </form>
         <Snackbar
-          open={this.state.openPassWordError}
-          autoHideDuration={6000}
+          open={this.state.openRequiredFieldsError}
+          autoHideDuration={1000}
           onClose={this.handleClose}
         >
-          <Alert severity="error">
+          <Alert severity="error" onClose={this.handleClose}>
+            {dictio.openRequiredFieldsError[this.props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.openPassWordError}
+          autoHideDuration={1000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error" onClose={this.handleClose}>
             {dictio.pwConfirmError[this.props.language]}
           </Alert>
         </Snackbar>
         <Snackbar
           open={this.state.openEmailError}
-          autoHideDuration={6000}
+          autoHideDuration={1000}
           onClose={this.handleClose}
           TransitionComponent="Fade"
         >
-          <Alert severity="error">
+          <Alert severity="error" onClose={this.handleClose}>
             {dictio.emailConfirmError[this.props.language]}
           </Alert>
         </Snackbar>
