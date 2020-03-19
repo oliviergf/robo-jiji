@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import dictio from "../assets/dictionary";
 import { askPushPermission } from "../services/pushManager";
 import logo from "../assets/roboticon.png";
+import Test from "./Test";
 
 export default function Home(props) {
   console.log("props home", props);
@@ -30,6 +31,7 @@ export default function Home(props) {
             {dictio.informations[props.language]}
           </Link>
         </Button>
+        <Test />
         {/* <Button onClick={askPushPermission}>push permission</Button> */}
       </Box>
     </Container>

@@ -5,6 +5,7 @@ import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
 import url from "../assets/serverURL";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 
 // todo: implement select zone in list
 class ZoneMenu extends React.Component {
@@ -14,6 +15,7 @@ class ZoneMenu extends React.Component {
       test: {},
       zones: [],
       allowDraw: false,
+      openDrawer: false,
       userLocation: { lat: 45.496205, lng: -73.571895 } //or call findUserCoord but fucks sometime...
     };
     this.findUserCoord();
@@ -26,6 +28,10 @@ class ZoneMenu extends React.Component {
         userLocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }
       });
     });
+  };
+
+  toggleDrawer = open => {
+    this.setState({ openDrawer: open });
   };
 
   componentDidMount = () => {
@@ -145,6 +151,13 @@ class ZoneMenu extends React.Component {
     return (
       <Container className="home">
         <Button onClick={this.onCreateClick}>create</Button>
+        <Button
+          onClick={() => {
+            this.toggleDrawer(true);
+          }}
+        >
+          open
+        </Button>
         <Map
           isMarkerShown
           complete={this.onPolygonComplete}
@@ -152,11 +165,22 @@ class ZoneMenu extends React.Component {
           zonesToDisplay={this.state.zones}
           userLocation={this.state.userLocation}
         />
-        <ZoneList
-          zoneList={this.state.zones}
-          deleteZoneFunc={this.onDeleteClick}
-          onSelect={this.onZoneSelect}
-        />
+        <SwipeableDrawer
+          anchor="bottom"
+          open={this.state.openDrawer}
+          onClose={() => {
+            this.toggleDrawer(false);
+          }}
+          onOpen={() => {
+            this.toggleDrawer(true);
+          }}
+        >
+          <ZoneList
+            zoneList={this.state.zones}
+            deleteZoneFunc={this.onDeleteClick}
+            onSelect={this.onZoneSelect}
+          />
+        </SwipeableDrawer>
       </Container>
     );
   }

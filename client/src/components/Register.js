@@ -13,6 +13,7 @@ import url from "../assets/serverURL";
  * TODO: implement validation and redirect correctly to somewhere when user is logged in
  * https://material-ui.com/components/snackbars/
  */
+//refactors this whole piece of shit class
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -101,7 +102,6 @@ class Register extends React.Component {
           password: this.state.password
         })
         .then(function(response) {
-          console.log("register response", response);
           if (response.data === "success") {
             self.setState({ waitingRequest: false, registrationSucces: true });
             setTimeout(() => {
@@ -109,11 +109,11 @@ class Register extends React.Component {
             }, 1500);
           } else if (response.data === "emailUsed") {
             self.triggerErrorEmailUsed();
+            self.setState({ waitingRequest: false });
           }
         })
         .catch(function(error) {
-          this.setState({ waitingRequest: false });
-
+          self.setState({ waitingRequest: false });
           console.log(error);
         });
     }
