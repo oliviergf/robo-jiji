@@ -128,7 +128,9 @@ class Register extends React.Component {
           firstname: this.state.firstname,
           lastname: this.state.lastname,
           email: this.state.email,
-          password: this.state.password
+          password: this.state.password,
+          platform: this.state.platform,
+          telephone: this.state.telephone
         })
         .then(function(response) {
           if (response.data === "success") {

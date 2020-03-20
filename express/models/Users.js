@@ -16,6 +16,16 @@ module.exports = function(sequelize, Sequelize) {
       notEmpty: true
     },
 
+    telephone: {
+      type: Sequelize.STRING,
+      notEmpty: true
+    },
+
+    platform: {
+      type: Sequelize.STRING,
+      notEmpty: true
+    },
+
     email: {
       type: Sequelize.STRING,
       allowNull: false,

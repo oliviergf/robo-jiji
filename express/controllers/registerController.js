@@ -17,7 +17,9 @@ registerController = {
         firstname: userinfo.firstname,
         lastname: userinfo.lastname,
         email: userinfo.email,
-        password: userinfo.password
+        password: userinfo.password,
+        platform: userinfo.platform,
+        telephone: userinfo.telephone
       });
       return "success";
     }

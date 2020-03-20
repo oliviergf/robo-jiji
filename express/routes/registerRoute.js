@@ -19,10 +19,10 @@ router.post("/", async function(req, res, next) {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    telephone: req.body.telephone,
+    platform: req.body.platform
   };
-
-  console.log(userInfo);
 
   let result = await registerController.registerUser(userInfo);
   if (result === "emailUsed") {
