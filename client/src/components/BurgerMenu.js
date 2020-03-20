@@ -82,7 +82,7 @@ export default function SideBurgMenu(props) {
           <Link
             key={index}
             style={{ textDecoration: "none", color: "inherit" }}
-            to="/home"
+            to="/account"
           >
             <ListItem
               button

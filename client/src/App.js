@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Informations from "./components/Information";
 import Bar from "./components/Bar";
+import Account from "./components/Account";
 import url from "./assets/serverURL";
 import "typeface-roboto";
 import "./App.css";
@@ -107,6 +108,9 @@ class App extends React.Component {
                 logUserIn={this.logUserCredentials}
                 language={this.state.language}
               />
+            </Route>
+            <Route path="/account">
+              <Account language={this.state.language} />
             </Route>
             <Route path="/map">
               <ZoneMenu language={this.state.language} />
