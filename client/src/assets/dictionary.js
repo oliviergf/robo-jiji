@@ -59,7 +59,10 @@ const dictionary = {
     "Il y a deja un compte associer a ce courriel",
     "There's a user associated with this email"
   ],
-  badLogin: ["Compte invalide", "Invalid account"]
+  badLogin: ["Compte invalide", "Invalid account"],
+  zoneName: ["Nom de la zone", "Zone name"],
+  zoneDialogTitle: ["Nouvelle zone", "New zone"],
+  cancel: ["Annuler", "Cancel"]
 };
 
 export default dictionary;

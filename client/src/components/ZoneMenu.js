@@ -6,6 +6,7 @@ import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
 import url from "../assets/serverURL";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import Dialog from "./zoneDialog";
 
 // todo: implement select zone in list
 class ZoneMenu extends React.Component {
@@ -16,7 +17,10 @@ class ZoneMenu extends React.Component {
       zones: [],
       allowDraw: false,
       openDrawer: false,
-      userLocation: { lat: 45.496205, lng: -73.571895 } //or call findUserCoord but fucks sometime...
+      openDialog: false,
+      tempZoneValue: "",
+      userLocation: { lat: 45.496205, lng: -73.571895 }, //or call findUserCoord but fucks sometime...
+      defaultZoneName: ""
     };
     this.findUserCoord();
   }
@@ -34,12 +38,12 @@ class ZoneMenu extends React.Component {
     this.setState({ openDrawer: open });
   };
 
+  // total hack; we had to wait for map component to render before using the GoogleMap object,
+  // its necessary for appending new zones to the map
+  // todo: fix this shit; add
   componentDidMount = () => {
     let self = this;
-    // total hack; we had to wait for map component to render before using the GoogleMap object,
-    // its necessary for appending new zones to the map
 
-    // todo: fix this shit; add
     setTimeout(function() {
       axios
         .get(`${url}/zone`)
@@ -75,10 +79,16 @@ class ZoneMenu extends React.Component {
         strokeWeight: 2
       });
       //create a new zone to be used in state
-      zonesToDisplay.push({ id: zone.zoneId, polygon: newPolygon });
+      zonesToDisplay.push({
+        id: zone.zoneId,
+        polygon: newPolygon,
+        name: zone.name
+      });
     });
+
     this.setState({
-      zones: zonesToDisplay
+      zones: zonesToDisplay,
+      defaultZoneName: `zone ${zonesToDisplay.length + 1}`
     });
   };
 
@@ -87,11 +97,7 @@ class ZoneMenu extends React.Component {
     console.log(zoneId);
   };
 
-  /**
-   * allows the user to draw on the map
-   */
   onCreateClick = () => {
-    //allowdraw
     this.setState({ allowDraw: true });
   };
 
@@ -121,13 +127,13 @@ class ZoneMenu extends React.Component {
       });
   };
 
-  //will be called when a polygon is complete; value is the gmaps formated polygon
-  onPolygonComplete = value => {
-    //create a new zone to be used in state
-    let newZone = { id: uuidv4(), polygon: value };
+  saveAndUploadZone = name => {
+    const value = this.state.tempZoneValue;
+    let newZone = { id: uuidv4(), polygon: value, name: name };
     this.setState({
       zones: [...this.state.zones, newZone],
-      allowDraw: false
+      allowDraw: false,
+      tempZoneValue: ""
     });
 
     let points = [];
@@ -137,7 +143,8 @@ class ZoneMenu extends React.Component {
     axios
       .post(`${url}/zone`, {
         zoneId: newZone.id,
-        path: points
+        path: points,
+        name: name
       })
       .then(function(response) {
         console.log(response);
@@ -145,6 +152,28 @@ class ZoneMenu extends React.Component {
       .catch(function(error) {
         console.log(error);
       });
+  };
+
+  //will be called when a polygon is complete;
+  onPolygonComplete = value => {
+    this.setState({
+      openDialog: true,
+      allowDraw: false,
+      tempZoneValue: value,
+      defaultZoneName: `zone ${this.state.zones.length + 1}`
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({ openDialog: false, tempZoneValue: "" });
+  };
+
+  cancelZone = () => {
+    this.closeDialog();
+  };
+  acceptZone = name => {
+    this.saveAndUploadZone(name);
+    this.closeDialog();
   };
 
   render() {
@@ -181,6 +210,14 @@ class ZoneMenu extends React.Component {
             onSelect={this.onZoneSelect}
           />
         </SwipeableDrawer>
+        <Dialog
+          closeDialog={this.closeDialog}
+          isOpen={this.state.openDialog}
+          acceptZone={this.acceptZone}
+          cancelZone={this.cancelZone}
+          language={this.props.language}
+          defaultZoneName={this.state.defaultZoneName}
+        />
       </Container>
     );
   }

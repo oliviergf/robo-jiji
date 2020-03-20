@@ -46,7 +46,7 @@ function generate(zoneList, deleteZoneFunc, onSelect) {
             <FolderIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary="Single-line item" />
+        <ListItemText primary={zone.name} />
         <ListItemSecondaryAction>
           <IconButton
             edge="end"

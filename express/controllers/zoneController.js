@@ -6,15 +6,14 @@ zoneController = {
     const firstPoint = zoneInfo.path[0];
     zoneInfo.path.push(firstPoint);
 
-    console.log(zoneInfo);
-
     await model.Zones.create({
       zoneId: zoneInfo.zoneId,
       UserId: zoneInfo.userId,
       polygon: {
         type: "Polygon",
         coordinates: [zoneInfo.path]
-      }
+      },
+      name: zoneInfo.name
     });
 
     //todo: checker quels apparts relativement recents sont dans la nouvelle zone?
@@ -34,7 +33,8 @@ zoneController = {
       zone.dataValues.polygon.coordinates[0].splice(-1, 1);
       userZones.push({
         zoneId: zone.dataValues.zoneId,
-        path: zone.dataValues.polygon.coordinates[0]
+        path: zone.dataValues.polygon.coordinates[0],
+        name: zone.dataValues.name
       });
     });
     return userZones;
