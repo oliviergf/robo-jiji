@@ -169,6 +169,7 @@ class ZoneMenu extends React.Component {
   };
 
   cancelZone = () => {
+    this.state.tempZoneValue.setMap(null);
     this.closeDialog();
   };
   acceptZone = name => {
