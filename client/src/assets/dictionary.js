@@ -62,7 +62,19 @@ const dictionary = {
   badLogin: ["Compte invalide", "Invalid account"],
   zoneName: ["Nom de la zone", "Zone name"],
   zoneDialogTitle: ["Nouvelle zone", "New zone"],
-  cancel: ["Annuler", "Cancel"]
+  cancel: ["Annuler", "Cancel"],
+  telephoneNumber: ["Numero de telephone", "Phone number"],
+  telephoneNumberConfirmation: ["Confirmation telephone", "Phone confirmation"],
+  platForm: ["Plateforme", "Platform"],
+
+  onlyAndroidUsers: [
+    "Necessaire pour les utilisateurs Android",
+    "Required for Android users"
+  ],
+  telephoneError: [
+    "Veillez entrer un numero de telephone valide",
+    "You must into a valid phone number"
+  ]
 };
 
 export default dictionary;

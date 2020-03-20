@@ -64,5 +64,7 @@ module.exports = db;
 //script to drop all tables; needed when modifying the models
 // drop table UserAparts;
 // drop table Zones;
+// drop table Subscriptions;
 // drop table Users;
 // drop table Aparts;
+// drop table Session;

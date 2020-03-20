@@ -1,6 +1,13 @@
 import React from "react";
 import axios from "axios";
-import { FormControl, InputLabel, Input, Button } from "@material-ui/core/";
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  FormLabel,
+  FormControlLabel
+} from "@material-ui/core/";
 import Snackbar from "@material-ui/core/Snackbar";
 import dictio from "../assets/dictionary";
 import isEmail from "isemail";
@@ -8,6 +15,8 @@ import Alert from "./Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Redirect } from "react-router";
 import url from "../assets/serverURL";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 /**
  * TODO: implement validation and redirect correctly to somewhere when user is logged in
@@ -24,6 +33,9 @@ class Register extends React.Component {
       emailConfirmation: "",
       password: "",
       confirmation: "",
+      platform: "apple",
+      telephone: "",
+      telephoneConfirmation: "",
       openPassWordError: false,
       openEmailError: false,
       openRequiredFieldsError: false,
@@ -31,7 +43,8 @@ class Register extends React.Component {
       waitingRequest: false,
       registrationSucces: false,
       fireRedirect: false,
-      openUsedEmailError: false
+      openUsedEmailError: false,
+      openPhoneError: false
     };
   }
 
@@ -43,6 +56,15 @@ class Register extends React.Component {
       this.state.emailConfirmation === "" ||
       this.state.password === "" ||
       this.state.confirmation === ""
+    );
+  };
+
+  hasInvalidPhoneNumber = () => {
+    return (
+      this.state.platform === "android" &&
+      (this.state.telephone !== this.state.telephoneConfirmation ||
+        this.state.telephone === "" ||
+        this.state.telephoneConfirmation === "")
     );
   };
 
@@ -66,13 +88,18 @@ class Register extends React.Component {
     this.setState({ openPassWordError: true });
   };
 
+  tiggerPhoneError = () => {
+    this.setState({ openPhoneError: true });
+  };
+
   handleClose = (event, reason) => {
     this.setState({
       openPassWordError: false,
       openEmailError: false,
       openRequiredFieldsError: false,
       openValidEmailError: false,
-      openUsedEmailError: false
+      openUsedEmailError: false,
+      openPhoneError: false
     });
   };
 
@@ -85,6 +112,8 @@ class Register extends React.Component {
   handleRegisterInput = evt => {
     if (this.hasAnyBlankField()) {
       this.triggerErrorRequired();
+    } else if (this.hasInvalidPhoneNumber()) {
+      this.tiggerPhoneError();
     } else if (!isEmail.validate(this.state.email)) {
       this.triggerErrorValidEmail();
     } else if (this.state.password !== this.state.confirmation) {
@@ -204,6 +233,60 @@ class Register extends React.Component {
             </FormControl>
           </div>
           <div>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="Platforme"
+                name="platform"
+                value={this.state.platform}
+                onChange={this.handleChange}
+              >
+                <FormControlLabel
+                  value="apple"
+                  control={<Radio />}
+                  label="Apple"
+                />
+                <FormControlLabel
+                  value="android"
+                  control={<Radio />}
+                  label="Android"
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          {this.state.platform === "android" && (
+            <div>
+              <div>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.telephoneNumber[this.props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="telephone"
+                    value={this.state.telephone}
+                    onChange={this.handleChange}
+                  />
+                </FormControl>
+              </div>
+              <div>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.telephoneNumberConfirmation[this.props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="telephoneConfirmation"
+                    value={this.state.telephoneConfirmation}
+                    onChange={this.handleChange}
+                  />
+                </FormControl>
+              </div>
+              <FormLabel>
+                {dictio.onlyAndroidUsers[this.props.language]}
+              </FormLabel>
+            </div>
+          )}
+          <div>
             <Button type="submit" value="Submit">
               {dictio.submit[this.props.language]}
             </Button>
@@ -262,6 +345,15 @@ class Register extends React.Component {
         >
           <Alert severity="success" onClose={this.handleClose}>
             {dictio.registerSucces[this.props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.openPhoneError}
+          autoHideDuration={2000}
+          onClose={this.handleClose}
+        >
+          <Alert severity="error" onClose={this.handleClose}>
+            {dictio.telephoneError[this.props.language]}
           </Alert>
         </Snackbar>
         {this.state.fireRedirect && <Redirect to={"/home"} />}
