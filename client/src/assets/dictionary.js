@@ -74,7 +74,9 @@ const dictionary = {
   telephoneError: [
     "Veillez entrer un numero de telephone valide",
     "You must into a valid phone number"
-  ]
+  ],
+  open: ["zones", "zones"],
+  new: ["ajout", "new"]
 };
 
 export default dictionary;

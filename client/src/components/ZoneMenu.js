@@ -7,6 +7,7 @@ import axios from "../services/axios";
 import url from "../assets/serverURL";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Dialog from "./zoneDialog";
+import dictio from "../assets/dictionary";
 
 // todo: implement select zone in list
 class ZoneMenu extends React.Component {
@@ -172,6 +173,10 @@ class ZoneMenu extends React.Component {
     this.state.tempZoneValue.setMap(null);
     this.closeDialog();
   };
+
+  cancelZoneInProgress = () => {
+    this.setState({ allowDraw: false, tempZoneValue: "" });
+  };
   acceptZone = name => {
     this.saveAndUploadZone(name);
     this.closeDialog();
@@ -180,13 +185,22 @@ class ZoneMenu extends React.Component {
   render() {
     return (
       <Container className="home">
-        <Button onClick={this.onCreateClick}>create</Button>
+        {this.state.allowDraw ? (
+          <Button onClick={this.cancelZoneInProgress}>
+            {dictio.cancel[this.props.language]}
+          </Button>
+        ) : (
+          <Button onClick={this.onCreateClick}>
+            {dictio.new[this.props.language]}
+          </Button>
+        )}
+
         <Button
           onClick={() => {
             this.toggleDrawer(true);
           }}
         >
-          open
+          {dictio.open[this.props.language]}
         </Button>
         <Map
           isMarkerShown
