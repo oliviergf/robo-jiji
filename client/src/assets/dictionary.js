@@ -78,7 +78,9 @@ const dictionary = {
   open: ["zones", "zones"],
   new: ["ajout", "new"],
   modify: ["Modifier", "Edit"],
-  apply: ["Appliquer", "Apply"]
+  apply: ["Appliquer", "Apply"],
+  oldPassword: ["Ancien mot de passe", "Old password"],
+  changePassword: ["Nouveau mot de passe", "New password"]
 };
 
 export default dictionary;

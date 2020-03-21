@@ -35,9 +35,13 @@ export default function Account(props) {
   const [platform, setPlatform] = useState("");
   const [fireRedirect, setFireRedirect] = useState(false);
   const [waitingRequest, setWaitingRequest] = useState(false);
+  const [modify, setModify] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorTelephone, setErrorTelephone] = useState(false);
-  const [modify, setModify] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConf, setNewPasswordConf] = useState("");
 
   const hasInvalidPhoneNumber = () => {
     if (platform === "apple") return false;
@@ -58,6 +62,7 @@ export default function Account(props) {
   const handleCancel = () => {
     fetchUserInfo();
     setModify(false);
+    setChangePassword(false);
   };
 
   const lookForTriggers = () => {
@@ -89,6 +94,10 @@ export default function Account(props) {
       });
   };
 
+  const handleChangePassword = () => {
+    setChangePassword(true);
+  };
+
   const handleChange = evt => {
     if (evt.target.name === "firstname") setFirstname(evt.target.value);
     if (evt.target.name === "lastname") setLastname(evt.target.value);
@@ -118,6 +127,7 @@ export default function Account(props) {
     }
   };
 
+  // will only be called once
   useEffect(() => {
     fetchUserInfo();
   }, []);
@@ -235,51 +245,53 @@ export default function Account(props) {
                 </div>
               )}
             </div>
-
-            {/* <div>
-              <FormControl>
-                <InputLabel htmlFor="component-simple">
-                  {dictio.confirmation[this.props.language]}
-                </InputLabel>
-                <Input
-                  id="component-simple"
-                  name="emailConfirmation"
-                  value={this.state.emailConfirmation}
-                  onChange={this.handleChange}
-                />
-              </FormControl>
-            </div> */}
-            {/* <div>
-              <FormControl>
-                <InputLabel htmlFor="component-simple">
-                  {dictio.password[this.props.language]}
-                </InputLabel>
-                <Input
-                  id="component-simple"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-              </FormControl>
-            </div>
-            <div>
-              <FormControl>
-                <InputLabel htmlFor="component-simple">
-                  {dictio.confirmation[this.props.language]}
-                </InputLabel>
-                <Input
-                  id="component-simple"
-                  name="confirmation"
-                  value={this.state.confirmation}
-                  onChange={this.handleChange}
-                />
-              </FormControl>
-            </div> */}
+            {changePassword && (
+              <div>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.oldPassword[props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="oldPassword"
+                    value={oldPassword}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.changePassword[props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="newPassword"
+                    value={newPassword}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.confirmation[props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="newPasswordConf"
+                    value={newPasswordConf}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+              </div>
+            )}
             <div>
               {modify ? (
-                <Button onClick={handleCancel} value="Submit">
-                  {dictio.cancel[props.language]}
-                </Button>
+                <div>
+                  <Button onClick={handleCancel} value="Submit">
+                    {dictio.cancel[props.language]}
+                  </Button>
+                  <Button onClick={handleChangePassword} value="Submit">
+                    {dictio.changePassword[props.language]}
+                  </Button>
+                </div>
               ) : (
                 <Button onClick={handleModify} value="Submit">
                   {dictio.modify[props.language]}
@@ -288,7 +300,7 @@ export default function Account(props) {
 
               {modify && (
                 <Button type="submit" value="Submit">
-                  {dictio.submit[props.language]}
+                  {dictio.apply[props.language]}
                 </Button>
               )}
               {waitingRequest && <CircularProgress />}
