@@ -17,6 +17,22 @@ userController = {
     } catch (error) {
       console.log(error);
     }
+  },
+  updateUserInfo: async (user_id, updateUser) => {
+    let updatedUser = {
+      firstname: updateUser.firstname,
+      lastname: updateUser.lastname,
+      telephone: updateUser.telephone,
+      email: updateUser.email,
+      platform: updateUser.platform
+    };
+    if (updateUser.changePassword)
+      updatedUser.password = updateUser.newPassword;
+    return await model.Users.update(updatedUser, {
+      where: {
+        _id: user_id
+      }
+    });
   }
 };
 

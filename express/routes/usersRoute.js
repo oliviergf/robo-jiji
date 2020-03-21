@@ -12,4 +12,25 @@ router.get("/", async function(req, res, next) {
   }
 });
 
+router.put("/", async function(req, res, next) {
+  if (req.isAuthenticated) {
+    if (req.body.changePassword && req.user.password !== req.body.oldPassword) {
+      res.send("errorOldPassword");
+    } else {
+      const result = await userController.updateUserInfo(
+        req.user._id,
+        req.body
+      );
+
+      if (result[0] === 1) {
+        res.send(200);
+      } else {
+        res.send(500);
+      }
+    }
+  } else {
+    res.send(401);
+  }
+});
+
 module.exports = router;

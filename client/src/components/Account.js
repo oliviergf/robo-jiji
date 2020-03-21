@@ -20,7 +20,7 @@ import {
 } from "@material-ui/core/";
 
 /**
- * TODO: Ajouter le mdp (peutetre autre bouton?)
+ * TODO:
  *       faire le call d'api
  *       mettre les messages d'erreur
  */
@@ -38,6 +38,8 @@ export default function Account(props) {
   const [modify, setModify] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorTelephone, setErrorTelephone] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const [errorOldPassword, setOldErrorPassword] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -65,15 +67,27 @@ export default function Account(props) {
     setChangePassword(false);
   };
 
-  const lookForTriggers = () => {
-    let sendRequest = true;
+  const handleClose = () => {};
+
+  const formIsClean = () => {
+    let isClean = true;
     if (!isEmail.validate(email) || email !== emailConfirmation) {
       setErrorEmail(true);
-      sendRequest = false;
+      isClean = false;
     } else if (hasInvalidPhoneNumber()) {
       setErrorTelephone(true);
-      sendRequest = false;
+      isClean = false;
+    } else if (
+      changePassword &&
+      (newPassword !== newPasswordConf ||
+        newPassword === "" ||
+        newPasswordConf === "")
+    ) {
+      setErrorPassword(true);
+      isClean = false;
     }
+    console.log("isClean", isClean);
+    return isClean;
   };
 
   const fetchUserInfo = () => {
@@ -104,27 +118,42 @@ export default function Account(props) {
     if (evt.target.name === "email") setEmail(evt.target.value);
     if (evt.target.name === "telephone") setTelephone(evt.target.value);
     if (evt.target.name === "platform") setPlatform(evt.target.value);
+    if (evt.target.name === "oldPassword") setOldPassword(evt.target.value);
+    if (evt.target.name === "newPassword") setNewPassword(evt.target.value);
+    if (evt.target.name === "newPasswordConf")
+      setNewPasswordConf(evt.target.value);
     if (evt.target.name === "emailConfirmation")
       setEmailConfirmation(evt.target.value);
     if (evt.target.name === "telephoneConfirmation")
       setTelephoneConfirmation(evt.target.value);
   };
 
-  const handleEditInput = () => {
-    if (lookForTriggers()) {
-      // axios
-      //   .put(`${url}/users`, {
-      //     zoneId: newZone.id,
-      //     path: points,
-      //     name: name
-      //   })
-      //   .then(function(response) {
-      //     console.log(response);
-      //   })
-      //   .catch(function(error) {
-      //     console.log(error);
-      //   });
+  const handleEditInput = evt => {
+    if (formIsClean()) {
+      console.log("sending request");
+      //should be put but it doesnt work apparently
+      axios
+        .put(`${url}/users`, {
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          telephone: telephone,
+          changePassword: changePassword,
+          platform: platform,
+          oldPassword: oldPassword,
+          newPassword: newPassword
+        })
+        .then(function(response) {
+          console.log(response);
+          console.log("sending request post?");
+        })
+        .catch(function(error) {
+          console.log("sending request post?");
+
+          console.log(error);
+        });
     }
+    evt.preventDefault();
   };
 
   // will only be called once
@@ -212,7 +241,6 @@ export default function Account(props) {
                 </RadioGroup>
               </FormControl>
             </div>
-
             <div>
               {platform === "android" && (
                 <div>
