@@ -62,7 +62,6 @@ class Register extends React.Component {
   hasInvalidPhoneNumber = () => {
     if (this.state.platform === "apple") return false;
     const isnum = /^\d+$/.test(this.state.telephone);
-    console.log("isnum", isnum);
 
     return (
       (this.state.platform === "android" && !isnum) ||

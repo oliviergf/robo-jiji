@@ -31,16 +31,27 @@ export default function Account(props) {
   const [waitingRequest, setWaitingRequest] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorTelephone, setErrorTelephone] = useState(false);
+  const [modify, setModify] = useState(false);
 
   const hasInvalidPhoneNumber = () => {
+    if (platform === "apple") return false;
     const isnum = /^\d+$/.test(telephone);
+
     return (
-      platform === "android" &&
-      isnum &&
-      (telephone !== telephoneConfirmation ||
-        telephone === "" ||
-        telephoneConfirmation === "")
+      (platform === "android" && !isnum) ||
+      telephone !== telephoneConfirmation ||
+      telephone === "" ||
+      telephoneConfirmation === ""
     );
+  };
+
+  const handleModify = () => {
+    setModify(true);
+  };
+
+  const handleCancel = () => {
+    fetchUserInfo();
+    setModify(false);
   };
 
   const lookForTriggers = () => {
@@ -149,19 +160,21 @@ export default function Account(props) {
                 />
               </FormControl>
             </div>
-            <div>
-              <FormControl>
-                <InputLabel htmlFor="component-simple">
-                  {dictio.confirmation[props.language]}
-                </InputLabel>
-                <Input
-                  id="component-simple"
-                  name="emailConfirmation"
-                  value={emailConfirmation}
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </div>
+            {modify && (
+              <div>
+                <FormControl>
+                  <InputLabel htmlFor="component-simple">
+                    {dictio.confirmation[props.language]}
+                  </InputLabel>
+                  <Input
+                    id="component-simple"
+                    name="emailConfirmation"
+                    value={emailConfirmation}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+              </div>
+            )}
             <div>
               <FormControl component="fieldset">
                 <RadioGroup
@@ -183,8 +196,9 @@ export default function Account(props) {
                 </RadioGroup>
               </FormControl>
             </div>
-            {platform === "android" && (
-              <div>
+
+            <div>
+              {platform === "android" && (
                 <div>
                   <FormControl>
                     <InputLabel htmlFor="component-simple">
@@ -198,6 +212,8 @@ export default function Account(props) {
                     />
                   </FormControl>
                 </div>
+              )}
+              {platform === "android" && modify && (
                 <div>
                   <FormControl>
                     <InputLabel htmlFor="component-simple">
@@ -211,9 +227,9 @@ export default function Account(props) {
                     />
                   </FormControl>
                 </div>
-                <FormLabel>{dictio.onlyAndroidUsers[props.language]}</FormLabel>
-              </div>
-            )}
+              )}
+            </div>
+
             {/* <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
@@ -254,9 +270,21 @@ export default function Account(props) {
               </FormControl>
             </div> */}
             <div>
-              <Button type="submit" value="Submit">
-                {dictio.submit[props.language]}
-              </Button>
+              {modify ? (
+                <Button onClick={handleCancel} value="Submit">
+                  {dictio.cancel[props.language]}
+                </Button>
+              ) : (
+                <Button onClick={handleModify} value="Submit">
+                  {dictio.modify[props.language]}
+                </Button>
+              )}
+
+              {modify && (
+                <Button type="submit" value="Submit">
+                  {dictio.submit[props.language]}
+                </Button>
+              )}
               {waitingRequest && <CircularProgress />}
             </div>
           </form>

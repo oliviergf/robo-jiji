@@ -76,7 +76,9 @@ const dictionary = {
     "You must into a valid phone number"
   ],
   open: ["zones", "zones"],
-  new: ["ajout", "new"]
+  new: ["ajout", "new"],
+  modify: ["Modifier", "Edit"],
+  apply: ["Appliquer", "Apply"]
 };
 
 export default dictionary;
