@@ -19,6 +19,12 @@ import {
   FormControlLabel
 } from "@material-ui/core/";
 
+/**
+ * TODO: Ajouter le mdp (peutetre autre bouton?)
+ *       faire le call d'api
+ *       mettre les messages d'erreur
+ */
+
 export default function Account(props) {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
