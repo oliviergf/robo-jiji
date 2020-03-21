@@ -1,78 +1,220 @@
 import MuiAlert from "@material-ui/lab/Alert";
-
+import dictio from "../assets/dictionary";
 import React, { useState, useEffect } from "react";
-import { Container, Box, Button } from "@material-ui/core";
+import { Container, Box } from "@material-ui/core";
 import axios from "../services/axios";
 import url from "../assets/serverURL";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Redirect } from "react-router";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import isEmail from "isemail";
+
+import {
+  FormControl,
+  InputLabel,
+  Input,
+  Button,
+  FormLabel,
+  FormControlLabel
+} from "@material-ui/core/";
 
 export default function Account(props) {
-  console.log("in that funk");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailConfirmation, setEmailConfirmation] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [telephoneConfirmation, setTelephoneConfirmation] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [fireRedirect, setFireRedirect] = useState(false);
+  const [waitingRequest, setWaitingRequest] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorTelephone, setErrorTelephone] = useState(false);
+
+  const hasInvalidPhoneNumber = () => {
+    const isnum = /^\d+$/.test(telephone);
+    return (
+      platform === "android" &&
+      isnum &&
+      (telephone !== telephoneConfirmation ||
+        telephone === "" ||
+        telephoneConfirmation === "")
+    );
+  };
+
+  const lookForTriggers = () => {
+    let sendRequest = true;
+    if (!isEmail.validate(email) || email !== emailConfirmation) {
+      setErrorEmail(true);
+      sendRequest = false;
+    } else if (hasInvalidPhoneNumber()) {
+      setErrorTelephone(true);
+      sendRequest = false;
+    }
+  };
+
   const fetchUserInfo = () => {
+    setWaitingRequest(true);
     axios
       .get(`${url}/users`)
       .then(function(response) {
-        // handle success
-        console.log(response);
+        setFirstname(response.data.firstname);
+        setLastname(response.data.lastname);
+        setTelephone(response.data.telephone);
+        setPlatform(response.data.platform);
+        setEmail(response.data.email);
+        setWaitingRequest(false);
       })
       .catch(function(error) {
-        // handle error
         console.log(error);
-      })
-      .then(function() {
-        // always executed
+        setWaitingRequest(false);
       });
   };
+
+  const handleChange = evt => {
+    if (evt.target.name === "firstname") setFirstname(evt.target.value);
+    if (evt.target.name === "lastname") setLastname(evt.target.value);
+    if (evt.target.name === "email") setEmail(evt.target.value);
+    if (evt.target.name === "telephone") setTelephone(evt.target.value);
+    if (evt.target.name === "platform") setPlatform(evt.target.value);
+    if (evt.target.name === "emailConfirmation")
+      setEmailConfirmation(evt.target.value);
+    if (evt.target.name === "telephoneConfirmation")
+      setTelephoneConfirmation(evt.target.value);
+  };
+
+  const handleEditInput = () => {
+    if (lookForTriggers()) {
+      // axios
+      //   .put(`${url}/users`, {
+      //     zoneId: newZone.id,
+      //     path: points,
+      //     name: name
+      //   })
+      //   .then(function(response) {
+      //     console.log(response);
+      //   })
+      //   .catch(function(error) {
+      //     console.log(error);
+      //   });
+    }
+  };
+
   useEffect(() => {
-    console.log("effect used brah");
-  });
+    fetchUserInfo();
+  }, []);
+
   return (
     <Container className="home">
       <Box justifyContent="center" alignItems="center">
         <div>
-          <Button onClick={fetchUserInfo}>api call</Button>
-        </div>
-        {/* <div>
-          <form className="registerForm" onSubmit={this.handleRegisterInput}>
+          <form className="registerForm" onSubmit={handleEditInput}>
             <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
-                  {dictio.firstname[this.props.language]}
+                  {dictio.firstname[props.language]}
                 </InputLabel>
                 <Input
                   id="component-simple"
                   name="firstname"
-                  value={this.state.firstname}
-                  onChange={this.handleChange}
+                  value={firstname}
+                  onChange={handleChange}
                 />
               </FormControl>
             </div>
             <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
-                  {dictio.lastname[this.props.language]}
+                  {dictio.lastname[props.language]}
                 </InputLabel>
                 <Input
                   id="component-simple"
                   name="lastname"
-                  value={this.state.lastname}
-                  onChange={this.handleChange}
+                  value={lastname}
+                  onChange={handleChange}
                 />
               </FormControl>
             </div>
             <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
-                  {dictio.email[this.props.language]}
+                  {dictio.email[props.language]}
                 </InputLabel>
                 <Input
                   id="component-simple"
                   name="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
+                  value={email}
+                  onChange={handleChange}
                 />
               </FormControl>
             </div>
             <div>
+              <FormControl>
+                <InputLabel htmlFor="component-simple">
+                  {dictio.confirmation[props.language]}
+                </InputLabel>
+                <Input
+                  id="component-simple"
+                  name="emailConfirmation"
+                  value={emailConfirmation}
+                  onChange={handleChange}
+                />
+              </FormControl>
+            </div>
+            <div>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  aria-label="Platforme"
+                  name="platform"
+                  value={platform}
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="apple"
+                    control={<Radio />}
+                    label="Apple"
+                  />
+                  <FormControlLabel
+                    value="android"
+                    control={<Radio />}
+                    label="Android"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+            {platform === "android" && (
+              <div>
+                <div>
+                  <FormControl>
+                    <InputLabel htmlFor="component-simple">
+                      {dictio.telephoneNumber[props.language]}
+                    </InputLabel>
+                    <Input
+                      id="component-simple"
+                      name="telephone"
+                      value={telephone}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </div>
+                <div>
+                  <FormControl>
+                    <InputLabel htmlFor="component-simple">
+                      {dictio.telephoneNumberConfirmation[props.language]}
+                    </InputLabel>
+                    <Input
+                      id="component-simple"
+                      name="telephoneConfirmation"
+                      value={telephoneConfirmation}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </div>
+                <FormLabel>{dictio.onlyAndroidUsers[props.language]}</FormLabel>
+              </div>
+            )}
+            {/* <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
                   {dictio.confirmation[this.props.language]}
@@ -84,8 +226,8 @@ export default function Account(props) {
                   onChange={this.handleChange}
                 />
               </FormControl>
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
                   {dictio.password[this.props.language]}
@@ -110,15 +252,15 @@ export default function Account(props) {
                   onChange={this.handleChange}
                 />
               </FormControl>
-            </div>
+            </div> */}
             <div>
               <Button type="submit" value="Submit">
-                {dictio.submit[this.props.language]}
+                {dictio.submit[props.language]}
               </Button>
-              {this.state.waitingRequest && <CircularProgress />}
+              {waitingRequest && <CircularProgress />}
             </div>
           </form>
-          <Snackbar
+          {/* <Snackbar
             open={this.state.openRequiredFieldsError}
             autoHideDuration={2000}
             onClose={this.handleClose}
@@ -171,9 +313,9 @@ export default function Account(props) {
             <Alert severity="success" onClose={this.handleClose}>
               {dictio.registerSucces[this.props.language]}
             </Alert>
-          </Snackbar>
-          {this.state.fireRedirect && <Redirect to={"/home"} />}
-        </div> */}
+          </Snackbar> */}
+          {fireRedirect && <Redirect to={"/home"} />}
+        </div>
       </Box>
     </Container>
   );

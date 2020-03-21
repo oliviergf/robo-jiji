@@ -60,11 +60,15 @@ class Register extends React.Component {
   };
 
   hasInvalidPhoneNumber = () => {
+    if (this.state.platform === "apple") return false;
+    const isnum = /^\d+$/.test(this.state.telephone);
+    console.log("isnum", isnum);
+
     return (
-      this.state.platform === "android" &&
-      (this.state.telephone !== this.state.telephoneConfirmation ||
-        this.state.telephone === "" ||
-        this.state.telephoneConfirmation === "")
+      (this.state.platform === "android" && !isnum) ||
+      this.state.telephone !== this.state.telephoneConfirmation ||
+      this.state.telephone === "" ||
+      this.state.telephoneConfirmation === ""
     );
   };
 
@@ -108,6 +112,8 @@ class Register extends React.Component {
       [evt.target.name]: evt.target.value
     });
   };
+
+  testPhoneNumber = () => {};
 
   handleRegisterInput = evt => {
     if (this.hasAnyBlankField()) {

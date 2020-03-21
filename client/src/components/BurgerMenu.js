@@ -16,6 +16,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import TranslateIcon from "@material-ui/icons/Translate";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router";
 import url from "../assets/serverURL";
 
 const useStyles = makeStyles({
@@ -26,6 +27,8 @@ const useStyles = makeStyles({
 
 export default function SideBurgMenu(props) {
   const classes = useStyles();
+
+  const [redirect, setRedirect] = React.useState(false);
 
   const [state, setState] = React.useState({
     left: false
@@ -48,6 +51,7 @@ export default function SideBurgMenu(props) {
         .get(`${url}/logout`)
         .then(function(response) {
           // handle success
+          setRedirect(true);
           props.userLoggedOut();
         })
         .catch(function(error) {
@@ -216,6 +220,7 @@ export default function SideBurgMenu(props) {
       <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
         {sideList("left")}
       </Drawer>
+      {redirect && <Redirect to={"/home"} />}
     </div>
   );
 }

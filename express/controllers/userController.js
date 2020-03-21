@@ -8,7 +8,7 @@ userController = {
 
       const user = {
         firstname: result.dataValues.firstname,
-        lastName: result.dataValues.lastName,
+        lastname: result.dataValues.lastname,
         email: result.dataValues.email,
         telephone: result.dataValues.telephone,
         platform: result.dataValues.platform
