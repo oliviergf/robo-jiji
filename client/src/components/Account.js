@@ -1,10 +1,12 @@
 import MuiAlert from "@material-ui/lab/Alert";
-import React from "react";
+
+import React, { useState, useEffect } from "react";
 import { Container, Box, Button } from "@material-ui/core";
 import axios from "../services/axios";
 import url from "../assets/serverURL";
 
 export default function Account(props) {
+  console.log("in that funk");
   const fetchUserInfo = () => {
     axios
       .get(`${url}/users`)
@@ -20,6 +22,9 @@ export default function Account(props) {
         // always executed
       });
   };
+  useEffect(() => {
+    console.log("effect used brah");
+  });
   return (
     <Container className="home">
       <Box justifyContent="center" alignItems="center">

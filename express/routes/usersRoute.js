@@ -3,11 +3,10 @@ var router = express.Router();
 let userController = require("../controllers/userController");
 
 /* GET users listing. */
-router.get("/", function(req, res, next) {
+router.get("/", async function(req, res, next) {
   if (req.isAuthenticated) {
-    console.log("requser", req.user);
-    userController.fetchUserInfo(req.user._id);
-    res.send("respond with a resource");
+    const user = await userController.fetchUserInfo(req.user._id);
+    res.send(user);
   } else {
     res.send(401);
   }

@@ -10,8 +10,10 @@ userController = {
         firstname: result.dataValues.firstname,
         lastName: result.dataValues.lastName,
         email: result.dataValues.email,
-        telephoneNumber: result.dataValues.telephoneNumber
+        telephone: result.dataValues.telephone,
+        platform: result.dataValues.platform
       };
+      return user;
     } catch (error) {
       console.log(error);
     }
