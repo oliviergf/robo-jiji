@@ -156,9 +156,9 @@ export default function Account(props) {
           console.log("god damn response", response);
           if (response.data === "successful") {
             setSuccessAPIcall(true);
-            // setTimeout(() => {
-            //   setFireRedirect(true);
-            // }, 1500);
+            setTimeout(() => {
+              setFireRedirect(true);
+            }, 2000);
           } else if (response.data === "errorOldPassword") {
             setOldErrorPassword(true);
           }
