@@ -9,6 +9,8 @@ import { Redirect } from "react-router";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import isEmail from "isemail";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "./Alert";
 
 import {
   FormControl,
@@ -40,10 +42,19 @@ export default function Account(props) {
   const [errorTelephone, setErrorTelephone] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorOldPassword, setOldErrorPassword] = useState(false);
+  const [successAPIcall, setSuccessAPIcall] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConf, setNewPasswordConf] = useState("");
+
+  const handleClose = () => {
+    setErrorEmail(false);
+    setErrorTelephone(false);
+    setErrorPassword(false);
+    setOldErrorPassword(false);
+    setSuccessAPIcall(false);
+  };
 
   const hasInvalidPhoneNumber = () => {
     if (platform === "apple") return false;
@@ -66,8 +77,6 @@ export default function Account(props) {
     setModify(false);
     setChangePassword(false);
   };
-
-  const handleClose = () => {};
 
   const formIsClean = () => {
     let isClean = true;
@@ -144,8 +153,15 @@ export default function Account(props) {
           newPassword: newPassword
         })
         .then(function(response) {
-          console.log(response);
-          console.log("sending request post?");
+          console.log("god damn response", response);
+          if (response.data === "successful") {
+            setSuccessAPIcall(true);
+            // setTimeout(() => {
+            //   setFireRedirect(true);
+            // }, 1500);
+          } else if (response.data === "errorOldPassword") {
+            setOldErrorPassword(true);
+          }
         })
         .catch(function(error) {
           console.log("sending request post?");
@@ -160,6 +176,58 @@ export default function Account(props) {
   useEffect(() => {
     fetchUserInfo();
   }, []);
+
+  const popUpIcons = () => {
+    return (
+      <div>
+        <Snackbar
+          open={errorEmail}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert severity="error" onClose={handleClose}>
+            {dictio.emailConfirmError[props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorTelephone}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert severity="error" onClose={handleClose}>
+            {dictio.telephoneError[props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorPassword}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert severity="error" onClose={handleClose}>
+            {dictio.pwConfirmError[props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorOldPassword}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert severity="error" onClose={handleClose}>
+            {dictio.oldPasswordError[props.language]}
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={successAPIcall}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert severity="success" onClose={handleClose}>
+            {dictio.updateUserSuccess[props.language]}
+          </Alert>
+        </Snackbar>
+      </div>
+    );
+  };
 
   return (
     <Container className="home">
@@ -334,60 +402,7 @@ export default function Account(props) {
               {waitingRequest && <CircularProgress />}
             </div>
           </form>
-          {/* <Snackbar
-            open={this.state.openRequiredFieldsError}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="error" onClose={this.handleClose}>
-              {dictio.openRequiredFieldsError[this.props.language]}
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={this.state.openPassWordError}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="error" onClose={this.handleClose}>
-              {dictio.pwConfirmError[this.props.language]}
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={this.state.openEmailError}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="error" onClose={this.handleClose}>
-              {dictio.emailConfirmError[this.props.language]}
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={this.state.openValidEmailError}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="error" onClose={this.handleClose}>
-              {dictio.validEmailError[this.props.language]}
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={this.state.openUsedEmailError}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="error" onClose={this.handleClose}>
-              {dictio.openUsedEmailError[this.props.language]}
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            open={this.state.registrationSucces}
-            autoHideDuration={2000}
-            onClose={this.handleClose}
-          >
-            <Alert severity="success" onClose={this.handleClose}>
-              {dictio.registerSucces[this.props.language]}
-            </Alert>
-          </Snackbar> */}
+          {popUpIcons()}
           {fireRedirect && <Redirect to={"/home"} />}
         </div>
       </Box>

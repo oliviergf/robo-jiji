@@ -75,12 +75,20 @@ const dictionary = {
     "Veillez entrer un numero de telephone valide",
     "You must into a valid phone number"
   ],
+  oldPasswordError: [
+    "L'ancien mot de passe n'est pas valide",
+    "Old password isn't valid"
+  ],
   open: ["zones", "zones"],
   new: ["ajout", "new"],
   modify: ["Modifier", "Edit"],
   apply: ["Appliquer", "Apply"],
   oldPassword: ["Ancien mot de passe", "Old password"],
-  changePassword: ["Nouveau mot de passe", "New password"]
+  changePassword: ["Nouveau mot de passe", "New password"],
+  updateUserSuccess: [
+    "Compte modifie avec success",
+    "Account update succesfull"
+  ]
 };
 
 export default dictionary;
