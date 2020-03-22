@@ -88,7 +88,8 @@ const dictionary = {
   updateUserSuccess: [
     "Compte modifie avec success",
     "Account update succesfull"
-  ]
+  ],
+  delete: ["Effacer", "Delete"]
 };
 
 export default dictionary;

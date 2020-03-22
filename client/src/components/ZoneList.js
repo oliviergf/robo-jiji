@@ -6,11 +6,13 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
+import dictio from "../assets/dictionary";
 
 const selected = (zoneId, onSelect) => {
   //passes zone id to ZoneMenu to change color
@@ -30,9 +32,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function generate(zoneList, deleteZoneFunc, onSelect) {
+function generate(
+  zoneList,
+  deleteZoneFunc,
+  onSelect,
+  selectZoneToDelete,
+  zoneIndexDelete,
+  language
+) {
   if (zoneList.length !== 0) {
-    return zoneList.map(zone => (
+    return zoneList.map((zone, index) => (
       <ListItem
         button={true}
         name={zone.id}
@@ -48,13 +57,23 @@ function generate(zoneList, deleteZoneFunc, onSelect) {
         </ListItemAvatar>
         <ListItemText primary={zone.name} />
         <ListItemSecondaryAction>
-          <IconButton
-            edge="end"
-            aria-label="delete"
-            onClick={() => deleteZoneFunc(zone.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
+          {zoneIndexDelete !== index ? (
+            <IconButton
+              edge="end"
+              aria-label="delete"
+              onClick={() => selectZoneToDelete(index)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          ) : (
+            <Button
+              variant="outlined"
+              onClick={() => deleteZoneFunc(zone.id)}
+              color="secondary"
+            >
+              {dictio.delete[language]}
+            </Button>
+          )}
         </ListItemSecondaryAction>
       </ListItem>
     ));
@@ -84,7 +103,14 @@ export default function InteractiveList(props) {
           </Typography>
           <div className={classes.demo}>
             <List>
-              {generate(props.zoneList, props.deleteZoneFunc, props.onSelect)}
+              {generate(
+                props.zoneList,
+                props.deleteZoneFunc,
+                props.onSelect,
+                props.selectZoneToDelete,
+                props.zoneIndexDelete,
+                props.language
+              )}
             </List>
           </div>
         </Grid>

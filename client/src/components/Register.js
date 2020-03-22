@@ -9,9 +9,9 @@ import {
   FormControlLabel
 } from "@material-ui/core/";
 import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "./Alert";
 import dictio from "../assets/dictionary";
 import isEmail from "isemail";
-import Alert from "./Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Redirect } from "react-router";
 import url from "../assets/serverURL";

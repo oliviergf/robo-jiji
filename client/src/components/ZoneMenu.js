@@ -21,7 +21,8 @@ class ZoneMenu extends React.Component {
       openDialog: false,
       tempZoneValue: "",
       userLocation: { lat: 45.496205, lng: -73.571895 }, //or call findUserCoord but fucks sometime...
-      defaultZoneName: ""
+      defaultZoneName: "",
+      zoneSelectedToDelete: -1
     };
     this.findUserCoord();
   }
@@ -37,6 +38,10 @@ class ZoneMenu extends React.Component {
 
   toggleDrawer = open => {
     this.setState({ openDrawer: open });
+  };
+
+  selectZoneToDelete = index => {
+    this.setState({ zoneSelectedToDelete: index });
   };
 
   // total hack; we had to wait for map component to render before using the GoogleMap object,
@@ -93,14 +98,16 @@ class ZoneMenu extends React.Component {
     });
   };
 
-  //todo:does not work :  shit it
+  //zoneId works; if ever want to attempt to change colors
   onZoneSelect = zoneId => {
-    console.log(zoneId);
+    this.setState({ zoneSelectedToDelete: -1 });
   };
 
   onCreateClick = () => {
     this.setState({ allowDraw: true });
   };
+
+  onDeleteSelect = () => {};
 
   onDeleteClick = zoneId => {
     let self = this;
@@ -223,6 +230,9 @@ class ZoneMenu extends React.Component {
             zoneList={this.state.zones}
             deleteZoneFunc={this.onDeleteClick}
             onSelect={this.onZoneSelect}
+            selectZoneToDelete={this.selectZoneToDelete}
+            zoneIndexDelete={this.state.zoneSelectedToDelete}
+            language={this.props.language}
           />
         </SwipeableDrawer>
         <Dialog
