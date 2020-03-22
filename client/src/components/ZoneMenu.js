@@ -126,7 +126,8 @@ class ZoneMenu extends React.Component {
 
           //removes it from state zones
           self.setState({
-            zones: self.state.zones.filter(zone => zone.id !== zoneToDelete.id)
+            zones: self.state.zones.filter(zone => zone.id !== zoneToDelete.id),
+            zoneSelectedToDelete: -1
           });
         }
       })

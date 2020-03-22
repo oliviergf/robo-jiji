@@ -4,6 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
+import Notifications from "./components/Notifications";
 import Informations from "./components/Information";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
@@ -114,6 +115,9 @@ class App extends React.Component {
             </Route>
             <Route path="/map">
               <ZoneMenu language={this.state.language} />
+            </Route>
+            <Route path="/notifs">
+              <Notifications language={this.state.language} />
             </Route>
             <Route path="/">
               <Home language={this.state.language} />

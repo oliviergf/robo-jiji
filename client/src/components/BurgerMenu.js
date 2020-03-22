@@ -15,6 +15,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import TranslateIcon from "@material-ui/icons/Translate";
+import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router";
 import url from "../assets/serverURL";
@@ -38,7 +39,7 @@ export default function SideBurgMenu(props) {
     dictio.account[props.language],
     dictio.maps[props.language],
     dictio.dashboard[props.language],
-    dictio.settings[props.language],
+    dictio.notification[props.language],
     dictio.logout[props.language],
     dictio.langue[props.language]
   ];
@@ -141,11 +142,11 @@ export default function SideBurgMenu(props) {
             </ListItem>
           </Link>
         );
-      case dictio.settings[props.language]:
+      case dictio.notification[props.language]:
         return (
           <Link
             style={{ textDecoration: "none", color: "inherit" }}
-            to="/settings"
+            to="/notifs"
             key={index}
           >
             <ListItem
@@ -155,7 +156,7 @@ export default function SideBurgMenu(props) {
               }}
             >
               <ListItemIcon>
-                <SettingsIcon />
+                <NotificationImportantIcon />
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>

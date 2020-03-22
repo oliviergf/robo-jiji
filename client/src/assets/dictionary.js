@@ -8,7 +8,7 @@ const dictionary = {
   langue: ["English", "Francais"],
   logout: ["Deconnexion", "logout"],
   account: ["Compte", "Account"],
-  settings: ["Reglages", "Settings"],
+  notification: ["Notifications", "Notifications"],
   maps: ["Carte", "Map"],
   dashboard: ["Appartements", "Dashboard"],
   subscribe: ["Creer un compte", "Subscribe"],
