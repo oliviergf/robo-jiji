@@ -21,15 +21,19 @@ admin.initializeApp({
  */
 const pushNotification = async (userId, apartId) => {
   try {
-    var registrationToken =
-      "dwBU5MPFxgRZ-0Q7Hc-Q50:APA91bHFq6HwgLSYBnEomsx5lzsDDtx9adeiRT1yS5nA-mxV9dprpF6yzBXvTDm-2bFm9AYytgn6MCkXft0yd9bxf1AM6GTJvpnWa5XMqoc_9GeXKA_Wz3jJJcsXJTSl_zeiritnCEjW";
+    let result = await models.Subscription.findOne({
+      attributes: ["BrowserToken"],
+      where: {
+        UserId: userId
+      }
+    });
 
     var message = {
       data: {
         score: "850",
         time: "2:45"
       },
-      token: registrationToken
+      token: result.dataValues.BrowserToken
     };
 
     // Send a message to the device corresponding to the provided
