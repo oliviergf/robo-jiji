@@ -5,6 +5,13 @@ subscriberController = {
 
     //save the payload to db
     saveSubToDatabase(userinfo, userToken);
+  },
+
+  updateNotificationInfo: async (userinfo, notifcationInfo) => {
+    console.log(userinfo);
+    console.log(notifcationInfo);
+    //save the payload to db
+    // saveSubToDatabase(userinfo, userToken);
   }
 };
 

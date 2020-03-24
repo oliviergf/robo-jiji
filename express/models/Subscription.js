@@ -9,6 +9,19 @@ module.exports = function(sequelize, Sequelize) {
     BrowserToken: {
       type: Sequelize.STRING,
       notEmpty: true
+    },
+
+    notifyAllTheTime: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    startBlockingTime: {
+      type: DataTypes.TIME,
+      defaultValue: "00:00"
+    },
+    endBlockingTime: {
+      type: DataTypes.TIME,
+      defaultValue: "07:00"
     }
   });
   Subscription.associate = models => {

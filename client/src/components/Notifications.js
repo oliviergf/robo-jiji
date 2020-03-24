@@ -71,10 +71,6 @@ export default function Notifications(props) {
   };
 
   const handleTimeForm = evt => {
-    console.log(start);
-    console.log(end);
-    console.log(checkedG);
-
     axios
       .put(`${url}/subscribeNotif`, {
         start: start,
