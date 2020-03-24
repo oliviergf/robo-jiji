@@ -5,8 +5,16 @@ import axios from "../services/axios";
 import url from "../assets/serverURL";
 import React, { useState } from "react";
 import dictio from "../assets/dictionary";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import { green } from "@material-ui/core/colors";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import Favorite from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -20,10 +28,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    "&$checked": {
+      color: green[600]
+    }
+  },
+  checked: {}
+})(props => <Checkbox color="default" {...props} />);
 export default function Notifications(props) {
   const classes = useStyles();
   const [start, setStart] = useState("00:00");
   const [end, setEnd] = useState("07:30");
+  const [checkedG, setCheckedG] = useState(false);
 
   const testNotification = () => {
     // Make a request for a user with a given ID
@@ -47,6 +65,9 @@ export default function Notifications(props) {
   const handleClockEnd = evt => {
     setEnd(evt.target.value);
   };
+  const handleChange = () => {
+    setCheckedG(!checkedG);
+  };
 
   const handleTimeForm = evt => {
     console.log(start);
@@ -67,7 +88,18 @@ export default function Notifications(props) {
           <Button onClick={testNotification}>test Notifications</Button>
           <div>
             <form className={classes.container} onSubmit={handleTimeForm}>
+              <FormControlLabel
+                control={
+                  <GreenCheckbox
+                    checked={checkedG}
+                    onChange={handleChange}
+                    name={dictio.allTheTime[props.language]}
+                  />
+                }
+                label={dictio.allTheTime[props.language]}
+              />
               <TextField
+                disabled={checkedG}
                 id="time"
                 label={dictio.beginning[props.language]}
                 type="time"
@@ -82,6 +114,7 @@ export default function Notifications(props) {
                 }}
               />
               <TextField
+                disabled={checkedG}
                 value={end}
                 id="time"
                 label={dictio.ending[props.language]}

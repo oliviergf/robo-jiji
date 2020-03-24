@@ -18,6 +18,7 @@ const dictionary = {
     "Coronarobot automatise la recherche d'apartement en envoyant des notifications lorsqu'un appartement est publier sur kijiji",
     "Corobonat is a service that automates the apartement hunting by notifying you whenever there a new one posted"
   ],
+  allTheTime: ["Envoyer des notifications 24/7", "Send notifications 24/7"],
   info1: [
     "Le but est de reduire le stress de l'ulisateur qui cherche un logement en lui envoyant des notifications quand un apparts se post. Nous permettons de definir des zones geographiques et vous serez allerter losrquon new shit pop dans la zone!",
     "the goal is to reduce the amount of time one yser could spend resfressh kijiji by sending notifications when a given spot is posted inside one of more speficic regions that the user defines"
@@ -30,7 +31,7 @@ const dictionary = {
     "Les utilisateurs de Iphone n'ont pas acces directement aux notifications de l'appareils et donc le service enverra des messages texte afin de notidier l'utilisateur.",
     "Iphones users cannot presently receive notifications via the app and they will receveives texte messages"
   ],
-  beginning: ["debut", "start"],
+  beginning: ["heure debut", "start hour"],
   ending: ["fin", "end"],
   firstname: ["Prenom", "First name"],
   lastname: ["Nom", "Last name"],
