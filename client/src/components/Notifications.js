@@ -37,6 +37,7 @@ const GreenCheckbox = withStyles({
   },
   checked: {}
 })(props => <Checkbox color="default" {...props} />);
+
 export default function Notifications(props) {
   const classes = useStyles();
   const [start, setStart] = useState("00:00");
@@ -72,6 +73,25 @@ export default function Notifications(props) {
   const handleTimeForm = evt => {
     console.log(start);
     console.log(end);
+    console.log(checkedG);
+
+    axios
+      .put(`${url}/subscribeNotif`, {
+        start: start,
+        end: end,
+        checkedG: checkedG
+      })
+      .then(function(response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function(error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function() {
+        // always executed
+      });
     evt.preventDefault();
   };
   return (

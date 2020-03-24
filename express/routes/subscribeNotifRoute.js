@@ -27,4 +27,13 @@ router.get("/", async function(req, res, next) {
   }
 });
 
+router.put("/", async function(req, res, next) {
+  if (req.isAuthenticated()) {
+    console.log("its a put notification ashhole");
+    console.log(req.body);
+    res.send("register that damn user!");
+  } else {
+    res.send(401);
+  }
+});
 module.exports = router;
