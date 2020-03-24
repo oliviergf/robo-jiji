@@ -16,11 +16,11 @@ module.exports = function(sequelize, Sequelize) {
       defaultValue: false
     },
     startBlockingTime: {
-      type: DataTypes.TIME,
+      type: Sequelize.TIME,
       defaultValue: "00:00"
     },
     endBlockingTime: {
-      type: DataTypes.TIME,
+      type: Sequelize.TIME,
       defaultValue: "07:00"
     }
   });
