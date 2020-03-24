@@ -30,6 +30,8 @@ const dictionary = {
     "Les utilisateurs de Iphone n'ont pas acces directement aux notifications de l'appareils et donc le service enverra des messages texte afin de notidier l'utilisateur.",
     "Iphones users cannot presently receive notifications via the app and they will receveives texte messages"
   ],
+  beginning: ["debut", "start"],
+  ending: ["fin", "end"],
   firstname: ["Prenom", "First name"],
   lastname: ["Nom", "Last name"],
   email: ["Courriel", "Email"],
