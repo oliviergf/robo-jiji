@@ -36,7 +36,6 @@ export async function askPushPermission() {
     .then(currentToken => {
       if (currentToken) {
         console.log(currentToken);
-        console.log("also here");
         sendSubscriptionToBackEnd(currentToken);
       } else {
         // Show permission request.

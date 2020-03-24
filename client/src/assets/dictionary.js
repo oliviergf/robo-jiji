@@ -38,6 +38,7 @@ const dictionary = {
   submit: ["Creer", "Submit"],
   login: ["se connecter", "login"],
   enter: ["Entrer", "Enter"],
+  enablePush: ["Autoriser les notifications", "Enable notifications"],
   pwConfirmError: [
     "Mauvaise confirmation du mot de passe",
     "Wrong password confirmation"

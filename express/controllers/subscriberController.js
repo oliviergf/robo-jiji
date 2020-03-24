@@ -18,7 +18,7 @@ saveSubToDatabase = async (UserId, userToken) => {
     });
 
     if (!created) {
-      sub.BrowserToken = BrowserToken;
+      sub.BrowserToken = userToken;
       await sub.save();
     }
   } catch (error) {
