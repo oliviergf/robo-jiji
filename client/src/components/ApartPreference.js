@@ -46,8 +46,8 @@ export default function Account(props) {
     dateAvailable: "",
     priceStart: 750,
     priceEnd: 2000,
-    rooms: [],
-    numberBedrooms: 1,
+    rooms: ["3 & ½"],
+    numberBedrooms: ["1"],
     furnished: false,
     parkingAvailable: false,
     wheelchairAccessible: false,
@@ -66,6 +66,7 @@ export default function Account(props) {
     setState({ ...state, rooms: event.target.value });
   };
   const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
+  const bedRooms = ["1", "2", "3", "4", "5"];
 
   const handleChangePrice = (target, newValue) => {
     setState({ ...state, priceStart: newValue[0], priceEnd: newValue[1] });
@@ -85,6 +86,7 @@ export default function Account(props) {
             min={100}
             max={5000}
           />
+          {`[${state.priceStart},${state.priceEnd}]`}
         </div>
         <div>
           <FormControl className={classes.formControl}>
@@ -102,6 +104,28 @@ export default function Account(props) {
               {rooms.map((room, index) => (
                 <MenuItem key={room} value={room}>
                   <Checkbox checked={state.rooms.indexOf(room) > -1} />
+                  <ListItemText primary={room} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-mutiple-checkbox-label">
+              {dictio.bedrooms[props.language]}
+            </InputLabel>
+            <Select
+              multiple
+              value={state.numberBedrooms}
+              onChange={handleChangeRooms}
+              input={<Input />}
+              renderValue={selected => selected.join(", ")}
+              MenuProps={MenuProps}
+            >
+              {bedRooms.map((room, index) => (
+                <MenuItem key={room} value={room}>
+                  <Checkbox checked={state.numberBedrooms.indexOf(room) > -1} />
                   <ListItemText primary={room} />
                 </MenuItem>
               ))}
