@@ -97,7 +97,11 @@ const dictionary = {
     "Compte modifie avec success",
     "Account update succesfull"
   ],
-  delete: ["Effacer", "Delete"]
+  delete: ["Effacer", "Delete"],
+  furnished: ["Meubler", "Furnished"],
+  petsAllowed: ["Animaux acceptes", "Pets allowed"],
+  wheelchairAccessible: ["Acces handicape", "Wheelchair accessible"],
+  parkingAvailable: ["Parking disponible", "Parking available"]
 };
 
 export default dictionary;

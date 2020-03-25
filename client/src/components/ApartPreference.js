@@ -14,7 +14,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
-
+import FormGroup from "@material-ui/core/FormGroup";
+import FormHelperText from "@material-ui/core/FormHelperText";
 function valuetext(value) {
   return `${value}$`;
 }
@@ -54,16 +55,21 @@ export default function Account(props) {
     petsAllowed: false
   });
 
-  const handleEditInput = () => {
-    console.log("editing em prefs");
+  const handleEditInput = evt => {
+    console.log(state);
+    evt.preventDefault();
   };
 
-  const handleChange = () => {
-    console.log("todo");
+  const handleChange = evt => {
+    setState({ ...state, [evt.target.name]: evt.target.checked });
   };
 
   const handleChangeRooms = event => {
     setState({ ...state, rooms: event.target.value });
+  };
+
+  const handleChangeBedRooms = event => {
+    setState({ ...state, numberBedrooms: event.target.value });
   };
   const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
   const bedRooms = ["1", "2", "3", "4", "5"];
@@ -118,7 +124,7 @@ export default function Account(props) {
             <Select
               multiple
               value={state.numberBedrooms}
-              onChange={handleChangeRooms}
+              onChange={handleChangeBedRooms}
               input={<Input />}
               renderValue={selected => selected.join(", ")}
               MenuProps={MenuProps}
@@ -132,8 +138,57 @@ export default function Account(props) {
             </Select>
           </FormControl>
         </div>
-        <Button onClick={handleChange} value="Submit">
-          {dictio.cancel[props.language]}
+        <div>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Options</FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.furnished}
+                    onChange={handleChange}
+                    name="furnished"
+                  />
+                }
+                label={dictio.furnished[props.language]}
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.parkingAvailable}
+                    onChange={handleChange}
+                    name="parkingAvailable"
+                  />
+                }
+                label={dictio.parkingAvailable[props.language]}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.wheelchairAccessible}
+                    onChange={handleChange}
+                    name="wheelchairAccessible"
+                  />
+                }
+                label={dictio.wheelchairAccessible[props.language]}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.petsAllowed}
+                    onChange={handleChange}
+                    name="petsAllowed"
+                  />
+                }
+                label={dictio.petsAllowed[props.language]}
+              />
+            </FormGroup>
+            <FormHelperText>Be careful</FormHelperText>
+          </FormControl>
+        </div>
+        <Button type="submit" value="Submit">
+          {dictio.apply[props.language]}
         </Button>
       </form>
     </div>
