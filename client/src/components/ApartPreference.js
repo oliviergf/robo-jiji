@@ -16,6 +16,13 @@ import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 function valuetext(value) {
   return `${value}$`;
 }
@@ -44,7 +51,7 @@ const useStyles = makeStyles({
 export default function Account(props) {
   const classes = useStyles();
   const [state, setState] = useState({
-    dateAvailable: "",
+    dateAvailable: moment().format("DD/MM/YYYY"),
     priceStart: 750,
     priceEnd: 2000,
     rooms: ["3 & ½"],
@@ -77,10 +84,31 @@ export default function Account(props) {
   const handleChangePrice = (target, newValue) => {
     setState({ ...state, priceStart: newValue[0], priceEnd: newValue[1] });
   };
+
+  const handleDateChange = date => {
+    setState({ ...state, dateAvailable: date });
+  };
   return (
     <div>
       <form className="preferenceForm" onSubmit={handleEditInput}>
         <h2>{dictio.preferences[props.language]}</h2>
+        <div>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <KeyboardDatePicker
+              disableToolbar
+              variant="inline"
+              format="dd/MM/yyyy"
+              margin="normal"
+              id="date-picker-inline"
+              label={dictio.dateAvailable[props.language]}
+              value={state.sdateAvailable}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                "aria-label": "change date"
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
         <div className={classes.root}>
           <InputLabel>{dictio.priceRange[props.language]}</InputLabel>
           <Slider

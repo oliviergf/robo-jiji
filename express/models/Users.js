@@ -46,6 +46,34 @@ module.exports = function(sequelize, Sequelize) {
     status: {
       type: Sequelize.ENUM("active", "inactive"),
       defaultValue: "active"
+    },
+
+    dateAvailable: {
+      type: Sequelize.DATE
+    },
+    priceStart: {
+      type: Sequelize.INTEGER
+    },
+    priceEnd: {
+      type: Sequelize.INTEGER
+    },
+    rooms: {
+      type: Sequelize.STRING
+    },
+    numberBedrooms: {
+      type: Sequelize.STRING
+    },
+    furnished: {
+      type: Sequelize.BOOLEAN
+    },
+    parkingAvailable: {
+      type: Sequelize.BOOLEAN
+    },
+    wheelchairAccessible: {
+      type: Sequelize.BOOLEAN
+    },
+    petsAllowed: {
+      type: Sequelize.BOOLEAN
     }
   });
 
