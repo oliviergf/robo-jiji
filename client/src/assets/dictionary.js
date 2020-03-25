@@ -14,6 +14,7 @@ const dictionary = {
   subscribe: ["Creer un compte", "Subscribe"],
   return: ["retour", "return"],
   informations: ["informations", "informations"],
+  preferences: ["Preferences", "Preferences"],
   description: [
     "Coronarobot automatise la recherche d'apartement en envoyant des notifications lorsqu'un appartement est publier sur kijiji",
     "Corobonat is a service that automates the apartement hunting by notifying you whenever there a new one posted"

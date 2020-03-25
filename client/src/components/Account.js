@@ -11,6 +11,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import isEmail from "isemail";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "./Alert";
+import Preferences from "./ApartPreference";
 
 import {
   FormControl,
@@ -234,6 +235,7 @@ export default function Account(props) {
       <Box justifyContent="center" alignItems="center">
         <div>
           <form className="registerForm" onSubmit={handleEditInput}>
+            <h2>{dictio.account[props.language]}</h2>
             <div>
               <FormControl>
                 <InputLabel htmlFor="component-simple">
@@ -402,6 +404,7 @@ export default function Account(props) {
               {waitingRequest && <CircularProgress />}
             </div>
           </form>
+          <Preferences language={props.language} />
           {popUpIcons()}
           {fireRedirect && <Redirect to={"/home"} />}
         </div>
