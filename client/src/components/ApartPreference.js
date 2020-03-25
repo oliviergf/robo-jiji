@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dictio from "../assets/dictionary";
 import { makeStyles } from "@material-ui/core/styles";
+import url from "../assets/serverURL";
 import {
   FormControl,
   InputLabel,
@@ -17,6 +18,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import MomentUtils from "@date-io/moment";
+import axios from "../services/axios";
 import moment from "moment";
 import {
   MuiPickersUtilsProvider,
@@ -61,9 +63,32 @@ export default function Account(props) {
     wheelchairAccessible: false,
     petsAllowed: false
   });
+  const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
+  const bedRooms = ["1", "2", "3", "4", "5"];
 
   const handleEditInput = evt => {
-    console.log(state);
+    console.log("in there!!");
+    axios
+      .put(`${url}/preferences`, {
+        data: state
+      })
+      .then(function(response) {
+        console.log("god damn response", response);
+        // if (response.data === "successful") {
+        //   setSuccessAPIcall(true);
+        //   setTimeout(() => {
+        //     setFireRedirect(true);
+        //   }, 2000);
+        // } else if (response.data === "errorOldPassword") {
+        //   setOldErrorPassword(true);
+        // }
+      })
+      .catch(function(error) {
+        console.log("sending request post?");
+
+        console.log(error);
+      });
+
     evt.preventDefault();
   };
 
@@ -78,8 +103,6 @@ export default function Account(props) {
   const handleChangeBedRooms = event => {
     setState({ ...state, numberBedrooms: event.target.value });
   };
-  const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
-  const bedRooms = ["1", "2", "3", "4", "5"];
 
   const handleChangePrice = (target, newValue) => {
     setState({ ...state, priceStart: newValue[0], priceEnd: newValue[1] });
