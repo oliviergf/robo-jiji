@@ -13,6 +13,7 @@ const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 if (cluster.isMaster) {
   for (let i = 0; i < cpuCount; i++) {
     cluster.fork();
+    // console.log("date here now", new Date().toString());
   }
 } else {
   var app = require("../app");

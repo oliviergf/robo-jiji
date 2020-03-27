@@ -53,7 +53,7 @@ const useStyles = makeStyles({
 export default function Account(props) {
   const classes = useStyles();
   const [state, setState] = useState({
-    dateAvailable: moment().format("DD/MM/YYYY"),
+    dateAvailable: moment(),
     priceStart: 750,
     priceEnd: 2000,
     rooms: ["3 & ½"],
@@ -120,11 +120,11 @@ export default function Account(props) {
             <KeyboardDatePicker
               disableToolbar
               variant="inline"
-              format="dd/MM/yyyy"
+              format="DD/MM/YY"
               margin="normal"
               id="date-picker-inline"
               label={dictio.dateAvailable[props.language]}
-              value={state.sdateAvailable}
+              value={state.dateAvailable}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 "aria-label": "change date"

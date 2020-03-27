@@ -10,8 +10,6 @@ https: router.get("/", passport.authenticate("session"), async function(
   res,
   next
 ) {
-  //TODO: might want to send more info here
-  //todo: update user last loggedin
   if (req.isAuthenticated()) {
     res.send({ firstname: req.user.firstname });
   } else {
