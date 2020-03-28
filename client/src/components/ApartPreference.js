@@ -66,6 +66,29 @@ export default function Account(props) {
   const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
   const bedRooms = ["1", "2", "3", "4", "5"];
 
+  // will only be called once
+  useEffect(() => {
+    axios
+      .get(`${url}/preferences`)
+      .then(function(response) {
+        setState({
+          dateAvailable: response.data.dateAvailable || moment(),
+          priceStart: response.data.priceStart || 750,
+          priceEnd: response.data.priceEnd || 2000,
+          rooms: response.data.rooms || ["3 & ½"],
+          numberBedrooms: response.data.numberBedrooms || ["1"],
+          furnished: response.data.furnished || false,
+          parkingAvailable: response.data.parkingAvailable || false,
+          wheelchairAccessible: response.data.wheelchairAccessible || false,
+          petsAllowed: response.data.petsAllowed || false
+        });
+      }, [])
+      .catch(function(error) {
+        console.log("error fetching preferences");
+        console.log(error);
+      });
+  }, []);
+
   const handleEditInput = evt => {
     console.log("in there!!");
     axios
