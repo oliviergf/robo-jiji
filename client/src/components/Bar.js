@@ -62,7 +62,7 @@ export default function ButtonAppBar(props) {
           >
             <Link
               style={{ textDecoration: "none", color: "white" }}
-              to="/dashboard"
+              to="/apartements"
             >
               <ApartmentIcon />
             </Link>

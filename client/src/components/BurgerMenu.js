@@ -126,7 +126,7 @@ export default function SideBurgMenu(props) {
         return (
           <Link
             style={{ textDecoration: "none", color: "inherit" }}
-            to="/dashboard"
+            to="/apartements"
             key={index}
           >
             <ListItem

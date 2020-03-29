@@ -94,7 +94,7 @@ class App extends React.Component {
         </div>
         <div className="body">
           <Switch>
-            <Route path="/dashboard">
+            <Route path="/apartements">
               <Home language={this.state.language} />
             </Route>
             <Route path="/informations">
