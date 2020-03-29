@@ -3,7 +3,7 @@ import { Container, Box, Button } from "@material-ui/core";
 import { askPushPermission } from "../services/pushManager";
 import axios from "../services/axios";
 import url from "../assets/serverURL";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dictio from "../assets/dictionary";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";

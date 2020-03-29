@@ -47,6 +47,7 @@ const dictionary = {
   login: ["se connecter", "login"],
   enter: ["Entrer", "Enter"],
   enablePush: ["Autoriser les notifications", "Enable notifications"],
+  Error: ["Erreur", "Error"],
   pwConfirmError: [
     "Mauvaise confirmation du mot de passe",
     "Wrong password confirmation"
@@ -96,8 +97,9 @@ const dictionary = {
   changePassword: ["Nouveau mot de passe", "New password"],
   updateUserSuccess: [
     "Compte modifie avec success",
-    "Account update succesfull"
+    "Account update successfull"
   ],
+  success: ["Succes", "Success"],
   delete: ["Effacer", "Delete"],
   furnished: ["Meubler", "Furnished"],
   petsAllowed: ["Animaux acceptes", "Pets allowed"],

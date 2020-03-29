@@ -19,6 +19,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import MomentUtils from "@date-io/moment";
 import axios from "../services/axios";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "./Alert";
 import moment from "moment";
 import {
   MuiPickersUtilsProvider,
@@ -61,10 +63,16 @@ export default function Account(props) {
     furnished: false,
     parkingAvailable: false,
     wheelchairAccessible: false,
-    petsAllowed: false
+    petsAllowed: false,
+    showSucces: false,
+    showError: false
   });
   const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
   const bedRooms = ["1", "2", "3", "4", "5"];
+
+  const handleClose = () => {
+    setState({ ...state, showSucces: false, showError: false });
+  };
 
   // will only be called once
   useEffect(() => {
@@ -90,25 +98,15 @@ export default function Account(props) {
   }, []);
 
   const handleEditInput = evt => {
-    console.log("in there!!");
     axios
       .put(`${url}/preferences`, {
         data: state
       })
       .then(function(response) {
-        console.log("god damn response", response);
-        // if (response.data === "successful") {
-        //   setSuccessAPIcall(true);
-        //   setTimeout(() => {
-        //     setFireRedirect(true);
-        //   }, 2000);
-        // } else if (response.data === "errorOldPassword") {
-        //   setOldErrorPassword(true);
-        // }
+        setState({ ...state, showSucces: true });
       })
       .catch(function(error) {
-        console.log("sending request post?");
-
+        setState({ ...state, showError: true });
         console.log(error);
       });
 
@@ -258,13 +256,33 @@ export default function Account(props) {
                 label={dictio.petsAllowed[props.language]}
               />
             </FormGroup>
-            <FormHelperText>Be careful</FormHelperText>
+            <FormHelperText>
+              attention ces cases peuvent severement restraindre la recherche
+            </FormHelperText>
           </FormControl>
         </div>
         <Button type="submit" value="Submit">
           {dictio.apply[props.language]}
         </Button>
       </form>
+      <Snackbar
+        open={state.showSucces}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert severity="success" onClose={handleClose}>
+          {dictio.success[props.language]}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={state.showError}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert severity="error" onClose={handleClose}>
+          {dictio.Error[props.language]}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
