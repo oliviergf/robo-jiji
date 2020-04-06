@@ -1,5 +1,4 @@
 import MuiAlert from "@material-ui/lab/Alert";
-
 import { Container, Box, Button } from "@material-ui/core";
 import dictio from "../assets/dictionary";
 import React, { useEffect, useState } from "react";
@@ -16,30 +15,18 @@ import axios from "../services/axios";
 import moment from "moment";
 const useStyles = makeStyles({ colWidth: "1rem" });
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData(1, 159, 6.0, 24, 4.0),
-//   createData(2, 237, 9.0, 37, 4.3),
-//   createData(3, 262, 16.0, 24, 6.0),
-//   createData(4, 305, 3.7, 67, 4.3),
-//   createData(5, 356, 16.0, 49, 3.9),
-// ];
-
 export default function Apartements(props) {
-  // will only be called once
   useEffect(() => {
     fetchUserApartementList();
   }, []);
 
   const parseAparts = (aparts) => {
-    console.log(aparts);
     aparts.map((apart) => {
       const today = moment();
       const creationDate = moment(apart.createdAt);
+
       if (creationDate.isBefore(today, "d")) {
+        //is not today
         apart.createdAt = creationDate.format("D/M");
       } else {
         apart.createdAt = creationDate.format("HH:mm");
@@ -55,10 +42,9 @@ export default function Apartements(props) {
         // handle success
         const parsedAparts = parseAparts(response.data.data);
         setState({ ...state, aparts: parsedAparts });
-        console.log(state);
       })
       .catch(function (error) {
-        // handle error
+        // handle error hello
         console.log(error);
       })
       .then(function () {
