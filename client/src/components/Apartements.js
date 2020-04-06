@@ -13,6 +13,8 @@ import Paper from "@material-ui/core/Paper";
 import url from "../assets/serverURL";
 import axios from "../services/axios";
 import moment from "moment";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+
 import VisibilityIcon from "@material-ui/icons/Visibility";
 const useStyles = makeStyles({ colWidth: "1rem" });
 
@@ -53,7 +55,39 @@ export default function Apartements(props) {
       });
   };
   const classes = useStyles();
-  const [state, setState] = useState({ aparts: [] });
+  const [state, setState] = useState({
+    aparts: [],
+    sorter: "",
+    direction: "desc",
+    sortDate: false,
+    sortPrice: false,
+  });
+
+  const sortHandeler = (type) => {
+    if (type === "date") {
+      setState({
+        ...state,
+        sortDate: true,
+        sortPrice: false,
+        direction: state.direction === "asc" ? "desc" : "asc",
+      });
+    } else {
+      setState({
+        ...state,
+        sortDate: false,
+        sortPrice: true,
+        direction: state.direction === "asc" ? "desc" : "asc",
+      });
+    }
+  };
+
+  const sortHandelerDate = () => {
+    sortHandeler("date");
+  };
+  const sortHandelerPrice = () => {
+    sortHandeler("price");
+  };
+
   return (
     <Container className="home">
       <Box justifyContent="center" alignItems="center">
@@ -66,10 +100,24 @@ export default function Apartements(props) {
                   <TableCell>#</TableCell>
                   <TableCell></TableCell>
                   <TableCell align="right">
-                    {dictio.timeFetch[props.language]}
+                    <TableSortLabel
+                      active={state.sortDate}
+                      direction={state.direction}
+                      onClick={sortHandelerDate}
+                      name="date"
+                    >
+                      {dictio.timeFetch[props.language]}
+                    </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
-                    {dictio.price[props.language]}
+                    <TableSortLabel
+                      active={state.sortPrice}
+                      direction={state.direction}
+                      onClick={sortHandelerPrice}
+                      name="price"
+                    >
+                      {dictio.price[props.language]}
+                    </TableSortLabel>
                   </TableCell>
                 </TableRow>
               </TableHead>
