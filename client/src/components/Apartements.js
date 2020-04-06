@@ -1,7 +1,7 @@
 import MuiAlert from "@material-ui/lab/Alert";
 
 import { Container, Box, Button } from "@material-ui/core";
-
+import dictio from "../assets/dictionary";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -37,11 +37,12 @@ export default function Apartements(props) {
               <TableHead>
                 <TableRow className={classes.colWidth}>
                   <TableCell> :) </TableCell>
-
                   <TableCell># </TableCell>
                   <TableCell align="right">Zone</TableCell>
                   <TableCell align="right">Date</TableCell>
-                  <TableCell align="right">price</TableCell>
+                  <TableCell align="right">
+                    {dictio.price[props.language]}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

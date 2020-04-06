@@ -12,6 +12,7 @@ const sessionLoginRouter = require("./routes/sessionRoute");
 const loginRouter = require("./routes/loginRoute");
 const subscribeNotifRouter = require("./routes/subscribeNotifRoute");
 const preferencesRouter = require("./routes/preferencesRoute");
+const apartementsRouter = require("./routes/apartementsList");
 const passport = require("passport");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -45,7 +46,7 @@ db.sequelize.sync();
 
 // initalize sequelize with session store
 var myStore = new SequelizeStore({
-  db: db.sequelize
+  db: db.sequelize,
 });
 
 /**
@@ -58,7 +59,7 @@ var myStore = new SequelizeStore({
 app.use(
   cors({
     origin: true,
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -80,9 +81,9 @@ app.use(
     cookie: {
       secure: false, //to allow HTTP over HTTPS
       maxAge: 1000 * 1000 * 60 * sessionTimeOutMinutes, //in millisec
-      expires: expiryDate
+      expires: expiryDate,
     },
-    store: myStore
+    store: myStore,
   })
 );
 
@@ -102,22 +103,22 @@ app.use(passport.session()); // persistent login sessions
 require("./services/passport/passport.js")(passport, db.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   console.log("serialising user", user);
   done(null, user._id);
 });
 
-passport.deserializeUser(async function(id, done) {
+passport.deserializeUser(async function (id, done) {
   console.log("deserialising user id", id);
 
   let user = await db.Users.findOne({
-    where: { _id: id }
+    where: { _id: id },
   });
   done(null, user.dataValues);
 });
 
 // terminates user session and delete req.user
-app.get("/logout", function(req, res) {
+app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
 });
@@ -135,6 +136,7 @@ app.use("/sessionLogin", sessionLoginRouter);
 app.use("/zone", zoneRouter);
 app.use("/subscribeNotif", subscribeNotifRouter);
 app.use("/preferences", preferencesRouter);
+app.use("/apartements", apartementsRouter);
 
 /**
  * launches RSS worker
@@ -150,25 +152,25 @@ app.use("/preferences", preferencesRouter);
  * --------------------------------------------------------------------------------
  */
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
   console.log({
     message: err.message,
-    error: err
+    error: err,
   });
 
   // render the error page
   res.status(err.status || 500);
   res.json({
     message: err.message,
-    error: err
+    error: err,
   });
 });
 
