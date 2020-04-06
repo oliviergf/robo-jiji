@@ -16,7 +16,12 @@ import moment from "moment";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 import VisibilityIcon from "@material-ui/icons/Visibility";
-const useStyles = makeStyles({ colWidth: "1rem" });
+const useStyles = makeStyles({
+  colWidth: "1rem",
+  container: {
+    maxHeight: 440,
+  },
+});
 
 export default function Apartements(props) {
   useEffect(() => {
@@ -120,8 +125,12 @@ export default function Apartements(props) {
       <Box justifyContent="center" alignItems="center">
         <div>
           <h1>apartements</h1>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
+          <TableContainer className={classes.container} component={Paper}>
+            <Table
+              stickyHeader
+              aria-label="sticky table"
+              className={classes.table}
+            >
               <TableHead>
                 <TableRow className={classes.colWidth}>
                   <TableCell>#</TableCell>
