@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Notifications from "./components/Notifications";
 import Informations from "./components/Information";
+import Apartements from "./components/Apartements";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
@@ -95,7 +96,7 @@ class App extends React.Component {
         <div className="body">
           <Switch>
             <Route path="/apartements">
-              <Home language={this.state.language} />
+              <Apartements language={this.state.language} />
             </Route>
             <Route path="/informations">
               <Informations language={this.state.language} />

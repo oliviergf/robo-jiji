@@ -39,7 +39,6 @@ if (cluster.isMaster) {
   /**
    * Get port from environment and store in Express.
    */
-
   var port = normalizePort(process.env.PORT || "3000");
   app.set("port", port);
 
@@ -50,7 +49,7 @@ if (cluster.isMaster) {
   var server = https.createServer(
     {
       key: fs.readFileSync("server.key"),
-      cert: fs.readFileSync("server.cert")
+      cert: fs.readFileSync("server.cert"),
     },
     app
   );
@@ -120,7 +119,7 @@ if (cluster.isMaster) {
   }
 }
 
-cluster.on("exit", worker => {
+cluster.on("exit", (worker) => {
   console.log("mayday! mayday! worker", worker.id, " is no more!");
   cluster.fork();
 });
