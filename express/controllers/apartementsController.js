@@ -2,7 +2,8 @@ const model = require("../models");
 
 apartementsController = {
   findUserAparts: async (userId) => {
-    let result = await model.Aparts.findAll({
+    let results = await model.Aparts.findAll({
+      attributes: ["_id", "price", "link", "createdAt"],
       include: [
         {
           model: model.Users,
@@ -11,8 +12,8 @@ apartementsController = {
         },
       ],
     });
-
-    console.log(result);
+    const apartsToReturn = results.map((apart) => apart.dataValues);
+    return apartsToReturn;
   },
 };
 

@@ -4,10 +4,15 @@ var passport = require("passport");
 const apartementsController = require("../controllers/apartementsController");
 
 /* GET React home page. */
-router.get("/", passport.authenticate("session"), function (req, res, next) {
+router.get("/", passport.authenticate("session"), async function (
+  req,
+  res,
+  next
+) {
   if (req.isAuthenticated()) {
-    apartementsController.findUserAparts(req.user._id);
-    res.send({ firstname: req.user.firstname });
+    res.send({
+      data: await apartementsController.findUserAparts(req.user._id),
+    });
   } else {
     res.sendStatus(401);
   }
