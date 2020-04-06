@@ -12,7 +12,10 @@ apartementsController = {
         },
       ],
     });
-    const apartsToReturn = results.map((apart) => apart.dataValues);
+    let apartsToReturn = results.map((apart) => apart.dataValues);
+    apartsToReturn.map((apt) => {
+      delete apt.users;
+    });
     return apartsToReturn;
   },
 };

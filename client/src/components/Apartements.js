@@ -30,11 +30,14 @@ export default function Apartements(props) {
 
       if (creationDate.isBefore(today, "d")) {
         //is not today
+        apart.absoluteDate = creationDate;
         apart.createdAt = creationDate.format("D/M");
       } else {
+        apart.absoluteDate = creationDate;
         apart.createdAt = creationDate.format("HH:mm");
       }
     });
+    console.log(aparts);
     return aparts;
   };
 
@@ -63,6 +66,27 @@ export default function Apartements(props) {
     sortPrice: false,
   });
 
+  const sortAparts = (type) => {
+    if (!state.aparts) return;
+    const sortedArray = state.aparts.sort((a, b) => {
+      if (type === "date") {
+        if (state.direction === "asc") {
+          return a.absoluteDate.diff(b.absoluteDate);
+        } else {
+          return b.absoluteDate.diff(a.absoluteDate);
+        }
+      } else {
+        if (state.direction === "asc") {
+          return a.price - b.price;
+        } else {
+          return b.price - a.price;
+        }
+      }
+    });
+
+    return sortedArray;
+  };
+
   const sortHandeler = (type) => {
     if (type === "date") {
       setState({
@@ -70,6 +94,7 @@ export default function Apartements(props) {
         sortDate: true,
         sortPrice: false,
         direction: state.direction === "asc" ? "desc" : "asc",
+        aparts: sortAparts("date"),
       });
     } else {
       setState({
@@ -77,8 +102,10 @@ export default function Apartements(props) {
         sortDate: false,
         sortPrice: true,
         direction: state.direction === "asc" ? "desc" : "asc",
+        aparts: sortAparts("price"),
       });
     }
+    console.log(state);
   };
 
   const sortHandelerDate = () => {
