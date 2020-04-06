@@ -13,6 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import url from "../assets/serverURL";
 import axios from "../services/axios";
 import moment from "moment";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 const useStyles = makeStyles({ colWidth: "1rem" });
 
 export default function Apartements(props) {
@@ -62,8 +63,8 @@ export default function Apartements(props) {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow className={classes.colWidth}>
-                  <TableCell> :) </TableCell>
                   <TableCell>#</TableCell>
+                  <TableCell></TableCell>
                   <TableCell align="right">
                     {dictio.timeFetch[props.language]}
                   </TableCell>
@@ -77,10 +78,10 @@ export default function Apartements(props) {
                   state.aparts.map((row, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        :)
+                        {row._id}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row._id}
+                        <VisibilityIcon />
                       </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
