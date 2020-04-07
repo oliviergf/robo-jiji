@@ -20,6 +20,11 @@ module.exports = function (sequelize, Sequelize) {
       type: Sequelize.INTEGER,
     },
 
+    photoSize: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    },
+
     link: {
       type: Sequelize.STRING,
       unique: true,

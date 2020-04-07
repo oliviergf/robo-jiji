@@ -12,7 +12,7 @@ const log = new logger();
  * displayed to the user
  * @param {string} postLink
  */
-const classifySingleApartment = async postLink => {
+const classifySingleApartment = async (postLink) => {
   try {
     const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);
@@ -25,9 +25,11 @@ const classifySingleApartment = async postLink => {
     const photoGallery = apartInfo.viewItemPage.viewItemData.media;
     const attributes = apartInfo.viewItemPage.viewItemData.adAttributes;
 
+    let imageCount = 0;
+
     //fetch every images & info on the post
-    if (photoGallery) fetchPhotos(photoGallery, postLink);
-    if (attributes) updateApartsAttributes(attributes, postLink);
+    if (photoGallery) imageCount = fetchPhotos(photoGallery, postLink);
+    if (attributes) updateApartsAttributes(attributes, postLink, imageCount);
 
     //todo: fire up notification and await photos and attributes
   } catch (err) {
@@ -44,6 +46,7 @@ fetchPhotos = async (gallery, postLink) => {
   //remove https//kijiji.ca/ from dir and turns / into .
   const shortlink = postLink.substring(22);
   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
+  let imageCount = 0;
 
   //creates new directory for post
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -55,26 +58,31 @@ fetchPhotos = async (gallery, postLink) => {
         const picture = await axios({
           method: "get",
           url: photo.href,
-          responseType: "stream"
+          responseType: "stream",
         });
         picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+        imageCount++;
       } catch (error) {
         log.err("gallery", gallery);
         log.err(`could not fetch img ${photo.href} `, error);
       }
     }
   });
+
+  return imageCount;
 };
 
 /**
  * updates apart attributes in DB like  # of rooms, animals allowed, parking
  */
-updateApartsAttributes = async (info, postLink) => {
+updateApartsAttributes = async (info, postLink, imageCount) => {
   const Apart = await models.Aparts.findOne({
-    where: { link: postLink }
+    where: { link: postLink },
   });
 
-  info.attributes.map(att => {
+  apart.photoSize = imageCount;
+
+  info.attributes.map((att) => {
     switch (att.machineKey) {
       case "numberbedrooms":
         if (att.localeSpecificValues.fr.value && att.machineValue) {

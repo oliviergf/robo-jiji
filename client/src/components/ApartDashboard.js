@@ -123,7 +123,6 @@ export default function Apartements(props) {
   };
 
   const handleOpen = (id) => {
-    console.log(id);
     axios
       .get(`${url}/apartVue`, {
         params: {
@@ -131,6 +130,7 @@ export default function Apartements(props) {
         },
       })
       .then(function (response) {
+        console.log(response);
         setState({
           ...state,
           openModal: true,

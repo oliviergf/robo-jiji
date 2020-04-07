@@ -11,6 +11,7 @@ const zoneRouter = require("./routes/zoneRoute");
 const sessionLoginRouter = require("./routes/sessionRoute");
 const loginRouter = require("./routes/loginRoute");
 const subscribeNotifRouter = require("./routes/subscribeNotifRoute");
+const vueRouter = require("./routes/apartVue");
 const preferencesRouter = require("./routes/preferencesRoute");
 const apartementsRouter = require("./routes/apartementsList");
 const passport = require("passport");
@@ -68,7 +69,7 @@ app.use(logger("dev"));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "pictures")));
 
 const expiryDate = new Date(Date.now() + 60 * 60 * 10000); //10 hours
 const sessionTimeOutMinutes = 60 * 3; //3 hours
@@ -137,6 +138,7 @@ app.use("/zone", zoneRouter);
 app.use("/subscribeNotif", subscribeNotifRouter);
 app.use("/preferences", preferencesRouter);
 app.use("/apartements", apartementsRouter);
+app.use("/apartVue", vueRouter);
 
 /**
  * launches RSS worker

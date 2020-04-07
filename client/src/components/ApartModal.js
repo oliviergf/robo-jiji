@@ -39,6 +39,10 @@ export default function ApartModal(props) {
     >
       <Fade in={props.open}>
         <div className={classes.paper}>
+          <img
+            className="logoimg"
+            src="https://localhost:3000/v-apartments-condos.city-of-toronto.1-bedroom-basement-apartment-for-rent-for-april-1st.1491171385/0.jpeg"
+          />
           <h2 id="transition-modal-title">Transition modal</h2>
           <p id="transition-modal-description">
             react-transition-group animates me.
