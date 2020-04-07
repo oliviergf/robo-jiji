@@ -24,12 +24,21 @@ const useStyles = makeStyles((theme) => ({
 export default function ApartModal(props) {
   const classes = useStyles();
 
-  //   const shortlink = postLink.substring(22);
-  //   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
-
-  const imagesGallery = () => {
+  //todo: must figure out how to fetch images from here.
+  //and build relevant JSX
+  const ImagesGallery = () => {
     if (!props.apartInfo) return <div>no images</div>;
-    console.log(props.apartInfo);
+    let images;
+    const shortlink = props.apartInfo.link.substring(22);
+    const dir = `/${shortlink.replace(/\//g, ".")}/`;
+    let urls = [];
+    for (let i = 0; i < props.apartInfo.photoSize; i++) {
+      const urlToFetch = url + dir + i + ".jpeg";
+      console.log(urlToFetch);
+      urls.push(urlToFetch);
+    }
+
+    return <div>bruh</div>;
   };
 
   return (
@@ -47,7 +56,7 @@ export default function ApartModal(props) {
     >
       <Fade in={props.open}>
         <div className={classes.paper}>
-          {imagesGallery()}
+          {/* <img src="https://localhost:3000/v-chambres-a-louer-colocataire.ville-de-montreal.chambre-superbe-maison-metro-jarry-villeray.1495342377/4.jpeg" /> */}
           <h2 id="transition-modal-title">Transition modal</h2>
           <p id="transition-modal-description">
             react-transition-group animates me.
