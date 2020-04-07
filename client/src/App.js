@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Notifications from "./components/Notifications";
 import Informations from "./components/Information";
-import Apartements from "./components/Apartements";
+import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
@@ -16,16 +16,16 @@ import "./App.css";
 import { Switch, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
 class App extends React.Component {
@@ -37,18 +37,18 @@ class App extends React.Component {
       anchorEl: null,
       width: window.innerWidth,
       height: window.innerHeight,
-      language: 0
+      language: 0,
     };
     this.testBrowserSession();
   }
 
   changeLanguage = () => {
-    this.setState(prevState => ({
-      language: prevState.language === 0 ? 1 : 0
+    this.setState((prevState) => ({
+      language: prevState.language === 0 ? 1 : 0,
     }));
   };
 
-  handleClick = event => {
+  handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -60,10 +60,10 @@ class App extends React.Component {
     this.setState({ isLoggedIn: false, userFirstName: "" });
   };
 
-  logUserCredentials = user => {
+  logUserCredentials = (user) => {
     this.setState({
       isLoggedIn: true,
-      userFirstName: user.firstname
+      userFirstName: user.firstname,
     });
   };
 
@@ -72,10 +72,10 @@ class App extends React.Component {
     let self = this;
     axios
       .get(`${url}/sessionLogin`)
-      .then(function(response) {
+      .then(function (response) {
         self.logUserCredentials(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
