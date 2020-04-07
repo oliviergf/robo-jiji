@@ -25,10 +25,16 @@ const classifySingleApartment = async (postLink) => {
     const photoGallery = apartInfo.viewItemPage.viewItemData.media;
     const attributes = apartInfo.viewItemPage.viewItemData.adAttributes;
 
+    //assumes every images has been saved
     let imageCount = 0;
+    photoGallery.map((photo) => {
+      if (photo.type !== "video") {
+        imageCount++;
+      }
+    });
 
     //fetch every images & info on the post
-    if (photoGallery) imageCount = fetchPhotos(photoGallery, postLink);
+    if (photoGallery) fetchPhotos(photoGallery, postLink);
     if (attributes) updateApartsAttributes(attributes, postLink, imageCount);
 
     //todo: fire up notification and await photos and attributes
@@ -46,7 +52,6 @@ fetchPhotos = async (gallery, postLink) => {
   //remove https//kijiji.ca/ from dir and turns / into .
   const shortlink = postLink.substring(22);
   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
-  let imageCount = 0;
 
   //creates new directory for post
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -61,15 +66,13 @@ fetchPhotos = async (gallery, postLink) => {
           responseType: "stream",
         });
         picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
-        imageCount++;
       } catch (error) {
         log.err("gallery", gallery);
-        log.err(`could not fetch img ${photo.href} `, error);
+        log.err(`could not fetch img ${photo.href} in dir ${dir} \n\n\n\n\n\ `);
+        if (error.errno === "ECONNRESET") log.o("econreset just fucked us");
       }
     }
   });
-
-  return imageCount;
 };
 
 /**
@@ -80,7 +83,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
     where: { link: postLink },
   });
 
-  apart.photoSize = imageCount;
+  Apart.photoSize = imageCount;
 
   info.attributes.map((att) => {
     switch (att.machineKey) {
