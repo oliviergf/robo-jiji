@@ -24,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ApartModal(props) {
   const classes = useStyles();
 
+  //   const shortlink = postLink.substring(22);
+  //   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
+
+  const imagesGallery = () => {
+    if (!props.apartInfo) return <div>no images</div>;
+    console.log(props.apartInfo);
+  };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -39,10 +47,7 @@ export default function ApartModal(props) {
     >
       <Fade in={props.open}>
         <div className={classes.paper}>
-          <img
-            className="logoimg"
-            src="https://localhost:3000/v-apartments-condos.city-of-toronto.1-bedroom-basement-apartment-for-rent-for-april-1st.1491171385/0.jpeg"
-          />
+          {imagesGallery()}
           <h2 id="transition-modal-title">Transition modal</h2>
           <p id="transition-modal-description">
             react-transition-group animates me.

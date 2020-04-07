@@ -11,7 +11,7 @@ router.get("/", passport.authenticate("session"), async function (
 ) {
   if (req.isAuthenticated()) {
     res.send({
-      data: await vueController.findApartInfos(req.user._id),
+      apartInfos: await vueController.findApartInfos(req.query.id),
     });
   } else {
     res.sendStatus(401);

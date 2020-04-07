@@ -33,6 +33,7 @@ export default function Apartements(props) {
     sortDate: false,
     sortPrice: false,
     openModal: false,
+    apartInfo: null,
   });
   useEffect(() => {
     fetchUserApartementList();
@@ -123,6 +124,7 @@ export default function Apartements(props) {
   };
 
   const handleOpen = (id) => {
+    console.log(id);
     axios
       .get(`${url}/apartVue`, {
         params: {
@@ -130,11 +132,10 @@ export default function Apartements(props) {
         },
       })
       .then(function (response) {
-        console.log(response);
         setState({
           ...state,
           openModal: true,
-          fetchedApart: response,
+          fetchedApart: response.data.apartInfos,
         });
       })
       .catch(function (error) {
@@ -211,7 +212,11 @@ export default function Apartements(props) {
               </TableBody>
             </Table>
           </TableContainer>
-          <ApartModal open={state.openModal} handleClose={handleClose} />
+          <ApartModal
+            open={state.openModal}
+            apartInfo={state.fetchedApart}
+            handleClose={handleClose}
+          />
         </div>
       </Box>
     </Container>
