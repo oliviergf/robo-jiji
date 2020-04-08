@@ -19,16 +19,14 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  images: {
+    maxWidth: 100,
+    maxHeight: 100,
+  },
 }));
 
 export default function ApartModal(props) {
-  const classes = useStyles();
-
-  //todo: must figure out how to fetch images from here.
-  //and build relevant JSX
-  const ImagesGallery = () => {
-    if (!props.apartInfo) return <div>no images</div>;
-    let images;
+  const createUrls = () => {
     const shortlink = props.apartInfo.link.substring(22);
     const dir = `/${shortlink.replace(/\//g, ".")}/`;
     let urls = [];
@@ -37,9 +35,23 @@ export default function ApartModal(props) {
       console.log(urlToFetch);
       urls.push(urlToFetch);
     }
-
-    return <div>bruh</div>;
+    return urls;
   };
+
+  const [state, setState] = useState({
+    photoUrls: createUrls(),
+  });
+
+  const putImages = () => {
+    return state.photoUrls.map((url, index) => {
+      return <img className={classes.images} key={index} src={url} />;
+    });
+  };
+
+  // useEffect(() => {
+  //   console.log("impo info", props.apartInfo);
+  // }, []);
+  const classes = useStyles();
 
   return (
     <Modal
@@ -56,6 +68,7 @@ export default function ApartModal(props) {
     >
       <Fade in={props.open}>
         <div className={classes.paper}>
+          {putImages()}
           {/* <img src="https://localhost:3000/v-chambres-a-louer-colocataire.ville-de-montreal.chambre-superbe-maison-metro-jarry-villeray.1495342377/4.jpeg" /> */}
           <h2 id="transition-modal-title">Transition modal</h2>
           <p id="transition-modal-description">

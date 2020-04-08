@@ -212,11 +212,13 @@ export default function Apartements(props) {
               </TableBody>
             </Table>
           </TableContainer>
-          <ApartModal
-            open={state.openModal}
-            apartInfo={state.fetchedApart}
-            handleClose={handleClose}
-          />
+          {state.openModal && (
+            <ApartModal
+              open={state.openModal}
+              apartInfo={state.fetchedApart}
+              handleClose={handleClose}
+            />
+          )}
         </div>
       </Box>
     </Container>

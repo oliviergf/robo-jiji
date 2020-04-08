@@ -13,6 +13,7 @@ const log = new logger();
  * @param {string} postLink
  */
 const classifySingleApartment = async (postLink) => {
+  //reset on error
   try {
     const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);

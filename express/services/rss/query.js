@@ -115,6 +115,8 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
 /**
  * dispatch each appart to a classifier
  */
+
+//todo: introduce a bit of random here
 sendApartsToClassifier = (apartsToCreate) => {
   //queries to get aparts images & info
   apartsToCreate.map((apart) => {
