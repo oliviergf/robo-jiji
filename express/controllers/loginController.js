@@ -12,10 +12,9 @@ LoginController = {
     });
 
     //todo: implements last_login update :)
-
     //todo: we may want to send more info than that.
     if (user.length === 1) {
-      return user[0].dataValues.firstname;
+      return user[0].dataValues;
     } else {
       return null;
     }

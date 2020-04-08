@@ -10,15 +10,18 @@ registerController = {
     });
 
     if (userCount !== 0) {
-      throw new Error("Email already in use");
+      return "emailUsed";
     } else {
       //inserts new User into db
       await model.Users.create({
         firstname: userinfo.firstname,
         lastname: userinfo.lastname,
         email: userinfo.email,
-        password: userinfo.password
+        password: userinfo.password,
+        platform: userinfo.platform,
+        telephone: userinfo.telephone
       });
+      return "success";
     }
   }
 };

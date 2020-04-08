@@ -8,7 +8,6 @@ router.post("/", async function(req, res, next) {
   if (req.isAuthenticated()) {
     const userToken = req.body.data;
     const userInfo = req.user;
-    console.log(userInfo);
     await subscriberController.subscribeUser(userInfo._id, userToken);
     res.send("register that damn user!");
   } else {
@@ -20,10 +19,20 @@ router.post("/", async function(req, res, next) {
  * triggers notification testing purposes
  */
 router.get("/", async function(req, res, next) {
-  console.log("IT GO IN HERE");
-  console.log("req body", req.body);
-  pushNotification("hello", "ok");
-  res.send("register that damn user!");
+  if (req.isAuthenticated()) {
+    pushNotification(req.user._id, "ok that a notification!");
+    res.send("register that damn user!");
+  } else {
+    res.send(401);
+  }
 });
 
+router.put("/", async function(req, res, next) {
+  if (req.isAuthenticated()) {
+    await subscriberController.updateNotificationInfo(req.user._id, req.body);
+    res.send("register that damn user!");
+  } else {
+    res.send(401);
+  }
+});
 module.exports = router;

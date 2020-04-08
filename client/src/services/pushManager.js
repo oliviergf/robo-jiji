@@ -3,6 +3,7 @@ import axios from "../services/axios";
 import * as firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/messaging";
+import url from "../assets/serverURL";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9JEIuG4hy1njZN2ktyr93BTbs1A2PX3U",
@@ -34,8 +35,6 @@ export async function askPushPermission() {
     .getToken()
     .then(currentToken => {
       if (currentToken) {
-        console.log(currentToken);
-        console.log("also here");
         sendSubscriptionToBackEnd(currentToken);
       } else {
         // Show permission request.
@@ -78,7 +77,7 @@ export async function askPushPermission() {
  */
 const sendSubscriptionToBackEnd = userToken => {
   return axios
-    .post("http://localhost:3000/subscribeNotif", {
+    .post(`${url}/subscribeNotif`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

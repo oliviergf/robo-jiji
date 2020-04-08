@@ -4,40 +4,51 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
+import Notifications from "./components/Notifications";
+import Informations from "./components/Information";
+import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
+import Account from "./components/Account";
+import url from "./assets/serverURL";
 import "typeface-roboto";
 import "./App.css";
 
 import { Switch, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });
 
-/**
- * watch this video for push notifications : https://www.youtube.com/watch?v=N9zpRvFRmj8
- */
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
       userFirstName: "",
-      anchorEl: null
+      anchorEl: null,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      language: 0,
     };
     this.testBrowserSession();
   }
 
-  handleClick = event => {
+  changeLanguage = () => {
+    this.setState((prevState) => ({
+      language: prevState.language === 0 ? 1 : 0,
+    }));
+  };
+
+  handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -49,10 +60,10 @@ class App extends React.Component {
     this.setState({ isLoggedIn: false, userFirstName: "" });
   };
 
-  logUserCredentials = user => {
+  logUserCredentials = (user) => {
     this.setState({
       isLoggedIn: true,
-      userFirstName: user.firstname
+      userFirstName: user.firstname,
     });
   };
 
@@ -60,40 +71,56 @@ class App extends React.Component {
   testBrowserSession = () => {
     let self = this;
     axios
-      .get("http://localhost:3000/sessionLogin")
-      .then(function(response) {
+      .get(`${url}/sessionLogin`)
+      .then(function (response) {
         self.logUserCredentials(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className="App">
         <div className={classes.root}>
           <Bar
             userLoggedOut={this.logoutHandeler}
+            changeLanguage={this.changeLanguage}
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
+            language={this.state.language}
           />
         </div>
         <div className="body">
           <Switch>
+            <Route path="/apartements">
+              <Apartements language={this.state.language} />
+            </Route>
+            <Route path="/informations">
+              <Informations language={this.state.language} />
+            </Route>
             <Route path="/register">
-              <Register />
+              <Register language={this.state.language} />
             </Route>
             <Route path="/login">
-              <Login logUserIn={this.logUserCredentials} />
+              <Login
+                logUserIn={this.logUserCredentials}
+                language={this.state.language}
+              />
+            </Route>
+            <Route path="/account">
+              <Account language={this.state.language} />
             </Route>
             <Route path="/map">
-              <ZoneMenu />
+              <ZoneMenu language={this.state.language} />
+            </Route>
+            <Route path="/notifs">
+              <Notifications language={this.state.language} />
             </Route>
             <Route path="/">
-              <Home />
+              <Home language={this.state.language} />
             </Route>
           </Switch>
         </div>

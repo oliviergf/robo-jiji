@@ -14,6 +14,11 @@ module.exports = function(sequelize, Sequelize) {
     zoneId: {
       type: Sequelize.STRING,
       notEmpty: true
+    },
+
+    name: {
+      type: Sequelize.STRING,
+      notEmpty: true
     }
   });
 

@@ -16,15 +16,18 @@ router.get("/", async function(req, res, next) {
 /* POST new zone. */
 router.post("/", async function(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log(req.user);
     const zoneInfo = {
       path: req.body.path,
       zoneId: req.body.zoneId,
-      userId: req.user._id
+      userId: req.user._id,
+      name: req.body.name
     };
 
-    //add try catch here?
-    await zoneController.createZone(zoneInfo);
+    try {
+      await zoneController.createZone(zoneInfo);
+    } catch (error) {
+      res.send(500);
+    }
 
     res.send(200);
   } else {
@@ -34,7 +37,6 @@ router.post("/", async function(req, res, next) {
 
 router.delete("/", async function(req, res, next) {
   if (req.isAuthenticated()) {
-    console.log(req.user);
     const zoneInfo = {
       zoneId: req.body.zoneId
     };

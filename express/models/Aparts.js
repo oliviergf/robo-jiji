@@ -1,76 +1,81 @@
-module.exports = function(sequelize, Sequelize) {
+module.exports = function (sequelize, Sequelize) {
   var Aparts = sequelize.define("Aparts", {
     _id: {
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
 
     localisation: {
       type: Sequelize.GEOMETRY("POINT"),
-      notEmpty: true
+      notEmpty: true,
     },
 
     title: {
       type: Sequelize.STRING,
-      notEmpty: true
+      notEmpty: true,
     },
 
     price: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+    },
+
+    photoSize: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
     },
 
     link: {
       type: Sequelize.STRING,
-      unique: true
+      unique: true,
     },
 
     description: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
 
     rooms: {
       type: Sequelize.STRING,
-      defaultValue: null
+      defaultValue: null,
     },
 
     petsAllowed: {
       type: Sequelize.STRING,
-      defaultValue: null
+      defaultValue: null,
     },
 
     numberBedrooms: {
       type: Sequelize.INTEGER,
-      defaultValue: null
+      defaultValue: null,
     },
 
     dateAvailable: {
       type: Sequelize.DATE,
-      defaultValue: null
+      defaultValue: null,
     },
 
     furnished: {
       type: Sequelize.BOOLEAN,
-      defaultValue: null
+      defaultValue: null,
     },
 
     wheelchairAccessible: {
       type: Sequelize.BOOLEAN,
-      defaultValue: null
+      defaultValue: null,
     },
 
     parkingSpots: {
       type: Sequelize.INTEGER,
-      defaultValue: null
-    }
+      defaultValue: null,
+    },
   });
 
-  Aparts.associate = models => {
+  Aparts.associate = (models) => {
     Aparts.belongsToMany(models.Users, {
       through: "UserApart",
       as: "users",
-      foreignKey: "apartId"
+      foreignKey: "apartId",
     });
   };
 

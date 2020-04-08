@@ -5,6 +5,23 @@ subscriberController = {
 
     //save the payload to db
     saveSubToDatabase(userinfo, userToken);
+  },
+
+  updateNotificationInfo: async (UserId, notifcationInfo) => {
+    try {
+      const result = await model.Subscription.findOne({
+        where: { UserId: UserId }
+      });
+      result.notifyAllTheTime = notifcationInfo.checkedG;
+      result.startBlockingTime = notifcationInfo.start;
+      result.endBlockingTime = notifcationInfo.end;
+      result.save({
+        fields: ["notifyAllTheTime", "startBlockingTime", "endBlockingTime"]
+      });
+    } catch (error) {
+      console.log(error);
+      console.log("could not update notification hours");
+    }
   }
 };
 
@@ -18,7 +35,7 @@ saveSubToDatabase = async (UserId, userToken) => {
     });
 
     if (!created) {
-      sub.BrowserToken = BrowserToken;
+      sub.BrowserToken = userToken;
       await sub.save();
     }
   } catch (error) {

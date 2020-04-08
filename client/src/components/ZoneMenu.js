@@ -4,6 +4,10 @@ import ZoneList from "./ZoneList";
 import { Container, Button } from "@material-ui/core";
 import uuidv4 from "uuid/v4";
 import axios from "../services/axios";
+import url from "../assets/serverURL";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import Dialog from "./zoneDialog";
+import dictio from "../assets/dictionary";
 
 // todo: implement select zone in list
 class ZoneMenu extends React.Component {
@@ -13,36 +17,42 @@ class ZoneMenu extends React.Component {
       test: {},
       zones: [],
       allowDraw: false,
-      userLocation: this.findUserCoord() //or call findUserCoord but fucks sometime...
+      openDrawer: false,
+      openDialog: false,
+      tempZoneValue: "",
+      userLocation: { lat: 45.496205, lng: -73.571895 }, //or call findUserCoord but fucks sometime...
+      defaultZoneName: "",
+      zoneSelectedToDelete: -1
     };
+    this.findUserCoord();
   }
 
-  findUserCoord = () => {
-    let userPosition = {};
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        userPosition.lat = pos.coords.latitude;
-        userPosition.lng = pos.coords.longitude;
-      },
-      () => {
-        //error handeler
-        userPosition.lat = 45.496205;
-        userPosition.lng = -73.571895;
-      }
-    );
-
-    return userPosition;
+  findUserCoord = async () => {
+    let self = this;
+    await navigator.geolocation.getCurrentPosition(pos => {
+      self.setState({
+        userLocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }
+      });
+    });
   };
 
+  toggleDrawer = open => {
+    this.setState({ openDrawer: open });
+  };
+
+  selectZoneToDelete = index => {
+    this.setState({ zoneSelectedToDelete: index });
+  };
+
+  // total hack; we had to wait for map component to render before using the GoogleMap object,
+  // its necessary for appending new zones to the map
+  // todo: fix this shit; add
   componentDidMount = () => {
     let self = this;
-    // total hack; we had to wait for map component to render before using the GoogleMap object,
-    // its necessary for appending new zones to the map
 
-    // todo: fix this shit; add
     setTimeout(function() {
       axios
-        .get("http://localhost:3000/zone")
+        .get(`${url}/zone`)
         .then(function(response) {
           // handle success
           self.initZones(response.data);
@@ -75,52 +85,34 @@ class ZoneMenu extends React.Component {
         strokeWeight: 2
       });
       //create a new zone to be used in state
-      zonesToDisplay.push({ id: zone.zoneId, polygon: newPolygon });
+      zonesToDisplay.push({
+        id: zone.zoneId,
+        polygon: newPolygon,
+        name: zone.name
+      });
     });
+
     this.setState({
-      zones: zonesToDisplay
+      zones: zonesToDisplay,
+      defaultZoneName: `zone ${zonesToDisplay.length + 1}`
     });
   };
 
-  //todo:does not work :  shit it
+  //zoneId works; if ever want to attempt to change colors
   onZoneSelect = zoneId => {
-    console.log(zoneId);
-    // //doesnt work
-    // const zonesColored = this.state.zones.map(zone => {
-    //   if (zone.id === zoneId) {
-    //     let poly = zone.polygon;
-    //     poly.setOptions({ fillColor: "#FF00FF" });
-    //     return {
-    //       polygon: poly,
-    //       id: zone.id
-    //     };
-    //   } else {
-    //     let poly = zone.polygon;
-    //     poly.setOptions({ fillColor: "#FF00FF" });
-    //     return {
-    //       polygon: poly,
-    //       id: zone.id
-    //     };
-    //   }
-    // });
-
-    // this.setState({ zones: zonesColored });
-
-    //might want to trigger rerender to pass zones to zonelist?
+    this.setState({ zoneSelectedToDelete: -1 });
   };
 
-  /**
-   * allows the user to draw on the map
-   */
   onCreateClick = () => {
-    //allowdraw
     this.setState({ allowDraw: true });
   };
+
+  onDeleteSelect = () => {};
 
   onDeleteClick = zoneId => {
     let self = this;
     axios
-      .delete("http://localhost:3000/zone", {
+      .delete(`${url}/zone`, {
         data: {
           zoneId: zoneId
         }
@@ -134,7 +126,8 @@ class ZoneMenu extends React.Component {
 
           //removes it from state zones
           self.setState({
-            zones: self.state.zones.filter(zone => zone.id !== zoneToDelete.id)
+            zones: self.state.zones.filter(zone => zone.id !== zoneToDelete.id),
+            zoneSelectedToDelete: -1
           });
         }
       })
@@ -143,13 +136,13 @@ class ZoneMenu extends React.Component {
       });
   };
 
-  //will be called when a polygon is complete; value is the gmaps formated polygon
-  onPolygonComplete = value => {
-    //create a new zone to be used in state
-    let newZone = { id: uuidv4(), polygon: value };
+  saveAndUploadZone = name => {
+    const value = this.state.tempZoneValue;
+    let newZone = { id: uuidv4(), polygon: value, name: name };
     this.setState({
       zones: [...this.state.zones, newZone],
-      allowDraw: false
+      allowDraw: false,
+      tempZoneValue: ""
     });
 
     let points = [];
@@ -157,9 +150,10 @@ class ZoneMenu extends React.Component {
     value.getPath().i.map(pos => points.push([pos.lat(), pos.lng()]));
 
     axios
-      .post("http://localhost:3000/zone", {
+      .post(`${url}/zone`, {
         zoneId: newZone.id,
-        path: points
+        path: points,
+        name: name
       })
       .then(function(response) {
         console.log(response);
@@ -169,10 +163,53 @@ class ZoneMenu extends React.Component {
       });
   };
 
+  //will be called when a polygon is complete;
+  onPolygonComplete = value => {
+    this.setState({
+      openDialog: true,
+      allowDraw: false,
+      tempZoneValue: value,
+      defaultZoneName: `zone ${this.state.zones.length + 1}`
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({ openDialog: false, tempZoneValue: "" });
+  };
+
+  cancelZone = () => {
+    this.state.tempZoneValue.setMap(null);
+    this.closeDialog();
+  };
+
+  cancelZoneInProgress = () => {
+    this.setState({ allowDraw: false, tempZoneValue: "" });
+  };
+  acceptZone = name => {
+    this.saveAndUploadZone(name);
+    this.closeDialog();
+  };
+
   render() {
     return (
       <Container className="home">
-        <Button onClick={this.onCreateClick}>create</Button>
+        {this.state.allowDraw ? (
+          <Button onClick={this.cancelZoneInProgress}>
+            {dictio.cancel[this.props.language]}
+          </Button>
+        ) : (
+          <Button onClick={this.onCreateClick}>
+            {dictio.new[this.props.language]}
+          </Button>
+        )}
+
+        <Button
+          onClick={() => {
+            this.toggleDrawer(true);
+          }}
+        >
+          {dictio.open[this.props.language]}
+        </Button>
         <Map
           isMarkerShown
           complete={this.onPolygonComplete}
@@ -180,10 +217,32 @@ class ZoneMenu extends React.Component {
           zonesToDisplay={this.state.zones}
           userLocation={this.state.userLocation}
         />
-        <ZoneList
-          zoneList={this.state.zones}
-          deleteZoneFunc={this.onDeleteClick}
-          onSelect={this.onZoneSelect}
+        <SwipeableDrawer
+          anchor="bottom"
+          open={this.state.openDrawer}
+          onClose={() => {
+            this.toggleDrawer(false);
+          }}
+          onOpen={() => {
+            this.toggleDrawer(true);
+          }}
+        >
+          <ZoneList
+            zoneList={this.state.zones}
+            deleteZoneFunc={this.onDeleteClick}
+            onSelect={this.onZoneSelect}
+            selectZoneToDelete={this.selectZoneToDelete}
+            zoneIndexDelete={this.state.zoneSelectedToDelete}
+            language={this.props.language}
+          />
+        </SwipeableDrawer>
+        <Dialog
+          closeDialog={this.closeDialog}
+          isOpen={this.state.openDialog}
+          acceptZone={this.acceptZone}
+          cancelZone={this.cancelZone}
+          language={this.props.language}
+          defaultZoneName={this.state.defaultZoneName}
         />
       </Container>
     );

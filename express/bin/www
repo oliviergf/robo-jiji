@@ -3,6 +3,7 @@ const cluster = require("cluster");
 const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
+const fs = require("fs");
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
@@ -12,11 +13,12 @@ const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 if (cluster.isMaster) {
   for (let i = 0; i < cpuCount; i++) {
     cluster.fork();
+    // console.log("date here now", new Date().toString());
   }
 } else {
   var app = require("../app");
   var debug = require("debug")("express:server");
-  var http = require("http");
+  var https = require("https");
   let RSSPoolWorkers = require("../services/rss/index");
   const webpush = require("web-push");
 
@@ -32,12 +34,11 @@ if (cluster.isMaster) {
    * set crawler workload for each cluster.
    */
 
-  RSSPoolWorkers(cluster.worker.id, cpuCount);
+  // RSSPoolWorkers(cluster.worker.id, cpuCount);
 
   /**
    * Get port from environment and store in Express.
    */
-
   var port = normalizePort(process.env.PORT || "3000");
   app.set("port", port);
 
@@ -45,7 +46,13 @@ if (cluster.isMaster) {
    * Create HTTP server.
    */
 
-  var server = http.createServer(app);
+  var server = https.createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert"),
+    },
+    app
+  );
 
   /**
    * Listen on provided port, on all network interfaces.
@@ -112,7 +119,7 @@ if (cluster.isMaster) {
   }
 }
 
-cluster.on("exit", worker => {
+cluster.on("exit", (worker) => {
   console.log("mayday! mayday! worker", worker.id, " is no more!");
   cluster.fork();
 });

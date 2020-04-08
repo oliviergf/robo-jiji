@@ -42,15 +42,15 @@ var sequelize = new Sequelize(
 var db = {};
 
 fs.readdirSync(__dirname)
-  .filter(function(file) {
+  .filter(function (file) {
     return file.indexOf(".") !== 0 && file !== "index.js";
   })
-  .forEach(function(file) {
+  .forEach(function (file) {
     var model = sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(function(modelName) {
+Object.keys(db).forEach(function (modelName) {
   if ("associate" in db[modelName]) {
     db[modelName].associate(db);
   }
@@ -64,5 +64,8 @@ module.exports = db;
 //script to drop all tables; needed when modifying the models
 // drop table UserAparts;
 // drop table Zones;
-// drop table Users;
+// drop table Subscriptions;
 // drop table Aparts;
+// drop table Session;
+
+// drop table Users;

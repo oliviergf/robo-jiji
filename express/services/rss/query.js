@@ -10,7 +10,7 @@ const log = new Logger();
 /**
  * Performs a full sequence of events concerning a RSS link
  */
-rssQuery = researchLink => {
+rssQuery = (researchLink) => {
   let count = 0;
   let lastQueryLinks = [];
 
@@ -22,7 +22,7 @@ rssQuery = researchLink => {
 
       //filters aparts in lastQuery
       const newAparts = fetchedAparts.filter(
-        apart =>
+        (apart) =>
           !lastQueryLinks.includes(apart.guid) &&
           apart["g-core:price"] &&
           hasValidGeo(apart)
@@ -30,11 +30,11 @@ rssQuery = researchLink => {
 
       // empties last query links and add new links
       lastQueryLinks = [];
-      fetchedAparts.map(apart => lastQueryLinks.push(apart.link));
+      fetchedAparts.map((apart) => lastQueryLinks.push(apart.link));
 
       // insert new aparts in db via transaction
       if (newAparts.length > 0) {
-        const result = await insertApartsIntoDb(newAparts, 3);
+        const result = await insertApartsIntoDb(newAparts, 3, false);
         log.zoneRequestEnded(
           result.result[1] ? result.result[1] : 0,
           newAparts.length,
@@ -50,7 +50,7 @@ rssQuery = researchLink => {
     }
   };
 
-  setInterval(function() {
+  setInterval(function () {
     startService();
   }, QueryTimer);
   startService();
@@ -59,16 +59,16 @@ rssQuery = researchLink => {
 /**
  * Makes transaction to DB
  */
-processTransaction = responseAparts => {
+processTransaction = (responseAparts) => {
   let ApartsToCreate = [];
   let UserApartsCreated = [];
-  return models.sequelize.transaction(async t => {
+  return models.sequelize.transaction(async (t) => {
     ApartsToCreate = await selectUniqueLinks(responseAparts);
 
     if (ApartsToCreate.length !== 0) {
       await models.Aparts.bulkCreate(ApartsToCreate, {
         transaction: t,
-        ignoreDuplicates: true
+        ignoreDuplicates: true,
       });
 
       /**
@@ -79,7 +79,7 @@ processTransaction = responseAparts => {
         select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
         from Zones, Aparts
         where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${ApartsToCreate.map(
-          apart => `'${apart.link}'`
+          (apart) => `'${apart.link}'`
         )})`,
         { transaction: t }
       );
@@ -93,8 +93,9 @@ processTransaction = responseAparts => {
  * If the transaction fails for some reason, we should retry it after 500ms
  * max retries = 3
  */
-insertApartsIntoDb = async (responseAparts, triesLeft) => {
+insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
   try {
+    if (isARetry) log.o(`RETRYING QUERY WITH ${triesLeft} TRIES LEFT`);
     const result = await processTransaction(responseAparts);
     if (result.toCreate.length !== 0) sendApartsToClassifier(result.toCreate);
 
@@ -105,7 +106,7 @@ insertApartsIntoDb = async (responseAparts, triesLeft) => {
     if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
       log.o(`DEADLOCKFOUND! RETRYING WITH ${triesLeft}`);
       setTimeout(() => {
-        insertApartsIntoDb(responseAparts, triesLeft - 1);
+        insertApartsIntoDb(responseAparts, triesLeft - 1, true);
       }, 500);
     }
   }
@@ -114,9 +115,11 @@ insertApartsIntoDb = async (responseAparts, triesLeft) => {
 /**
  * dispatch each appart to a classifier
  */
-sendApartsToClassifier = apartsToCreate => {
+
+//todo: introduce a bit of random here
+sendApartsToClassifier = (apartsToCreate) => {
   //queries to get aparts images & info
-  apartsToCreate.map(apart => {
+  apartsToCreate.map((apart) => {
     classifier(apart.link);
   });
 };
@@ -124,17 +127,17 @@ sendApartsToClassifier = apartsToCreate => {
 /**
  * returns an array of unique apartements that arent in DB
  */
-selectUniqueLinks = async newAparts => {
+selectUniqueLinks = async (newAparts) => {
   let uniqueAparts = [];
 
-  const newApartslinks = newAparts.map(apart => apart.link);
+  const newApartslinks = newAparts.map((apart) => apart.link);
   const apartsInDb = await models.Aparts.findAll({
     attributes: ["link"],
-    where: { link: { [Op.in]: [newApartslinks] } }
+    where: { link: { [Op.in]: [newApartslinks] } },
   });
 
-  const apartsInDbLinks = apartsInDb.map(apt => apt.dataValues.link);
-  newAparts.map(apart => {
+  const apartsInDbLinks = apartsInDb.map((apt) => apt.dataValues.link);
+  newAparts.map((apart) => {
     if (!apartsInDbLinks.includes(apart.link)) {
       uniqueAparts.push({
         title: apart.title,
@@ -143,15 +146,15 @@ selectUniqueLinks = async newAparts => {
         link: apart.link,
         localisation: {
           type: "Point",
-          coordinates: [apart["geo:lat"], apart["geo:long"]]
-        }
+          coordinates: [apart["geo:lat"], apart["geo:long"]],
+        },
       });
     }
   });
   return uniqueAparts;
 };
 
-hasValidGeo = apart => {
+hasValidGeo = (apart) => {
   return (
     typeof apart["geo:long"] === "number" &&
     typeof apart["geo:lat"] === "number"
