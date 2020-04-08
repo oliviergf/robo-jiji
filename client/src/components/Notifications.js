@@ -16,27 +16,27 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
-  }
+    width: 200,
+  },
 }));
 
 const GreenCheckbox = withStyles({
   root: {
     color: green[400],
     "&$checked": {
-      color: green[600]
-    }
+      color: green[600],
+    },
   },
-  checked: {}
-})(props => <Checkbox color="default" {...props} />);
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 export default function Notifications(props) {
   const classes = useStyles();
@@ -44,48 +44,52 @@ export default function Notifications(props) {
   const [end, setEnd] = useState("07:30");
   const [checkedG, setCheckedG] = useState(false);
 
+  useEffect(() => {
+    askPushPermission();
+  }, []);
+
   const testNotification = () => {
     // Make a request for a user with a given ID
     axios
       .get(`${url}/subscribeNotif`)
-      .then(function(response) {
+      .then(function (response) {
         // handle success
         console.log(response);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .then(function() {
+      .then(function () {
         // always executed
       });
   };
-  const handleClockBegin = evt => {
+  const handleClockBegin = (evt) => {
     setStart(evt.target.value);
   };
-  const handleClockEnd = evt => {
+  const handleClockEnd = (evt) => {
     setEnd(evt.target.value);
   };
   const handleChange = () => {
     setCheckedG(!checkedG);
   };
 
-  const handleTimeForm = evt => {
+  const handleTimeForm = (evt) => {
     axios
       .put(`${url}/subscribeNotif`, {
         start: start,
         end: end,
-        checkedG: checkedG
+        checkedG: checkedG,
       })
-      .then(function(response) {
+      .then(function (response) {
         // handle success
         console.log(response);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .then(function() {
+      .then(function () {
         // always executed
       });
     evt.preventDefault();
@@ -123,10 +127,10 @@ export default function Notifications(props) {
                 onChange={handleClockBegin}
                 className={classes.textField}
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 inputProps={{
-                  step: 300 // 5 min
+                  step: 300, // 5 min
                 }}
               />
               <TextField
@@ -138,10 +142,10 @@ export default function Notifications(props) {
                 onChange={handleClockEnd}
                 className={classes.textField}
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 inputProps={{
-                  step: 300 // 5 min
+                  step: 300, // 5 min
                 }}
               />
               <Button type="submit" value="Submit">
