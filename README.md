@@ -1,12 +1,9 @@
 # robo-jiji
-  lets go
   TODO:
-  - [X] faire une requete SQL pour les queries
-  - [ ] figure out comment utiliser websession et cookies et authentification
-  - [ ] faire le login
-  - [ ] faire l'API pour Rss
-  - [ ] faire la page maps
-  - [ ] faire le dashboard
-  - [ ] securité & tests
-    
-
+  - [ ] Finir le UI fonctionnel (notifications)
+  - [ ] Faire les retry pour classifer  
+  - [ ] Hasher les passwords
+  - [ ] Gerer les notifications selon préférences
+  - [ ] Intégrer les messages txts
+  - [ ] Sécurité & tests  
+ # robo-jiji
