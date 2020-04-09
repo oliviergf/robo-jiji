@@ -131,6 +131,7 @@ export default function Apartements(props) {
       })
       .then(function (response) {})
       .catch(function (error) {});
+    props.clickSeenApart();
   };
 
   const handleOpen = (id) => {

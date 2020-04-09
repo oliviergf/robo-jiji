@@ -64,7 +64,14 @@ class App extends React.Component {
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname,
+      unSeenCount: user.unSeenCount,
     });
+  };
+
+  clickSeenApart = () => {
+    let unSeenCount = this.state.unSeenCount - 1;
+
+    this.setState({ unSeenCount: unSeenCount });
   };
 
   //test whether the current browser contains a valid session
@@ -91,12 +98,16 @@ class App extends React.Component {
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             language={this.state.language}
+            unSeenCount={this.state.unSeenCount}
           />
         </div>
         <div className="body">
           <Switch>
             <Route path="/apartements">
-              <Apartements language={this.state.language} />
+              <Apartements
+                language={this.state.language}
+                clickSeenApart={this.clickSeenApart}
+              />
             </Route>
             <Route path="/informations">
               <Informations language={this.state.language} />

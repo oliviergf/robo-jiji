@@ -10,20 +10,21 @@ import ApartmentIcon from "@material-ui/icons/Apartment";
 import ExploreIcon from "@material-ui/icons/Explore";
 import BurgerMenu from "./BurgerMenu";
 import dictio from "../assets/dictionary";
+import Badge from "@material-ui/core/Badge";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   list: {
-    width: 250
-  }
+    width: 250,
+  },
 }));
 
 export default function ButtonAppBar(props) {
@@ -31,12 +32,14 @@ export default function ButtonAppBar(props) {
   const [state, setState] = React.useState({
     left: false,
     anchorEl: null,
-    showMenu: false
+    showMenu: false,
   });
 
-  const handleProfileMenuOpen = event => {
+  const handleProfileMenuOpen = (event) => {
     setState({ ...state, anchorEl: event.currentTarget });
   };
+
+  console.log("props.unSeenCount", props.unSeenCount);
 
   const loginArea = () => {
     let loginButton;
@@ -60,12 +63,14 @@ export default function ButtonAppBar(props) {
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            <Link
-              style={{ textDecoration: "none", color: "white" }}
-              to="/apartements"
-            >
-              <ApartmentIcon />
-            </Link>
+            <Badge color="secondary" badgeContent={props.unSeenCount}>
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to="/apartements"
+              >
+                <ApartmentIcon />
+              </Link>
+            </Badge>
           </IconButton>
         </div>
       );
