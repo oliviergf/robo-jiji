@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var passport = require("passport");
-const vueController = require("../controllers/apartVueController");
+const vueController = require("../controllers/apartementsController");
 
 /* GET React home page. */
 router.get("/", passport.authenticate("session"), async function (

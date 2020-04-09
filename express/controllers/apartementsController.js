@@ -18,6 +18,13 @@ apartementsController = {
     });
     return apartsToReturn;
   },
+  findApartInfos: async (apartId) => {
+    let result = await model.Aparts.findOne({ where: { _id: apartId } });
+    return result.dataValues;
+  },
+  apartHasBeenSeenByUser: async (userId) => {
+    // add seen shit to datastruc.
+  },
 };
 
 module.exports = apartementsController;
