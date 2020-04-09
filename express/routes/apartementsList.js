@@ -12,7 +12,7 @@ router.get("/", passport.authenticate("session"), async function (
   if (req.isAuthenticated()) {
     const dashboardInfo = {
       data: await apartementsController.findUserAparts(req.user._id),
-      checkedList: await apartementsController.getSeenApartList(req.user._id),
+      checkedList: await apartementsController.getSeenAparts(req.user._id),
     };
 
     res.send(dashboardInfo);

@@ -22,9 +22,10 @@ apartementsController = {
     let result = await model.Aparts.findOne({ where: { _id: apartId } });
     return result.dataValues;
   },
-  apartHasBeenSeenByUser: async (userId) => {
+  setSeenApart: async (userId, apartId) => {
     // add seen shit to datastruc.
   },
+  getSeenAparts: async (userId) => {},
 };
 
 module.exports = apartementsController;

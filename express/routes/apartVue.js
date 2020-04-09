@@ -26,7 +26,7 @@ router.post("/", passport.authenticate("session"), async function (
 ) {
   if (req.isAuthenticated()) {
     res.send({
-      result: await vueController.apartHasBeenSeenByUser(req.query.id),
+      result: await vueController.setSeenApart(req.user._id, req.query.id),
     });
   } else {
     res.sendStatus(401);
