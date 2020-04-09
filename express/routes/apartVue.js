@@ -18,4 +18,19 @@ router.get("/", passport.authenticate("session"), async function (
   }
 });
 
+/* GET React home page. */
+router.post("/", passport.authenticate("session"), async function (
+  req,
+  res,
+  next
+) {
+  if (req.isAuthenticated()) {
+    res.send({
+      result: await vueController.apartHasBeenSeenByUser(req.query.id),
+    });
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 module.exports = router;

@@ -5,5 +5,7 @@ module.exports = vueController = {
     let result = await model.Aparts.findOne({ where: { _id: apartId } });
     return result.dataValues;
   },
-  findApartPhotos: async (userId) => {},
+  apartHasBeenSeenByUser: async (userId) => {
+    // add seen shit to datastruc.
+  },
 };
