@@ -45,7 +45,7 @@ export default function Notifications(props) {
   const [checkedG, setCheckedG] = useState(false);
 
   useEffect(() => {
-    askPushPermission();
+    askPushPermission(doNothing);
   }, []);
 
   const testNotification = () => {
@@ -94,13 +94,17 @@ export default function Notifications(props) {
       });
     evt.preventDefault();
   };
+
+  const doNothing = () => {
+    console.log("not doing shit");
+  };
   return (
     <Container className="home">
       <Box justifyContent="center" alignItems="center">
         <div>
           <Button
             onClick={() => {
-              askPushPermission();
+              // askPushPermission();
             }}
           >
             {dictio.enablePush[props.language]}

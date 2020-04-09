@@ -69,6 +69,7 @@ class App extends React.Component {
   };
 
   clickSeenApart = () => {
+    if ((this.state.unSeenCount = 0)) return;
     let unSeenCount = this.state.unSeenCount - 1;
 
     this.setState({ unSeenCount: unSeenCount });
