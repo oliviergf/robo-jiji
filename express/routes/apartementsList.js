@@ -10,12 +10,9 @@ router.get("/", passport.authenticate("session"), async function (
   next
 ) {
   if (req.isAuthenticated()) {
-    const dashboardInfo = {
+    res.send({
       data: await apartementsController.findUserAparts(req.user._id),
-      checkedList: await apartementsController.getSeenAparts(req.user._id),
-    };
-
-    res.send(dashboardInfo);
+    });
   } else {
     res.sendStatus(401);
   }

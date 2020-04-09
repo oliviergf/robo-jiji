@@ -203,7 +203,7 @@ export default function Apartements(props) {
                         {row._id}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <VisibilityIcon />
+                        {row.seen && <VisibilityIcon />}
                       </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>

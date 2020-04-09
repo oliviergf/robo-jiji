@@ -12,8 +12,10 @@ apartementsController = {
         },
       ],
     });
+
     let apartsToReturn = results.map((apart) => apart.dataValues);
     apartsToReturn.map((apt) => {
+      apt.seen = apt.users[0].dataValues.UserApart.dataValues.seen;
       delete apt.users;
     });
     return apartsToReturn;
@@ -25,7 +27,6 @@ apartementsController = {
   setSeenApart: async (userId, apartId) => {
     // add seen shit to datastruc.
   },
-  getSeenAparts: async (userId) => {},
 };
 
 module.exports = apartementsController;
