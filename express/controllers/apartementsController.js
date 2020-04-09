@@ -25,7 +25,15 @@ apartementsController = {
     return result.dataValues;
   },
   setSeenApart: async (userId, apartId) => {
-    // add seen shit to datastruc.
+    let userApart = await model.UserApart.findOne({
+      where: {
+        userId: userId,
+        apartId: apartId,
+      },
+    });
+
+    userApart.seen = true;
+    userApart.save();
   },
 };
 

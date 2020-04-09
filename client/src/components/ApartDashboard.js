@@ -34,6 +34,7 @@ export default function Apartements(props) {
     sortPrice: false,
     openModal: false,
     apartInfo: null,
+    lookedApart: "",
   });
   useEffect(() => {
     fetchUserApartementList();
@@ -123,6 +124,15 @@ export default function Apartements(props) {
     sortHandeler("price");
   };
 
+  const seenApart = (apartId) => {
+    axios
+      .post(`${url}/apartVue`, {
+        apartId: apartId,
+      })
+      .then(function (response) {})
+      .catch(function (error) {});
+  };
+
   const handleOpen = (id) => {
     console.log(id);
     axios
@@ -136,7 +146,9 @@ export default function Apartements(props) {
           ...state,
           openModal: true,
           fetchedApart: response.data.apartInfos,
+          lookedApart: id,
         });
+        seenApart(id);
       })
       .catch(function (error) {
         // handle error hello
@@ -146,9 +158,16 @@ export default function Apartements(props) {
   };
 
   const handleClose = () => {
+    let apartsWithSeenOne = state.aparts.map((apt) => {
+      if (apt._id === state.lookedApart) {
+        apt.seen = true;
+      }
+      return apt;
+    });
     setState({
       ...state,
       openModal: false,
+      aparts: apartsWithSeenOne,
     });
   };
 
