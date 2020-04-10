@@ -61,6 +61,7 @@ class App extends React.Component {
   };
 
   logUserCredentials = (user) => {
+    console.log("logUserCredentials", user);
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname,

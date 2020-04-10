@@ -1,30 +1,30 @@
-module.exports = function(sequelize, Sequelize) {
+module.exports = function (sequelize, Sequelize) {
   var Subscription = sequelize.define("Subscription", {
     _id: {
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
 
     BrowserToken: {
       type: Sequelize.STRING,
-      notEmpty: true
+      notEmpty: true,
     },
 
     notifyAllTheTime: {
       type: Sequelize.BOOLEAN,
-      defaultValue: false
+      defaultValue: false,
     },
     startBlockingTime: {
       type: Sequelize.TIME,
-      defaultValue: "00:00"
+      defaultValue: "00:00",
     },
     endBlockingTime: {
       type: Sequelize.TIME,
-      defaultValue: "07:00"
-    }
+      defaultValue: "07:00",
+    },
   });
-  Subscription.associate = models => {
+  Subscription.associate = (models) => {
     Subscription.belongsTo(models.Users);
   };
 

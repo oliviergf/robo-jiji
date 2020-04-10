@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
+const pushNotification = require("../notification/pushNotification");
 
 /**
  * Performs a full sequence of events concerning a RSS link
@@ -133,17 +134,18 @@ sendApartsToClassifier = (apartsToCreate) => {
  */
 sendNotificationsToUsers = async (newlyCreatedAparts) => {
   //we want to get the UserAparts for the aparts who are links. ne weed apart ID tho but we only have links
+
   /*
     we need to get the id of the aparts, we have links above does not work under cause UserApart onlyu has id
   */
   const links = newlyCreatedAparts.map((apt) => apt.link);
 
-  const ApartsId = await models.Aparts.findAll({
-    attributes: ["_id"],
+  const Aparts = await models.Aparts.findAll({
+    attributes: ["_id", "link"],
     where: { link: { [Op.in]: [links] } },
   });
 
-  const apartIds = ApartsId.map((apt) => apt.dataValues._id);
+  const apartIds = Aparts.map((apt) => apt.dataValues._id);
   const newlyCreatedUserAparts = await models.UserApart.findAll({
     where: { apartId: { [Op.in]: apartIds } },
   });

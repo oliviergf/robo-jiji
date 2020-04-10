@@ -104,7 +104,7 @@ export default function Notifications(props) {
         <div>
           <Button
             onClick={() => {
-              // askPushPermission();
+              askPushPermission();
             }}
           >
             {dictio.enablePush[props.language]}

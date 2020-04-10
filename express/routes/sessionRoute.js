@@ -17,7 +17,6 @@ https: router.get("/", passport.authenticate("session"), async function (
         seen: false,
       },
     });
-    console.log("unSeenCount", unSeenApartCount);
 
     res.send({ firstname: req.user.firstname, unSeenCount: unSeenApartCount });
   } else {

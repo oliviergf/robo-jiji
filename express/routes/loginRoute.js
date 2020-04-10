@@ -4,7 +4,7 @@ var passport = require("passport");
 const loginController = require("../controllers/loginController");
 
 /* GET   */
-router.get("/", function(req, res, next) {
+router.get("/", function (req, res, next) {
   const email = req.body.email;
   const password = req.body.password;
   res.send(
@@ -13,26 +13,21 @@ router.get("/", function(req, res, next) {
 });
 
 /* POST  */
-router.post("/", passport.authenticate("local"), async function(
+router.post("/", passport.authenticate("local"), async function (
   req,
   res,
   next
 ) {
   let userInfo = {
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
   };
 
   //todo: here we only send back userfirstname
   // we may want to send more info than that, to let the user changes his account settings and stuff.
   const user = await loginController.login(userInfo);
   if (user) {
-    // req.login(user, function(err) {
-    //   if (err) {
-    //     return next(err);
-    //   }
-    // });
-    res.send({ firstname: user.firstname });
+    res.send({ firstname: user.firstname, unSeenCount: user.unSeenCount });
   } else {
     res.send(401);
   }

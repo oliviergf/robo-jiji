@@ -8,7 +8,7 @@ const log = new logger();
 let admin = require("firebase-admin");
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: "https://super-awesome-party.firebaseio.com"
+  databaseURL: "https://super-awesome-party.firebaseio.com",
 });
 
 // sleep 3 ; curl http://localhost:3000/subscribeNotif
@@ -19,21 +19,24 @@ admin.initializeApp({
  * displayed to the user
  * @param {string} postLink
  */
-const pushNotification = async (userId, apartId) => {
+const pushNotification = async (userId, newAparts) => {
   try {
+    //todo: possibly multiples tokens here.
     let result = await models.Subscription.findOne({
       attributes: ["BrowserToken"],
       where: {
-        UserId: userId
-      }
+        UserId: userId,
+      },
     });
+
+    //user has no token
+    if (!result) return;
 
     var message = {
       data: {
-        score: "850",
-        time: "2:45"
+        aparts: JSON.stringify(newAparts),
       },
-      token: result.dataValues.BrowserToken
+      token: result.dataValues.BrowserToken,
     };
 
     // Send a message to the device corresponding to the provided
@@ -41,11 +44,11 @@ const pushNotification = async (userId, apartId) => {
     admin
       .messaging()
       .send(message)
-      .then(response => {
+      .then((response) => {
         // Response is a message ID string.
         console.log("Successfully sent message:", response);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("Error sending message:", error);
       });
   } catch (err) {
