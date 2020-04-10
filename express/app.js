@@ -34,7 +34,7 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
 
-//  metttre un temps prefere pour shut down les notificatiosn?
+// google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
 
 /**
  * SYNC DB

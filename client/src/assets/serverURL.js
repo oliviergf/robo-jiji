@@ -1,3 +1,3 @@
-const url = "https://localhost:3000";
+const url = "";
 
 export default url;

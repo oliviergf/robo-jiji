@@ -97,7 +97,10 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
   try {
     if (isARetry) log.o(`RETRYING QUERY WITH ${triesLeft} TRIES LEFT`);
     const result = await processTransaction(responseAparts);
-    if (result.toCreate.length !== 0) sendApartsToClassifier(result.toCreate); //put random here and retries and new folder if too big
+    if (result.toCreate.length !== 0) {
+      sendApartsToClassifier(result.toCreate); //put random here and retries and new folder if too big
+      sendNotificationsToUsers(result.UPcreated);
+    }
 
     return { result: result.UPcreated, insertInDb: result.toCreate.length };
   } catch (error) {
@@ -122,6 +125,13 @@ sendApartsToClassifier = (apartsToCreate) => {
   apartsToCreate.map((apart) => {
     classifier(apart.link);
   });
+};
+
+/**
+ * dispatch a notification to each User using UserApartCreated
+ */
+sendNotificationsToUsers = (UserAparts) => {
+  console.log("new user aparts here! sendNotificationsToUsers", UserAparts);
 };
 
 /**
