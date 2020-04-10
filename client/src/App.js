@@ -70,11 +70,13 @@ class App extends React.Component {
     });
 
     if (user.userSubscription !== 0)
-      askPushPermission(this.onNotificationReception());
+      askPushPermission(this.onNotificationReception);
   };
 
   onNotificationReception = (payload) => {
-    console.log("inside notification reception! payload", payload);
+    const aparts = JSON.parse(payload.data.aparts);
+    let unSeenCount = this.state.unSeenCount + aparts.length;
+    this.setState({ unSeenCount: unSeenCount });
   };
 
   clickSeenApart = () => {
