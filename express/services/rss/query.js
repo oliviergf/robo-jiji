@@ -119,7 +119,6 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
  * dispatch each appart to a classifier
  */
 
-//todo: introduce a bit of random here
 sendApartsToClassifier = (apartsToCreate) => {
   //queries to get aparts images & info
   apartsToCreate.map((apart) => {
@@ -139,25 +138,19 @@ sendNotificationsToUsers = async (newlyCreatedAparts) => {
   */
   const links = newlyCreatedAparts.map((apt) => apt.link);
 
-  console.log("new links", links);
-
   const ApartsId = await models.Aparts.findAll({
     attributes: ["_id"],
     where: { link: { [Op.in]: [links] } },
   });
 
   const apartIds = ApartsId.map((apt) => apt.dataValues._id);
-
-  console.log("new apartIds", apartIds);
-
   const newlyCreatedUserAparts = await models.UserApart.findAll({
     where: { apartId: { [Op.in]: apartIds } },
   });
 
-  //todo here:
   console.log(
-    "newlyCreatedAparts----------------------",
-    newlyCreatedUserAparts
+    "NOTIFICATIONS: new UserAparts count",
+    newlyCreatedUserAparts.length
   );
 
   let UserApartMap = new Map();
@@ -172,7 +165,10 @@ sendNotificationsToUsers = async (newlyCreatedAparts) => {
     }
   });
 
-  // pushNotification();
+  //push notifactions to each user
+  UserApartMap.forEach((val, key) => {
+    pushNotification(key, val);
+  });
 };
 
 /**

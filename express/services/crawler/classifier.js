@@ -21,7 +21,7 @@ const classifySingleApartment = async (postLink) => {
   }
 };
 
-const classifyRequestAttempt = async (postlink, triesLeft, isARetry) => {
+const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
   //reset on error
   try {
     if (isARetry) log.o(`RETRYING classifying WITH ${triesLeft} TRIES LEFT`);
@@ -53,7 +53,7 @@ const classifyRequestAttempt = async (postlink, triesLeft, isARetry) => {
     log.err(`could not fetch appart link ${postLink} restarting `, err);
     if (triesLeft > 0) {
       setTimeout(() => {
-        classifyRequestAttempt(postlink, triesLeft - 1, true);
+        classifyRequestAttempt(postLink, triesLeft - 1, true);
       }, Math.floor(Math.random() * 1500));
     }
   }
