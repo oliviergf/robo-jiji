@@ -44,10 +44,6 @@ export default function Notifications(props) {
   const [end, setEnd] = useState("07:30");
   const [checkedG, setCheckedG] = useState(false);
 
-  useEffect(() => {
-    askPushPermission(doNothing);
-  }, []);
-
   const testNotification = () => {
     // Make a request for a user with a given ID
     axios
@@ -94,17 +90,13 @@ export default function Notifications(props) {
       });
     evt.preventDefault();
   };
-
-  const doNothing = () => {
-    console.log("not doing shit");
-  };
   return (
     <Container className="home">
       <Box justifyContent="center" alignItems="center">
         <div>
           <Button
             onClick={() => {
-              askPushPermission();
+              askPushPermission(props.onNotificationReception);
             }}
           >
             {dictio.enablePush[props.language]}

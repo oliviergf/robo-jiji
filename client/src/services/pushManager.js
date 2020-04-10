@@ -68,7 +68,7 @@ export async function askPushPermission(callback) {
 
   messaging.onMessage((payload) => {
     console.log("Message received. ", payload);
-    callback();
+    callback(payload);
     // ...
   });
 }

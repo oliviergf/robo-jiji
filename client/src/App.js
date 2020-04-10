@@ -10,6 +10,8 @@ import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
+import { askPushPermission } from "./services/pushManager";
+
 import "typeface-roboto";
 import "./App.css";
 
@@ -67,10 +69,13 @@ class App extends React.Component {
       unSeenCount: user.unSeenCount,
     });
 
-    if (user.userSubscription !== 0) this.activateNotifications();
+    if (user.userSubscription !== 0)
+      askPushPermission(this.onNotificationReception());
   };
 
-  activateNotifications = () => {};
+  onNotificationReception = (payload) => {
+    console.log("inside notification reception! payload", payload);
+  };
 
   clickSeenApart = () => {
     if (this.state.unSeenCount === 0) return;
@@ -133,7 +138,10 @@ class App extends React.Component {
               <ZoneMenu language={this.state.language} />
             </Route>
             <Route path="/notifs">
-              <Notifications language={this.state.language} />
+              <Notifications
+                language={this.state.language}
+                onNotificationReception={this.onNotificationReception}
+              />
             </Route>
             <Route path="/">
               <Home language={this.state.language} />
