@@ -5,7 +5,6 @@ const models = require("../../models");
 const logger = require("../../utils/logger");
 const moment = require("moment");
 const log = new logger();
-const pushNotification = require("../notification/pushNotification");
 
 /**
  * This function queries the URL of the appartement.

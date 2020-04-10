@@ -131,13 +131,22 @@ sendApartsToClassifier = (apartsToCreate) => {
  * dispatch a notification for each new appart
  */
 sendNotificationsToUsers = async (newlyCreatedApartsLinks) => {
-  //those are the newly scratead stuff look into UserAparts to find whatdatfuck is going on
-  const links = newlyCreatedApartsLinks.map((apt) => apt.link);
-  const apartsInDb = await models.UserApart.findAll({
-    where: { link: { [Op.in]: [links] } },
-  });
-
-  console.log("aparts in db found", apartsInDb);
+  //we want to get the UserAparts for the aparts who are links. ne weed apart ID tho but we only have links
+  /*
+    we need to get the id of the aparts, we have links above does not work under cause UserApart onlyu has id
+  */
+  // const links = newlyCreatedApartsLinks.map((apt) => apt.link);
+  // const newlyCreatedAparts = await models.UserApart.findAll({
+  //   include: [
+  //     {
+  //       model: models.Aparts,
+  //       where: { link: { [Op.in]: [links] } },
+  //     },
+  //   ],
+  // });
+  //todo here:
+  // console.log("newlyCreatedAparts----------------------", newlyCreatedAparts);
+  // pushNotification();
 };
 
 /**
