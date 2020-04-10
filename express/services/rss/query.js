@@ -16,11 +16,11 @@ rssQuery = (researchLink) => {
 
   let startService = async () => {
     try {
-      //ping the RSS link & parse stuff
+      // ping the RSS link & parse stuff
       const response = await request(researchLink);
       const fetchedAparts = parser.parse(response).rss.channel.item;
 
-      //filters aparts in lastQuery
+      // filters aparts in lastQuery
       const newAparts = fetchedAparts.filter(
         (apart) =>
           !lastQueryLinks.includes(apart.guid) &&
@@ -130,22 +130,46 @@ sendApartsToClassifier = (apartsToCreate) => {
 /**
  * dispatch a notification for each new appart
  */
-sendNotificationsToUsers = async (newlyCreatedApartsLinks) => {
+sendNotificationsToUsers = async (newlyCreatedAparts) => {
   //we want to get the UserAparts for the aparts who are links. ne weed apart ID tho but we only have links
   /*
     we need to get the id of the aparts, we have links above does not work under cause UserApart onlyu has id
   */
-  // const links = newlyCreatedApartsLinks.map((apt) => apt.link);
-  // const newlyCreatedAparts = await models.UserApart.findAll({
-  //   include: [
-  //     {
-  //       model: models.Aparts,
-  //       where: { link: { [Op.in]: [links] } },
-  //     },
-  //   ],
-  // });
+  const links = newlyCreatedAparts.map((apt) => apt.link);
+
+  console.log("new links", links);
+
+  const ApartsId = await models.Aparts.findAll({
+    attributes: ["_id"],
+    where: { link: { [Op.in]: [links] } },
+  });
+
+  const apartIds = ApartsId.map((apt) => apt.dataValues._id);
+
+  console.log("new apartIds", apartIds);
+
+  const newlyCreatedUserAparts = await models.UserApart.findAll({
+    where: { apartId: { [Op.in]: apartIds } },
+  });
+
   //todo here:
-  // console.log("newlyCreatedAparts----------------------", newlyCreatedAparts);
+  console.log(
+    "newlyCreatedAparts----------------------",
+    newlyCreatedUserAparts
+  );
+
+  let UserApartMap = new Map();
+
+  newlyCreatedUserAparts.map((usrApt) => {
+    if (!UserApartMap.has(usrApt.dataValues.userId)) {
+      UserApartMap.set(usrApt.dataValues.userId, [usrApt.dataValues.apartId]);
+    } else {
+      let mapUserAparts = UserApartMap.get(usrApt.dataValues.userId);
+      mapUserAparts.push(usrApt.dataValues.apartId);
+      UserApartMap.set(usrApt.dataValues.userId, mapUserAparts);
+    }
+  });
+
   // pushNotification();
 };
 
