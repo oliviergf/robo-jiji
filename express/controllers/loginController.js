@@ -18,6 +18,7 @@ LoginController = {
       });
       return {
         firstname: user[0].dataValues.firstname,
+        _id: user[0].dataValues._id,
         unSeenCount: unSeenApartCount,
       };
     } else {

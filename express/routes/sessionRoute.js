@@ -11,14 +11,27 @@ https: router.get("/", passport.authenticate("session"), async function (
   next
 ) {
   if (req.isAuthenticated()) {
-    let unSeenApartCount = await Models.UserApart.count({
+    let unSeenCount = await Models.UserApart.count({
       where: {
         userId: req.user._id,
         seen: false,
       },
     });
 
-    res.send({ firstname: req.user.firstname, unSeenCount: unSeenApartCount });
+    let userSubscription = await Models.Subscription.count({
+      include: {
+        model: "Users",
+        where: {
+          userId: req.user._id,
+        },
+      },
+    });
+
+    res.send({
+      firstname: req.user.firstname,
+      unSeenCount: unSeenCount,
+      userSubscription: userSubscription,
+    });
   } else {
     res.sendStatus(401);
   }
