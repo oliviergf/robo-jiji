@@ -99,7 +99,7 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     const result = await processTransaction(responseAparts);
     if (result.toCreate.length !== 0) {
       sendApartsToClassifier(result.toCreate); //put random here and retries and new folder if too big
-      sendNotificationsToUsers(result.UPcreated);
+      sendNotificationsToUsers(result.toCreate);
     }
 
     return { result: result.UPcreated, insertInDb: result.toCreate.length };
@@ -128,10 +128,16 @@ sendApartsToClassifier = (apartsToCreate) => {
 };
 
 /**
- * dispatch a notification to each User using UserApartCreated
+ * dispatch a notification for each new appart
  */
-sendNotificationsToUsers = (UserAparts) => {
-  console.log("new user aparts here! sendNotificationsToUsers", UserAparts);
+sendNotificationsToUsers = async (newlyCreatedApartsLinks) => {
+  //those are the newly scratead stuff look into UserAparts to find whatdatfuck is going on
+  const links = newlyCreatedApartsLinks.map((apt) => apt.link);
+  const apartsInDb = await models.UserApart.findAll({
+    where: { link: { [Op.in]: [links] } },
+  });
+
+  console.log("aparts in db found", apartsInDb);
 };
 
 /**
