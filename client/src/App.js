@@ -61,13 +61,16 @@ class App extends React.Component {
   };
 
   logUserCredentials = (user) => {
-    console.log("logUserCredentials", user);
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname,
       unSeenCount: user.unSeenCount,
     });
+
+    if (user.userSubscription !== 0) this.activateNotifications();
   };
+
+  activateNotifications = () => {};
 
   clickSeenApart = () => {
     if (this.state.unSeenCount === 0) return;

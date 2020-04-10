@@ -19,12 +19,14 @@ https: router.get("/", passport.authenticate("session"), async function (
     });
 
     let userSubscription = await Models.Subscription.count({
-      include: {
-        model: "Users",
-        where: {
-          userId: req.user._id,
+      include: [
+        {
+          model: Models.Users,
+          where: {
+            _id: req.user._id,
+          },
         },
-      },
+      ],
     });
 
     res.send({
