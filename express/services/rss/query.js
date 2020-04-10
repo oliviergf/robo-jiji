@@ -123,7 +123,9 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
 sendApartsToClassifier = (apartsToCreate) => {
   //queries to get aparts images & info
   apartsToCreate.map((apart) => {
-    classifier(apart.link);
+    setTimeout(() => {
+      classifier(apart.link);
+    }, Math.floor(Math.random() * 500));
   });
 };
 
