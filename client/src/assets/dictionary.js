@@ -25,6 +25,7 @@ const dictionary = {
     "the goal is to reduce the amount of time one yser could spend resfressh kijiji by sending notifications when a given spot is posted inside one of more speficic regions that the user defines",
   ],
   timeFetch: ["Date ajouter", "Time fetched"],
+  install: ["Install", "Install"],
   dateAvailable: ["Date enmenagement", "Date available"],
   info2: [
     "Ce service est un app que vous pouvez telecharger via le siteweb sur votre telephone",

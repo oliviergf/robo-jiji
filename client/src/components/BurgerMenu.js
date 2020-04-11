@@ -16,14 +16,15 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import TranslateIcon from "@material-ui/icons/Translate";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router";
 import url from "../assets/serverURL";
 
 const useStyles = makeStyles({
   list: {
-    width: 250
-  }
+    width: 250,
+  },
 });
 
 export default function SideBurgMenu(props) {
@@ -32,7 +33,7 @@ export default function SideBurgMenu(props) {
   const [redirect, setRedirect] = React.useState(false);
 
   const [state, setState] = React.useState({
-    left: false
+    left: false,
   });
 
   const tabList = [
@@ -40,32 +41,33 @@ export default function SideBurgMenu(props) {
     dictio.maps[props.language],
     dictio.dashboard[props.language],
     dictio.notification[props.language],
+    dictio.install[props.language],
     dictio.logout[props.language],
-    dictio.langue[props.language]
+    dictio.langue[props.language],
   ];
 
-  const handleSideClick = text => {
+  const handleSideClick = (text) => {
     if (text === dictio.langue[props.language]) {
       props.changeLanguage();
     } else if (text === dictio.logout[props.language]) {
       axios
         .get(`${url}/logout`)
-        .then(function(response) {
+        .then(function (response) {
           // handle success
           setRedirect(true);
           props.userLoggedOut();
         })
-        .catch(function(error) {
+        .catch(function (error) {
           // handle error
           console.log(error);
         })
-        .then(function() {
+        .then(function () {
           // always executed
         });
     }
   };
 
-  const toggleDrawer = (side, open) => event => {
+  const toggleDrawer = (side, open) => (event) => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
@@ -117,6 +119,26 @@ export default function SideBurgMenu(props) {
             >
               <ListItemIcon>
                 <ExploreIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          </Link>
+        );
+      case dictio.install[props.language]:
+        return (
+          <Link
+            key={index}
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/"
+          >
+            <ListItem
+              button
+              onClick={() => {
+                handleSideClick(text);
+              }}
+            >
+              <ListItemIcon>
+                <GetAppIcon />
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -196,7 +218,7 @@ export default function SideBurgMenu(props) {
     }
   };
 
-  const sideList = side => (
+  const sideList = (side) => (
     <div
       className={classes.list}
       role="presentation"
