@@ -8,6 +8,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/usersRoute");
 const registerRouter = require("./routes/registerRoute");
 const zoneRouter = require("./routes/zoneRoute");
+const etcApartsRouter = require("./routes/etcAparts");
 const sessionLoginRouter = require("./routes/sessionRoute");
 const loginRouter = require("./routes/loginRoute");
 const subscribeNotifRouter = require("./routes/subscribeNotifRoute");
@@ -138,6 +139,7 @@ app.use("/zone", zoneRouter);
 app.use("/subscribeNotif", subscribeNotifRouter);
 app.use("/preferences", preferencesRouter);
 app.use("/apartements", apartementsRouter);
+app.use("/etcAparts", etcApartsRouter);
 app.use("/apartVue", vueRouter);
 
 /**

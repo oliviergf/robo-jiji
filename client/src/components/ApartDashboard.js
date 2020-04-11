@@ -162,6 +162,22 @@ export default function Apartements(props) {
       .then(function () {});
   };
 
+  const handleClear = () => {
+    axios
+      .put(`${url}/etcAparts`)
+      .then(function (response) {
+        fetchUserApartementList();
+        props.clearSeenAparts();
+      })
+      .catch(function (error) {
+        // handle error hello
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  };
+
   const handleClose = () => {
     let apartsWithSeenOne = state.aparts.map((apt) => {
       if (apt._id === state.lookedApart) {
@@ -236,6 +252,9 @@ export default function Apartements(props) {
               </TableBody>
             </Table>
           </TableContainer>
+          <div>
+            <Button onClick={handleClear}>clear</Button>
+          </div>
           {state.openModal && (
             <ApartModal
               open={state.openModal}

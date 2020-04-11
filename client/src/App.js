@@ -79,6 +79,10 @@ class App extends React.Component {
     this.setState({ unSeenCount: unSeenCount });
   };
 
+  clearSeenAparts = () => {
+    this.setState({ unSeenCount: 0 });
+  };
+
   clickSeenApart = () => {
     if (this.state.unSeenCount === 0) return;
     let unSeenCount = this.state.unSeenCount - 1;
@@ -119,6 +123,7 @@ class App extends React.Component {
               <Apartements
                 language={this.state.language}
                 clickSeenApart={this.clickSeenApart}
+                clearSeenAparts={this.clearSeenAparts}
               />
             </Route>
             <Route path="/informations">
