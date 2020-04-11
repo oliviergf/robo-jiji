@@ -34,7 +34,7 @@ if (cluster.isMaster) {
    * set crawler workload for each cluster.
    */
 
-  RSSPoolWorkers(cluster.worker.id, cpuCount);
+  // RSSPoolWorkers(cluster.worker.id, cpuCount);
 
   /**
    * Get port from environment and store in Express.

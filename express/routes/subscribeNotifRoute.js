@@ -19,12 +19,8 @@ router.post("/", async function (req, res, next) {
  * triggers notification testing purposes
  */
 router.get("/", async function (req, res, next) {
-  if (req.isAuthenticated()) {
-    pushNotification(req.user._id, "ok that a notification!");
-    res.send("register that damn user!");
-  } else {
-    res.sendStatus(401);
-  }
+  pushNotification(1, "ok that a notification!");
+  res.send("register that damn user!");
 });
 
 router.put("/", async function (req, res, next) {
