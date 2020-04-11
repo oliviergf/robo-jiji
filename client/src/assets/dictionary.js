@@ -20,12 +20,13 @@ const dictionary = {
     "Corobonat is a service that automates the apartement hunting by notifying you whenever there a new one posted",
   ],
   allTheTime: ["Envoyer des notifications 24/7", "Send notifications 24/7"],
+  timeFetch: ["Date ajouter", "Time fetched"],
+  install: ["Install", "Install"],
+  dateAvailable: ["Date enmenagement", "Date available"],
   info1: [
     "Le but est de reduire le stress de l'ulisateur qui cherche un logement en lui envoyant des notifications quand un apparts se post. Nous permettons de definir des zones geographiques et vous serez allerter losrquon new shit pop dans la zone!",
     "the goal is to reduce the amount of time one yser could spend resfressh kijiji by sending notifications when a given spot is posted inside one of more speficic regions that the user defines",
   ],
-  timeFetch: ["Date ajouter", "Time fetched"],
-  dateAvailable: ["Date enmenagement", "Date available"],
   info2: [
     "Ce service est un app que vous pouvez telecharger via le siteweb sur votre telephone",
     "This service is an website app hybrid that you can download to your phone",

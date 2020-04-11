@@ -13,7 +13,7 @@ const firebaseConfig = {
   storageBucket: "super-awesome-party.appspot.com",
   messagingSenderId: "875797832163",
   appId: "1:875797832163:web:3393363537c816b546c0d6",
-  measurementId: "G-7GLFHNZGV7"
+  measurementId: "G-7GLFHNZGV7",
 };
 
 // Initialize Firebase
@@ -29,11 +29,11 @@ messaging.usePublicVapidKey(
  * Let User know somehow that if they push ''block'' they'll need to disable it
  * in settings.
  */
-export async function askPushPermission() {
+export async function askPushPermission(callback) {
   //request permission
   messaging
     .getToken()
-    .then(currentToken => {
+    .then((currentToken) => {
       if (currentToken) {
         sendSubscriptionToBackEnd(currentToken);
       } else {
@@ -46,7 +46,7 @@ export async function askPushPermission() {
         // setTokenSentToServer(false);
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("An error occurred while retrieving token. ", err);
       // showToken('Error retrieving Instance ID token. ', err);
       // setTokenSentToServer(false);
@@ -55,19 +55,20 @@ export async function askPushPermission() {
   messaging.onTokenRefresh(() => {
     messaging
       .getToken()
-      .then(refreshedToken => {
+      .then((refreshedToken) => {
         console.log("Token refreshed.");
         //todo: might want to implement logic here
         sendSubscriptionToBackEnd(refreshedToken);
         // ...
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Unable to retrieve refreshed token ", err);
       });
   });
 
-  messaging.onMessage(payload => {
+  messaging.onMessage((payload) => {
     console.log("Message received. ", payload);
+    callback(payload);
     // ...
   });
 }
@@ -75,16 +76,16 @@ export async function askPushPermission() {
 /**
  * saves subscription to db
  */
-const sendSubscriptionToBackEnd = userToken => {
+const sendSubscriptionToBackEnd = (userToken) => {
   return axios
     .post(`${url}/subscribeNotif`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      data: userToken
+      data: userToken,
     })
-    .then(function(response) {
+    .then(function (response) {
       if (response.status !== 200) {
         throw new Error("Bad status code from server.");
       }

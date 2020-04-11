@@ -13,7 +13,8 @@ const links = [
   "https://www.kijiji.ca/rss-srp-a-louer/sherbrooke-qc/c30349001l1700156?radius=9.0&address=Sherbrooke%2C+QC&ll=45.404172,-71.892911",
   "https://www.kijiji.ca/rss-srp-a-louer/ville-de-montreal/c30349001l1700281?radius=9.0&address=6110+Rue+de+Chailly%2C+Saint-L%C3%A9onard%2C+QC+H1T+1J9%2C+Canada&ll=45.584154,-73.567284",
   "https://www.kijiji.ca/rss-srp-a-louer/ville-de-quebec/c30349001l1700124?radius=9.0&address=Qu%C3%A9bec%2C+QC&ll=46.813878,-71.207981",
-  "https://www.kijiji.ca/rss-srp-appartement-condo/ville-de-montreal/c37l1700281?radius=4.0&address=4670+Avenue+Dupuis%2C+Montr%C3%A9al%2C+QC+H3W+1N3%2C+Canada&ll=45.492763,-73.630455"
+  "https://www.kijiji.ca/rss-srp-appartement-condo/grand-montreal/c37l80002?ad=offering",
+  "https://www.kijiji.ca/rss-srp-appartement-condo/ville-de-montreal/c37l1700281?radius=4.0&address=4670+Avenue+Dupuis%2C+Montr%C3%A9al%2C+QC+H3W+1N3%2C+Canada&ll=45.492763,-73.630455",
 ];
 
 module.exports = links;

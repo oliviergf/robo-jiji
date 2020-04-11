@@ -15,6 +15,16 @@ const log = new logger();
 const classifySingleApartment = async (postLink) => {
   //reset on error
   try {
+    classifyRequestAttempt(postLink, 3, false);
+  } catch (err) {
+    log.err(`FAILED TO CLASSIFY APART ${postLink} `, err);
+  }
+};
+
+const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
+  //reset on error
+  try {
+    if (isARetry) log.o(`RETRYING classifying WITH ${triesLeft} TRIES LEFT`);
     const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);
 
@@ -40,7 +50,12 @@ const classifySingleApartment = async (postLink) => {
 
     //todo: fire up notification and await photos and attributes
   } catch (err) {
-    log.err(`could not fetch appart link ${postLink} `, err);
+    log.err(`could not fetch appart link ${postLink} restarting `, err);
+    if (triesLeft > 0) {
+      setTimeout(() => {
+        classifyRequestAttempt(postLink, triesLeft - 1, true);
+      }, Math.floor(Math.random() * 1500));
+    }
   }
 };
 

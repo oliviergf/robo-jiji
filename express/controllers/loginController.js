@@ -1,24 +1,30 @@
 const model = require("../models");
 
 LoginController = {
-  login: async userinfo => {
-    //todo: check that no user has the same email provided
-    //todo: handle all exceptions
+  login: async (userinfo) => {
     let user = await model.Users.findAll({
       where: {
         email: userinfo.email,
-        password: userinfo.password
-      }
+        password: userinfo.password,
+      },
     });
 
-    //todo: implements last_login update :)
-    //todo: we may want to send more info than that.
     if (user.length === 1) {
-      return user[0].dataValues;
+      let unSeenApartCount = await model.UserApart.count({
+        where: {
+          userId: user[0].dataValues._id,
+          seen: false,
+        },
+      });
+      return {
+        firstname: user[0].dataValues.firstname,
+        _id: user[0].dataValues._id,
+        unSeenCount: unSeenApartCount,
+      };
     } else {
       return null;
     }
-  }
+  },
 };
 
 module.exports = LoginController;

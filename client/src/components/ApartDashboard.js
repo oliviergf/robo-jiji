@@ -15,8 +15,10 @@ import axios from "../services/axios";
 import moment from "moment";
 import ApartModal from "./ApartModal";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
+import { askPushPermission } from "../services/pushManager";
 
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import NewReleasesIcon from "@material-ui/icons/NewReleases";
 const useStyles = makeStyles({
   colWidth: "1rem",
   container: {
@@ -34,6 +36,7 @@ export default function Apartements(props) {
     sortPrice: false,
     openModal: false,
     apartInfo: null,
+    lookedApart: "",
   });
   useEffect(() => {
     fetchUserApartementList();
@@ -53,7 +56,6 @@ export default function Apartements(props) {
         apart.createdAt = creationDate.format("HH:mm");
       }
     });
-    console.log(aparts);
     return aparts;
   };
 
@@ -62,8 +64,11 @@ export default function Apartements(props) {
       .get(`${url}/apartements`)
       .then(function (response) {
         // handle success
-        const parsedAparts = parseAparts(response.data.data);
-        setState({ ...state, aparts: parsedAparts });
+        let parsedAparts = parseAparts(response.data.data);
+        const sortedAparts = parsedAparts.sort((a, b) => {
+          return b.absoluteDate.diff(a.absoluteDate);
+        });
+        setState({ ...state, aparts: sortedAparts });
       })
       .catch(function (error) {
         // handle error hello
@@ -123,6 +128,16 @@ export default function Apartements(props) {
     sortHandeler("price");
   };
 
+  const seenApart = (apartId) => {
+    axios
+      .post(`${url}/apartVue`, {
+        apartId: apartId,
+      })
+      .then(function (response) {})
+      .catch(function (error) {});
+    props.clickSeenApart();
+  };
+
   const handleOpen = (id) => {
     console.log(id);
     axios
@@ -136,7 +151,9 @@ export default function Apartements(props) {
           ...state,
           openModal: true,
           fetchedApart: response.data.apartInfos,
+          lookedApart: id,
         });
+        seenApart(id);
       })
       .catch(function (error) {
         // handle error hello
@@ -145,10 +162,33 @@ export default function Apartements(props) {
       .then(function () {});
   };
 
+  const handleClear = () => {
+    axios
+      .put(`${url}/etcAparts`)
+      .then(function (response) {
+        fetchUserApartementList();
+        props.clearSeenAparts();
+      })
+      .catch(function (error) {
+        // handle error hello
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  };
+
   const handleClose = () => {
+    let apartsWithSeenOne = state.aparts.map((apt) => {
+      if (apt._id === state.lookedApart) {
+        apt.seen = true;
+      }
+      return apt;
+    });
     setState({
       ...state,
       openModal: false,
+      aparts: apartsWithSeenOne,
     });
   };
 
@@ -203,7 +243,7 @@ export default function Apartements(props) {
                         {row._id}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <VisibilityIcon />
+                        {!row.seen && <NewReleasesIcon />}
                       </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
@@ -212,6 +252,9 @@ export default function Apartements(props) {
               </TableBody>
             </Table>
           </TableContainer>
+          <div>
+            <Button onClick={handleClear}>clear</Button>
+          </div>
           {state.openModal && (
             <ApartModal
               open={state.openModal}

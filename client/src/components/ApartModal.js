@@ -32,7 +32,6 @@ export default function ApartModal(props) {
     let urls = [];
     for (let i = 0; i < props.apartInfo.photoSize; i++) {
       const urlToFetch = url + dir + i + ".jpeg";
-      console.log(urlToFetch);
       urls.push(urlToFetch);
     }
     return urls;

@@ -16,6 +16,10 @@ module.exports = function (sequelize, Sequelize) {
         key: "_id",
       },
     },
+    seen: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
   });
   return UserApart;
 };

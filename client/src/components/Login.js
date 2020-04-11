@@ -17,43 +17,43 @@ class Login extends React.Component {
       email: "",
       password: "",
       fireRedirect: false,
-      openLoginError: false
+      openLoginError: false,
     };
   }
 
   triggerError = () => {
     this.setState({
-      openLoginError: true
+      openLoginError: true,
     });
   };
 
   handleClose = (event, reason) => {
     this.setState({
-      openLoginError: false
+      openLoginError: false,
     });
   };
 
-  handleChange = evt => {
+  handleChange = (evt) => {
     this.setState({
-      [evt.target.name]: evt.target.value
+      [evt.target.name]: evt.target.value,
     });
   };
 
-  handleRegisterInput = evt => {
+  handleRegisterInput = (evt) => {
     if (this.state.email !== "" && this.state.password !== "") {
       let self = this;
       axios
         .post(`${url}/login`, {
           email: this.state.email,
-          password: this.state.password
+          password: this.state.password,
         })
-        .then(function(response) {
+        .then(function (response) {
           if (response.status === 200) {
             self.props.logUserIn(response.data);
             self.setState({ fireRedirect: true });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           if (error.response && error.response.status === 401) {
             self.triggerError();

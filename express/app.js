@@ -8,6 +8,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/usersRoute");
 const registerRouter = require("./routes/registerRoute");
 const zoneRouter = require("./routes/zoneRoute");
+const etcApartsRouter = require("./routes/etcAparts");
 const sessionLoginRouter = require("./routes/sessionRoute");
 const loginRouter = require("./routes/loginRoute");
 const subscribeNotifRouter = require("./routes/subscribeNotifRoute");
@@ -34,7 +35,7 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
 
-//  metttre un temps prefere pour shut down les notificatiosn?
+// google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
 
 /**
  * SYNC DB
@@ -138,6 +139,7 @@ app.use("/zone", zoneRouter);
 app.use("/subscribeNotif", subscribeNotifRouter);
 app.use("/preferences", preferencesRouter);
 app.use("/apartements", apartementsRouter);
+app.use("/etcAparts", etcApartsRouter);
 app.use("/apartVue", vueRouter);
 
 /**
@@ -163,10 +165,12 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-  console.log({
-    message: err.message,
-    error: err,
-  });
+
+  console.log("ERROR JUST HAPPENED HERE DUDE");
+  // console.log({
+  //   message: err.message,
+  //   error: err,
+  // });
 
   // render the error page
   res.status(err.status || 500);

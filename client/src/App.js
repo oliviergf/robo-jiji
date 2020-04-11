@@ -10,6 +10,8 @@ import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
+import { askPushPermission } from "./services/pushManager";
+
 import "typeface-roboto";
 import "./App.css";
 
@@ -27,6 +29,8 @@ const styles = (theme) => ({
     flexGrow: 1,
   },
 });
+
+// use this to geek flexbox https://flexboxfroggy.com/
 
 class App extends React.Component {
   constructor(props) {
@@ -64,7 +68,28 @@ class App extends React.Component {
     this.setState({
       isLoggedIn: true,
       userFirstName: user.firstname,
+      unSeenCount: user.unSeenCount,
     });
+
+    if (user.userSubscription !== 0)
+      askPushPermission(this.onNotificationReception);
+  };
+
+  onNotificationReception = (payload) => {
+    const aparts = JSON.parse(payload.data.aparts);
+    let unSeenCount = this.state.unSeenCount + aparts.length;
+    this.setState({ unSeenCount: unSeenCount });
+  };
+
+  clearSeenAparts = () => {
+    this.setState({ unSeenCount: 0 });
+  };
+
+  clickSeenApart = () => {
+    if (this.state.unSeenCount === 0) return;
+    let unSeenCount = this.state.unSeenCount - 1;
+
+    this.setState({ unSeenCount: unSeenCount });
   };
 
   //test whether the current browser contains a valid session
@@ -91,12 +116,17 @@ class App extends React.Component {
             isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             language={this.state.language}
+            unSeenCount={this.state.unSeenCount}
           />
         </div>
         <div className="body">
           <Switch>
             <Route path="/apartements">
-              <Apartements language={this.state.language} />
+              <Apartements
+                language={this.state.language}
+                clickSeenApart={this.clickSeenApart}
+                clearSeenAparts={this.clearSeenAparts}
+              />
             </Route>
             <Route path="/informations">
               <Informations language={this.state.language} />
@@ -117,7 +147,10 @@ class App extends React.Component {
               <ZoneMenu language={this.state.language} />
             </Route>
             <Route path="/notifs">
-              <Notifications language={this.state.language} />
+              <Notifications
+                language={this.state.language}
+                onNotificationReception={this.onNotificationReception}
+              />
             </Route>
             <Route path="/">
               <Home language={this.state.language} />

@@ -10,19 +10,19 @@ subscriberController = {
   updateNotificationInfo: async (UserId, notifcationInfo) => {
     try {
       const result = await model.Subscription.findOne({
-        where: { UserId: UserId }
+        where: { UserId: UserId },
       });
       result.notifyAllTheTime = notifcationInfo.checkedG;
       result.startBlockingTime = notifcationInfo.start;
       result.endBlockingTime = notifcationInfo.end;
       result.save({
-        fields: ["notifyAllTheTime", "startBlockingTime", "endBlockingTime"]
+        fields: ["notifyAllTheTime", "startBlockingTime", "endBlockingTime"],
       });
     } catch (error) {
       console.log(error);
       console.log("could not update notification hours");
     }
-  }
+  },
 };
 
 saveSubToDatabase = async (UserId, userToken) => {
@@ -30,8 +30,8 @@ saveSubToDatabase = async (UserId, userToken) => {
     const [sub, created] = await model.Subscription.findOrCreate({
       where: { UserId: UserId },
       defaults: {
-        BrowserToken: userToken
-      }
+        BrowserToken: userToken,
+      },
     });
 
     if (!created) {
