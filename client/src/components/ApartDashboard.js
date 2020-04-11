@@ -18,6 +18,7 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { askPushPermission } from "../services/pushManager";
 
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import NewReleasesIcon from "@material-ui/icons/NewReleases";
 const useStyles = makeStyles({
   colWidth: "1rem",
   container: {
@@ -55,7 +56,6 @@ export default function Apartements(props) {
         apart.createdAt = creationDate.format("HH:mm");
       }
     });
-    console.log(aparts);
     return aparts;
   };
 
@@ -64,8 +64,11 @@ export default function Apartements(props) {
       .get(`${url}/apartements`)
       .then(function (response) {
         // handle success
-        const parsedAparts = parseAparts(response.data.data);
-        setState({ ...state, aparts: parsedAparts });
+        let parsedAparts = parseAparts(response.data.data);
+        const sortedAparts = parsedAparts.sort((a, b) => {
+          return b.absoluteDate.diff(a.absoluteDate);
+        });
+        setState({ ...state, aparts: sortedAparts });
       })
       .catch(function (error) {
         // handle error hello
@@ -224,7 +227,7 @@ export default function Apartements(props) {
                         {row._id}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.seen && <VisibilityIcon />}
+                        {!row.seen && <NewReleasesIcon />}
                       </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
