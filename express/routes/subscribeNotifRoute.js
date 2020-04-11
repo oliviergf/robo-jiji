@@ -11,7 +11,7 @@ router.post("/", async function (req, res, next) {
     await subscriberController.subscribeUser(userInfo._id, userToken);
     res.send("register that damn user!");
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 
@@ -23,7 +23,7 @@ router.get("/", async function (req, res, next) {
     pushNotification(req.user._id, "ok that a notification!");
     res.send("register that damn user!");
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 
@@ -32,7 +32,7 @@ router.put("/", async function (req, res, next) {
     await subscriberController.updateNotificationInfo(req.user._id, req.body);
     res.send("register that damn user!");
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 module.exports = router;

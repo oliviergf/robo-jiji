@@ -30,6 +30,8 @@ const styles = (theme) => ({
   },
 });
 
+// use this to geek flexbox https://flexboxfroggy.com/
+
 class App extends React.Component {
   constructor(props) {
     super(props);

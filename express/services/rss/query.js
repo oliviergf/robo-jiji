@@ -125,7 +125,7 @@ sendApartsToClassifier = (apartsToCreate) => {
   apartsToCreate.map((apart) => {
     setTimeout(() => {
       classifier(apart.link);
-    }, Math.floor(Math.random() * 500));
+    }, Math.floor(Math.random() * 30000));
   });
 };
 
