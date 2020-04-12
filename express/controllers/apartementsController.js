@@ -16,6 +16,7 @@ apartementsController = {
     let apartsToReturn = results.map((apart) => apart.dataValues);
     apartsToReturn.map((apt) => {
       apt.seen = apt.users[0].dataValues.UserApart.dataValues.seen;
+      apt.zoneName = apt.users[0].dataValues.UserApart.dataValues.zoneName;
       delete apt.users;
     });
     return apartsToReturn;

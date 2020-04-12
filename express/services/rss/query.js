@@ -76,8 +76,8 @@ processTransaction = (responseAparts) => {
        * creates a new UserAparts for every new appart that fits into a zone
        */
       UserApartsCreated = await models.sequelize.query(
-        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt,zoneName)
+        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now(), Zones.name
         from Zones, Aparts
         where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${ApartsToCreate.map(
           (apart) => `'${apart.link}'`
