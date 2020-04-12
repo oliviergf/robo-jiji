@@ -63,6 +63,8 @@ export default function Apartements(props) {
     return aparts;
   };
 
+  //seeAllUserApartsParam is not state because setstate is async and  we change it
+  //before query when smashing button handleSeeAllUserApart
   const fetchUserApartementList = (seeAllUserApartsParam) => {
     axios
       .get(`${url}/apartements`, {

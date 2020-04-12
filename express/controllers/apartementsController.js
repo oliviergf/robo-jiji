@@ -6,33 +6,25 @@ apartementsController = {
 
     console.log(seeAllUserAparts);
     let results;
+    console.log(user);
 
     if (!seeAllUserAparts) {
-      console.log("sup");
-
-      // userPreferences.dateAvailable = ;
-      // userPreferences.price = {
-      //   [Op.between]: [user.priceStart, user.priceEnd],
-      // };
-      // // if (user.petsAllowed) userPreferences.petsAllowed = true;
-
-      results = await model.Aparts.findAll({
-        attributes: ["_id", "price", "link", "createdAt"],
-        where: {
-          dateAvailable: { [model.Sequelize.Op.gte]: user.dateAvailable },
-          price: {
-            [model.Sequelize.Op.between]: [user.priceStart, user.priceEnd],
-          },
+      //todo: handle room and bed numbers!
+      let userPreferences = {
+        dateAvailable: { [model.Sequelize.Op.gte]: user.dateAvailable },
+        price: {
+          [model.Sequelize.Op.between]: [user.priceStart, user.priceEnd],
         },
-        include: [
-          {
-            model: model.Users,
-            where: { _id: user._id },
-            as: "users",
-          },
-        ],
-      });
-    } else {
+      };
+      if (user.furnished) userPreferences.furnished = true;
+      if (user.parkingAvailable) userPreferences.parkingAvailable = true;
+      if (user.petsAllowed) userPreferences.petsAllowed = true;
+      if (user.wheelchairAccessible)
+        userPreferences.wheelchairAccessible = true;
+      userPreferences.price = {
+        [model.Sequelize.Op.between]: [user.priceStart, user.priceEnd],
+      };
+
       results = await model.Aparts.findAll({
         attributes: ["_id", "price", "link", "createdAt"],
         where: userPreferences,
@@ -44,9 +36,21 @@ apartementsController = {
           },
         ],
       });
+    } else {
+      results = await model.Aparts.findAll({
+        // attributes: ["_id", "price", "link", "createdAt"],
+        where: userPreferences,
+        include: [
+          {
+            model: model.Users,
+            where: { _id: user._id },
+            as: "users",
+          },
+        ],
+      });
     }
 
-    // console.log(userPreferences);
+    console.log(results[0]);
 
     let apartsToReturn = results.map((apart) => apart.dataValues);
 
