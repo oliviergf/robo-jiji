@@ -207,6 +207,7 @@ export default function Apartements(props) {
                 <TableRow className={classes.colWidth}>
                   <TableCell>#</TableCell>
                   <TableCell></TableCell>
+                  <TableCell>Zone</TableCell>
                   <TableCell align="right">
                     <TableSortLabel
                       active={state.sortDate}
@@ -241,6 +242,9 @@ export default function Apartements(props) {
                     >
                       <TableCell component="th" scope="row">
                         {row._id}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.zoneName}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {!row.seen && <NewReleasesIcon />}
