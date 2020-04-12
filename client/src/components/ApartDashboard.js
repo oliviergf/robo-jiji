@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 
 export default function Apartements(props) {
   const classes = useStyles();
+  const [seeAllUserAparts, setseeAllUserAparts] = useState(true);
   const [state, setState] = useState({
     aparts: [],
     sorter: "",
@@ -38,8 +39,11 @@ export default function Apartements(props) {
     apartInfo: null,
     lookedApart: "",
   });
+
   useEffect(() => {
-    fetchUserApartementList();
+    console.log("did useeffect");
+
+    fetchUserApartementList(seeAllUserAparts);
   }, []);
 
   const parseAparts = (aparts) => {
@@ -59,9 +63,13 @@ export default function Apartements(props) {
     return aparts;
   };
 
-  const fetchUserApartementList = () => {
+  const fetchUserApartementList = (seeAllUserApartsParam) => {
     axios
-      .get(`${url}/apartements`)
+      .get(`${url}/apartements`, {
+        params: {
+          seeAllUserAparts: seeAllUserApartsParam,
+        },
+      })
       .then(function (response) {
         // handle success
         let parsedAparts = parseAparts(response.data.data);
@@ -118,7 +126,6 @@ export default function Apartements(props) {
         aparts: sortAparts("price"),
       });
     }
-    console.log(state);
   };
 
   const sortHandelerDate = () => {
@@ -126,6 +133,11 @@ export default function Apartements(props) {
   };
   const sortHandelerPrice = () => {
     sortHandeler("price");
+  };
+
+  const handleSeeAllUserApart = () => {
+    setseeAllUserAparts(!seeAllUserAparts);
+    fetchUserApartementList(!seeAllUserAparts);
   };
 
   const seenApart = (apartId) => {
@@ -166,7 +178,7 @@ export default function Apartements(props) {
     axios
       .put(`${url}/etcAparts`)
       .then(function (response) {
-        fetchUserApartementList();
+        fetchUserApartementList(seeAllUserAparts);
         props.clearSeenAparts();
       })
       .catch(function (error) {
@@ -244,10 +256,10 @@ export default function Apartements(props) {
                         {row._id}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.zoneName}
+                        {!row.seen && <NewReleasesIcon />}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {!row.seen && <NewReleasesIcon />}
+                        {row.zoneName}
                       </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
@@ -258,6 +270,14 @@ export default function Apartements(props) {
           </TableContainer>
           <div>
             <Button onClick={handleClear}>clear</Button>
+          </div>
+          <div>
+            <Button
+              color={seeAllUserAparts ? "primary" : "secondary"}
+              onClick={handleSeeAllUserApart}
+            >
+              see all userAparts
+            </Button>
           </div>
           {state.openModal && (
             <ApartModal

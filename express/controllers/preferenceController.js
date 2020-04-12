@@ -4,12 +4,11 @@ preferenceController = {
   savePreferences: async (userId, prefs) => {
     let user = await model.Users.findOne({
       where: {
-        _id: userId
-      }
+        _id: userId,
+      },
     });
 
     if (user) {
-      console.log(user);
       user.dateAvailable = prefs.dateAvailable;
       user.priceStart = prefs.priceStart;
       user.priceEnd = prefs.priceEnd;
@@ -21,11 +20,11 @@ preferenceController = {
       user.furnished = prefs.furnished;
     }
 
-    user.save().catch(error => {
+    user.save().catch((error) => {
       console.log(error);
       //todo handle error
     });
-  }
+  },
 };
 
 module.exports = preferenceController;

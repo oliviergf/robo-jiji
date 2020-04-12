@@ -10,8 +10,13 @@ router.get("/", passport.authenticate("session"), async function (
   next
 ) {
   if (req.isAuthenticated()) {
+    const seeAllUserAparts = req.query.seeAllUserAparts === "true";
+
     res.send({
-      data: await apartementsController.findUserAparts(req.user._id),
+      data: await apartementsController.findUserAparts(
+        req.user,
+        seeAllUserAparts
+      ),
     });
   } else {
     res.sendStatus(401);

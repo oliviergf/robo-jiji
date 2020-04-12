@@ -113,7 +113,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
         if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
-        if (att.machineValue) Apart.petsAllowed = att.machineValue;
+        if (att.machineValue) Apart.petsAllowed = att.machineValue === "1";
         break;
       case "furnished":
         if (att.machineValue) Apart.furnished = att.machineValue === "1";

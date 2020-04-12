@@ -133,11 +133,6 @@ sendApartsToClassifier = (apartsToCreate) => {
  * dispatch a notification for each new appart
  */
 sendNotificationsToUsers = async (newlyCreatedAparts) => {
-  //we want to get the UserAparts for the aparts who are links. ne weed apart ID tho but we only have links
-
-  /*
-    we need to get the id of the aparts, we have links above does not work under cause UserApart onlyu has id
-  */
   const links = newlyCreatedAparts.map((apt) => apt.link);
 
   const Aparts = await models.Aparts.findAll({
