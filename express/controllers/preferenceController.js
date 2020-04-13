@@ -13,7 +13,6 @@ preferenceController = {
       user.priceStart = prefs.priceStart;
       user.priceEnd = prefs.priceEnd;
       user.rooms = JSON.stringify(prefs.rooms);
-      user.numberBedrooms = JSON.stringify(prefs.numberBedrooms);
       user.parkingAvailable = prefs.parkingAvailable;
       user.wheelchairAccessible = prefs.wheelchairAccessible;
       user.petsAllowed = prefs.petsAllowed;

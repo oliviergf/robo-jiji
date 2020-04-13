@@ -59,9 +59,7 @@ module.exports = function (sequelize, Sequelize) {
     rooms: {
       type: Sequelize.STRING,
     },
-    numberBedrooms: {
-      type: Sequelize.STRING,
-    },
+
     furnished: {
       type: Sequelize.BOOLEAN,
     },

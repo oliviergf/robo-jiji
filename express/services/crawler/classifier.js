@@ -106,7 +106,6 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
       case "numberbedrooms":
         if (att.localeSpecificValues.fr.value && att.machineValue) {
           Apart.rooms = att.localeSpecificValues.fr.value;
-          Apart.numberBedrooms = att.machineValue;
         }
         break;
       case "dateavailable":

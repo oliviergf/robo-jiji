@@ -41,8 +41,6 @@ export default function Apartements(props) {
   });
 
   useEffect(() => {
-    console.log("did useeffect");
-
     fetchUserApartementList(seeAllUserAparts);
   }, []);
 
