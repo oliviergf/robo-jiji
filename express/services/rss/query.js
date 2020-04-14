@@ -76,7 +76,7 @@ processTransaction = (responseAparts) => {
        * creates a new UserAparts for every new appart that fits into a zone
        */
       UserApartsCreated = await models.sequelize.query(
-        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt,zoneName)
+        `INSERT IGNORE INTO UserAparts (userId,apartId,createdAt,updatedAt,zoneName)
         select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now(), Zones.name
         from Zones, Aparts
         where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${ApartsToCreate.map(
@@ -107,11 +107,16 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
   } catch (error) {
     log.err("---Transaction Failed!", error);
     //if theres a deadlock, some
-    if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
-      log.o(`DEADLOCKFOUND! RETRYING WITH ${triesLeft}`);
+    // if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
+    if (triesLeft !== 0) {
+      log.o(
+        `Error found! ${error.parent.code} RETRYING WITH ${triesLeft} tries left`
+      );
       setTimeout(() => {
         insertApartsIntoDb(responseAparts, triesLeft - 1, true);
       }, 500);
+    } else {
+      log.o(`Error found! ${error.parent.code} no more tries left`);
     }
   }
 };

@@ -63,6 +63,8 @@ const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
  * downloads the pictures and adds them to our file system.
  * inside of the /pictures directory.
  * the strategy is the replace all the / of the link from a .
+ *
+ * todo: drop those fucks into s3 bucket: https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-creating-buckets.html
  */
 fetchPhotos = async (gallery, postLink) => {
   //remove https//kijiji.ca/ from dir and turns / into .
