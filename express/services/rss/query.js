@@ -99,7 +99,7 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     if (isARetry) log.o(`RETRYING QUERY WITH ${triesLeft} TRIES LEFT`);
     const result = await processTransaction(responseAparts);
     if (result.toCreate.length !== 0) {
-      sendApartsToClassifier(result.toCreate); //put random here and retries and new folder if too big
+      sendApartsToClassifier(result.toCreate);
       sendNotificationsToUsers(result.toCreate);
     }
 
