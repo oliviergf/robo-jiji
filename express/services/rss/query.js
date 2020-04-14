@@ -109,10 +109,14 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     //if theres a deadlock, some
     // if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
     if (triesLeft !== 0) {
-      log.o(`DEADLOCKFOUND! RETRYING WITH ${triesLeft}`);
+      log.o(
+        `Error found! ${error.parent.code} RETRYING WITH ${triesLeft} tries left`
+      );
       setTimeout(() => {
         insertApartsIntoDb(responseAparts, triesLeft - 1, true);
       }, 500);
+    } else {
+      log.o(`Error found! ${error.parent.code} no more tries left`);
     }
   }
 };
