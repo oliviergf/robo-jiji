@@ -23,6 +23,9 @@ router.get("/", async function (req, res, next) {
   res.send("register that damn user!");
 });
 
+/**
+ * Update user notifications
+ */
 router.put("/", async function (req, res, next) {
   if (req.isAuthenticated()) {
     await subscriberController.updateNotificationInfo(req.user._id, req.body);

@@ -37,13 +37,20 @@ apartementsController = {
       ],
     });
 
-    console.log("apart info", results[0]);
-    console.log("user info", user);
-
     let apartsToReturn = results.map((apart) => apart.dataValues);
 
+    //filters aparts according to room preference. should be in db query but too lazy
+    if (!seeAllUserAparts) {
+      apartsToReturn = apartsToReturn.filter((apart) =>
+        filterApartByRoomSize(apart.rooms, JSON.parse(user.rooms))
+      );
+    }
+
+    console.log("user roms", JSON.parse(user.rooms));
+    console.log("seeAllUserAparts", seeAllUserAparts);
     //trims off info we dont want to send to client
     apartsToReturn.map((apt) => {
+      console.log("returned room", apt.rooms);
       apt.seen = apt.users[0].dataValues.UserApart.dataValues.seen;
       apt.zoneName = apt.users[0].dataValues.UserApart.dataValues.zoneName;
       delete apt.users;
@@ -65,6 +72,22 @@ apartementsController = {
     userApart.seen = true;
     userApart.save();
   },
+};
+
+const filterApartByRoomSize = (apartRooms, userRooms) => {
+  if (apartRooms === null) return false;
+  let filterApart = false;
+  userRooms.map((userRoom) => {
+    //to be figured out but assuming apartRooms is always 1 ½ ou 2 ½ or simply 1
+    console.log(apartRooms);
+    if (
+      (userRoom === "1 1/2" || userRoom === "2 2/2") &&
+      (apartRooms.includes("1 ½ ou 2 ½") || apartRooms === "1")
+    )
+      filterApart = true;
+    else if (apartRooms.includes(userRoom)) filterApart = true;
+  });
+  return filterApart;
 };
 
 module.exports = apartementsController;

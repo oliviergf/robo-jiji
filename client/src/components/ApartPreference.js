@@ -58,7 +58,7 @@ export default function Account(props) {
     dateAvailable: moment(),
     priceStart: 750,
     priceEnd: 2000,
-    rooms: ["3 & ½"],
+    rooms: ["3 1/2"],
 
     furnished: false,
     parkingAvailable: false,
@@ -67,7 +67,7 @@ export default function Account(props) {
     showSucces: false,
     showError: false,
   });
-  const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
+  const rooms = ["1 1/2", "2 1/2", "3 1/2", "4 1/2", "5 1/2", "6 1/2", "7 1/2"];
 
   const handleClose = () => {
     setState({ ...state, showSucces: false, showError: false });
@@ -82,7 +82,7 @@ export default function Account(props) {
           dateAvailable: response.data.dateAvailable || moment(),
           priceStart: response.data.priceStart || 750,
           priceEnd: response.data.priceEnd || 2000,
-          rooms: response.data.rooms || ["3 & ½"],
+          rooms: response.data.rooms || ["3 1/2"],
 
           furnished: response.data.furnished || false,
           parkingAvailable: response.data.parkingAvailable || false,

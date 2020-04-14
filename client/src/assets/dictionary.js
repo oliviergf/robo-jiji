@@ -40,7 +40,10 @@ const dictionary = {
   beginning: ["heure debut", "start hour"],
   ending: ["fin", "end"],
   firstname: ["Prenom", "First name"],
-
+  applyPreferencesToNotificatons: [
+    "Appliquer les preferences aux notifications",
+    "Apply preferences to notification",
+  ],
   lastname: ["Nom", "Last name"],
   email: ["Courriel", "Email"],
   password: ["Mot de passe", "Password"],

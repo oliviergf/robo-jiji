@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 export default function Apartements(props) {
   const classes = useStyles();
-  const [seeAllUserAparts, setseeAllUserAparts] = useState(true);
+  const [seeAllUserAparts, setseeAllUserAparts] = useState(false);
   const [state, setState] = useState({
     aparts: [],
     sorter: "",

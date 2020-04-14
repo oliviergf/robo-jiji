@@ -130,14 +130,15 @@ sendApartsToClassifier = (apartsToCreate) => {
 };
 
 /**
- * dispatch a notification for each new appart
+ * dispatch a notification for newAparts to user
  */
 sendNotificationsToUsers = async (newlyCreatedAparts) => {
-  const links = newlyCreatedAparts.map((apt) => apt.link);
+  const newApartsLinks = newlyCreatedAparts.map((apt) => apt.link);
 
+  //fetches info about newly created aparts
   const Aparts = await models.Aparts.findAll({
     attributes: ["_id", "link"],
-    where: { link: { [Op.in]: [links] } },
+    where: { link: { [Op.in]: [newApartsLinks] } },
   });
 
   const apartIds = Aparts.map((apt) => apt.dataValues._id);
