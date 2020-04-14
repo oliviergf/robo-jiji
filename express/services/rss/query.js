@@ -76,8 +76,8 @@ processTransaction = (responseAparts) => {
        * creates a new UserAparts for every new appart that fits into a zone
        */
       UserApartsCreated = await models.sequelize.query(
-        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt)
-        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now()
+        `INSERT INTO UserAparts (userId,apartId,createdAt,updatedAt,zoneName)
+        select Zones.UserId as userId, Aparts._id as appart_id, NOW(), Now(), Zones.name
         from Zones, Aparts
         where st_contains(Zones.polygon, Aparts.localisation) AND Aparts.link IN (${ApartsToCreate.map(
           (apart) => `'${apart.link}'`
@@ -99,7 +99,7 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     if (isARetry) log.o(`RETRYING QUERY WITH ${triesLeft} TRIES LEFT`);
     const result = await processTransaction(responseAparts);
     if (result.toCreate.length !== 0) {
-      sendApartsToClassifier(result.toCreate); //put random here and retries and new folder if too big
+      sendApartsToClassifier(result.toCreate);
       sendNotificationsToUsers(result.toCreate);
     }
 
@@ -130,19 +130,15 @@ sendApartsToClassifier = (apartsToCreate) => {
 };
 
 /**
- * dispatch a notification for each new appart
+ * dispatch a notification for newAparts to user
  */
 sendNotificationsToUsers = async (newlyCreatedAparts) => {
-  //we want to get the UserAparts for the aparts who are links. ne weed apart ID tho but we only have links
+  const newApartsLinks = newlyCreatedAparts.map((apt) => apt.link);
 
-  /*
-    we need to get the id of the aparts, we have links above does not work under cause UserApart onlyu has id
-  */
-  const links = newlyCreatedAparts.map((apt) => apt.link);
-
+  //fetches info about newly created aparts
   const Aparts = await models.Aparts.findAll({
     attributes: ["_id", "link"],
-    where: { link: { [Op.in]: [links] } },
+    where: { link: { [Op.in]: [newApartsLinks] } },
   });
 
   const apartIds = Aparts.map((apt) => apt.dataValues._id);

@@ -45,11 +45,6 @@ module.exports = function (sequelize, Sequelize) {
       defaultValue: null,
     },
 
-    numberBedrooms: {
-      type: Sequelize.INTEGER,
-      defaultValue: null,
-    },
-
     dateAvailable: {
       type: Sequelize.DATE,
       defaultValue: null,

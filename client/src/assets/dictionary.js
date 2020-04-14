@@ -40,7 +40,14 @@ const dictionary = {
   beginning: ["heure debut", "start hour"],
   ending: ["fin", "end"],
   firstname: ["Prenom", "First name"],
-  bedrooms: ["Chambre a coucher", "Bedrooms"],
+  maxZonesReached: [
+    "Vous avez atteint le maximum de zones permises",
+    "You have reached the maxium number of zones",
+  ],
+  applyPreferencesToNotificatons: [
+    "Appliquer les preferences aux notifications",
+    "Apply preferences to notification",
+  ],
   lastname: ["Nom", "Last name"],
   email: ["Courriel", "Email"],
   password: ["Mot de passe", "Password"],

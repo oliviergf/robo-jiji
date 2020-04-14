@@ -12,11 +12,17 @@ subscriberController = {
       const result = await model.Subscription.findOne({
         where: { UserId: UserId },
       });
+      result.checkedApplyPreferences = notifcationInfo.checkedApplyPreferences;
       result.notifyAllTheTime = notifcationInfo.checkedG;
       result.startBlockingTime = notifcationInfo.start;
       result.endBlockingTime = notifcationInfo.end;
       result.save({
-        fields: ["notifyAllTheTime", "startBlockingTime", "endBlockingTime"],
+        fields: [
+          "notifyAllTheTime",
+          "startBlockingTime",
+          "endBlockingTime",
+          "checkedApplyPreferences",
+        ],
       });
     } catch (error) {
       console.log(error);

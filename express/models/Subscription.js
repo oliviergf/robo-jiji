@@ -11,6 +11,10 @@ module.exports = function (sequelize, Sequelize) {
       notEmpty: true,
     },
 
+    checkedApplyPreferences: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
+    },
     notifyAllTheTime: {
       type: Sequelize.BOOLEAN,
       defaultValue: false,

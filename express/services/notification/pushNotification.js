@@ -37,6 +37,11 @@ const pushNotification = async (userId, newAparts) => {
         aparts: JSON.stringify(newAparts),
       },
       token: result.dataValues.BrowserToken,
+      webpush: {
+        fcm_options: {
+          link: "https://localhost:3001/Home",
+        },
+      },
     };
 
     // Send a message to the device corresponding to the provided

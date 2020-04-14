@@ -8,7 +8,7 @@ import {
   Input,
   Button,
   FormLabel,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core/";
 import Slider from "@material-ui/core/Slider";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -25,7 +25,7 @@ import moment from "moment";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
-  KeyboardDatePicker
+  KeyboardDatePicker,
 } from "@material-ui/pickers";
 function valuetext(value) {
   return `${value}$`;
@@ -37,19 +37,19 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
+      width: 250,
+    },
+  },
 };
 
 const useStyles = makeStyles({
   root: {
-    width: 300
+    width: 300,
   },
   formControl: {
     minWidth: 120,
-    maxWidth: 300
-  }
+    maxWidth: 300,
+  },
 });
 
 export default function Account(props) {
@@ -58,17 +58,16 @@ export default function Account(props) {
     dateAvailable: moment(),
     priceStart: 750,
     priceEnd: 2000,
-    rooms: ["3 & ½"],
-    numberBedrooms: ["1"],
+    rooms: ["3 1/2"],
+
     furnished: false,
     parkingAvailable: false,
     wheelchairAccessible: false,
     petsAllowed: false,
     showSucces: false,
-    showError: false
+    showError: false,
   });
-  const rooms = ["1 & ½", "2 & ½", "3 & ½", "4 & ½", "5 & ½", "6 & ½", "7 & ½"];
-  const bedRooms = ["1", "2", "3", "4", "5"];
+  const rooms = ["1 1/2", "2 1/2", "3 1/2", "4 1/2", "5 1/2", "6 1/2", "7 1/2"];
 
   const handleClose = () => {
     setState({ ...state, showSucces: false, showError: false });
@@ -78,34 +77,34 @@ export default function Account(props) {
   useEffect(() => {
     axios
       .get(`${url}/preferences`)
-      .then(function(response) {
+      .then(function (response) {
         setState({
           dateAvailable: response.data.dateAvailable || moment(),
           priceStart: response.data.priceStart || 750,
           priceEnd: response.data.priceEnd || 2000,
-          rooms: response.data.rooms || ["3 & ½"],
-          numberBedrooms: response.data.numberBedrooms || ["1"],
+          rooms: response.data.rooms || ["3 1/2"],
+
           furnished: response.data.furnished || false,
           parkingAvailable: response.data.parkingAvailable || false,
           wheelchairAccessible: response.data.wheelchairAccessible || false,
-          petsAllowed: response.data.petsAllowed || false
+          petsAllowed: response.data.petsAllowed || false,
         });
       }, [])
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("error fetching preferences");
         console.log(error);
       });
   }, []);
 
-  const handleEditInput = evt => {
+  const handleEditInput = (evt) => {
     axios
       .put(`${url}/preferences`, {
-        data: state
+        data: state,
       })
-      .then(function(response) {
+      .then(function (response) {
         setState({ ...state, showSucces: true });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         setState({ ...state, showError: true });
         console.log(error);
       });
@@ -113,23 +112,19 @@ export default function Account(props) {
     evt.preventDefault();
   };
 
-  const handleChange = evt => {
+  const handleChange = (evt) => {
     setState({ ...state, [evt.target.name]: evt.target.checked });
   };
 
-  const handleChangeRooms = event => {
+  const handleChangeRooms = (event) => {
     setState({ ...state, rooms: event.target.value });
-  };
-
-  const handleChangeBedRooms = event => {
-    setState({ ...state, numberBedrooms: event.target.value });
   };
 
   const handleChangePrice = (target, newValue) => {
     setState({ ...state, priceStart: newValue[0], priceEnd: newValue[1] });
   };
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     setState({ ...state, dateAvailable: date });
   };
   return (
@@ -148,7 +143,7 @@ export default function Account(props) {
               value={state.dateAvailable}
               onChange={handleDateChange}
               KeyboardButtonProps={{
-                "aria-label": "change date"
+                "aria-label": "change date",
               }}
             />
           </MuiPickersUtilsProvider>
@@ -176,7 +171,7 @@ export default function Account(props) {
               value={state.rooms}
               onChange={handleChangeRooms}
               input={<Input />}
-              renderValue={selected => selected.join(", ")}
+              renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
             >
               {rooms.map((room, index) => (
@@ -188,28 +183,7 @@ export default function Account(props) {
             </Select>
           </FormControl>
         </div>
-        <div>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-mutiple-checkbox-label">
-              {dictio.bedrooms[props.language]}
-            </InputLabel>
-            <Select
-              multiple
-              value={state.numberBedrooms}
-              onChange={handleChangeBedRooms}
-              input={<Input />}
-              renderValue={selected => selected.join(", ")}
-              MenuProps={MenuProps}
-            >
-              {bedRooms.map((room, index) => (
-                <MenuItem key={room} value={room}>
-                  <Checkbox checked={state.numberBedrooms.indexOf(room) > -1} />
-                  <ListItemText primary={room} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
+
         <div>
           <FormControl component="fieldset">
             <FormLabel component="legend">Options</FormLabel>

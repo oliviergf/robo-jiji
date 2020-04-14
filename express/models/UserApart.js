@@ -20,6 +20,10 @@ module.exports = function (sequelize, Sequelize) {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
     },
+    zoneName: {
+      type: Sequelize.STRING,
+      defaultValue: "",
+    },
   });
   return UserApart;
 };

@@ -28,6 +28,7 @@ const useStyles = makeStyles({
 
 export default function Apartements(props) {
   const classes = useStyles();
+  const [seeAllUserAparts, setseeAllUserAparts] = useState(false);
   const [state, setState] = useState({
     aparts: [],
     sorter: "",
@@ -38,8 +39,9 @@ export default function Apartements(props) {
     apartInfo: null,
     lookedApart: "",
   });
+
   useEffect(() => {
-    fetchUserApartementList();
+    fetchUserApartementList(seeAllUserAparts);
   }, []);
 
   const parseAparts = (aparts) => {
@@ -59,9 +61,15 @@ export default function Apartements(props) {
     return aparts;
   };
 
-  const fetchUserApartementList = () => {
+  //seeAllUserApartsParam is not state because setstate is async and  we change it
+  //before query when smashing button handleSeeAllUserApart
+  const fetchUserApartementList = (seeAllUserApartsParam) => {
     axios
-      .get(`${url}/apartements`)
+      .get(`${url}/apartements`, {
+        params: {
+          seeAllUserAparts: seeAllUserApartsParam,
+        },
+      })
       .then(function (response) {
         // handle success
         let parsedAparts = parseAparts(response.data.data);
@@ -118,7 +126,6 @@ export default function Apartements(props) {
         aparts: sortAparts("price"),
       });
     }
-    console.log(state);
   };
 
   const sortHandelerDate = () => {
@@ -126,6 +133,11 @@ export default function Apartements(props) {
   };
   const sortHandelerPrice = () => {
     sortHandeler("price");
+  };
+
+  const handleSeeAllUserApart = () => {
+    setseeAllUserAparts(!seeAllUserAparts);
+    fetchUserApartementList(!seeAllUserAparts);
   };
 
   const seenApart = (apartId) => {
@@ -166,7 +178,7 @@ export default function Apartements(props) {
     axios
       .put(`${url}/etcAparts`)
       .then(function (response) {
-        fetchUserApartementList();
+        fetchUserApartementList(seeAllUserAparts);
         props.clearSeenAparts();
       })
       .catch(function (error) {
@@ -207,6 +219,7 @@ export default function Apartements(props) {
                 <TableRow className={classes.colWidth}>
                   <TableCell>#</TableCell>
                   <TableCell></TableCell>
+                  <TableCell>Zone</TableCell>
                   <TableCell align="right">
                     <TableSortLabel
                       active={state.sortDate}
@@ -245,6 +258,9 @@ export default function Apartements(props) {
                       <TableCell component="th" scope="row">
                         {!row.seen && <NewReleasesIcon />}
                       </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.zoneName}
+                      </TableCell>
                       <TableCell align="right">{row.createdAt}</TableCell>
                       <TableCell align="right">{row.price}</TableCell>
                     </TableRow>
@@ -254,6 +270,14 @@ export default function Apartements(props) {
           </TableContainer>
           <div>
             <Button onClick={handleClear}>clear</Button>
+          </div>
+          <div>
+            <Button
+              color={seeAllUserAparts ? "primary" : "secondary"}
+              onClick={handleSeeAllUserApart}
+            >
+              see all userAparts
+            </Button>
           </div>
           {state.openModal && (
             <ApartModal

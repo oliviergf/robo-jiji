@@ -16,13 +16,13 @@ firebase.initializeApp({
   storageBucket: "super-awesome-party.appspot.com",
   messagingSenderId: "875797832163",
   appId: "1:875797832163:web:3393363537c816b546c0d6",
-  measurementId: "G-7GLFHNZGV7"
+  measurementId: "G-7GLFHNZGV7",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function(payload) {
+messaging.setBackgroundMessageHandler(function (payload) {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
@@ -31,11 +31,18 @@ messaging.setBackgroundMessageHandler(function(payload) {
   const notificationTitle = "Background Message Title";
   const notificationOptions = {
     body: "Background Message body.",
-    icon: "/firebase-logo.png"
+    icon: "/firebase-logo.png",
   };
 
   return self.registration.showNotification(
     notificationTitle,
     notificationOptions
   );
+});
+
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+  event.waitUntil(self.clients.openWindow("apartements"));
+  //if we want a custom URL get it here
+  // event.waitUntil(self.clients.openWindow(event.notification.data));
 });

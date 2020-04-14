@@ -43,6 +43,9 @@ export default function Notifications(props) {
   const [start, setStart] = useState("00:00");
   const [end, setEnd] = useState("07:30");
   const [checkedG, setCheckedG] = useState(false);
+  const [checkedApplyPreferences, setCheckedApplyPreferences] = useState(true);
+
+  //fetch user info and update shit
 
   const testNotification = () => {
     // Make a request for a user with a given ID
@@ -70,12 +73,17 @@ export default function Notifications(props) {
     setCheckedG(!checkedG);
   };
 
-  const handleTimeForm = (evt) => {
+  const handlePreferences = () => {
+    setCheckedApplyPreferences(!checkedApplyPreferences);
+  };
+
+  const handleNotificationForm = (evt) => {
     axios
       .put(`${url}/subscribeNotif`, {
         start: start,
         end: end,
         checkedG: checkedG,
+        checkedApplyPreferences: checkedApplyPreferences,
       })
       .then(function (response) {
         // handle success
@@ -103,7 +111,20 @@ export default function Notifications(props) {
           </Button>
           <Button onClick={testNotification}>test Notifications</Button>
           <div>
-            <form className={classes.container} onSubmit={handleTimeForm}>
+            <form
+              className={classes.container}
+              onSubmit={handleNotificationForm}
+            >
+              <FormControlLabel
+                control={
+                  <GreenCheckbox
+                    checked={checkedApplyPreferences}
+                    onChange={handlePreferences}
+                    name={dictio.applyPreferencesToNotificatons[props.language]}
+                  />
+                }
+                label={dictio.applyPreferencesToNotificatons[props.language]}
+              />
               <FormControlLabel
                 control={
                   <GreenCheckbox

@@ -106,14 +106,13 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
       case "numberbedrooms":
         if (att.localeSpecificValues.fr.value && att.machineValue) {
           Apart.rooms = att.localeSpecificValues.fr.value;
-          Apart.numberBedrooms = att.machineValue;
         }
         break;
       case "dateavailable":
         if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
-        if (att.machineValue) Apart.petsAllowed = att.machineValue;
+        if (att.machineValue) Apart.petsAllowed = att.machineValue === "1";
         break;
       case "furnished":
         if (att.machineValue) Apart.furnished = att.machineValue === "1";
