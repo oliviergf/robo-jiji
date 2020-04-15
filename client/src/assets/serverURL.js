@@ -1,4 +1,4 @@
-const url = "https://localhost:3000";
+const url = "https://jijibot-express.herokuapp.com";
 
 export default url;
 
