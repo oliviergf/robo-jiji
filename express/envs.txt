@@ -1,0 +1,22 @@
+LOCALSETUP
+
+DB_HOST=localhost
+DB_USER=oliroot
+DB_PASS=securethispassworddamnit
+DB_NAME=devbot
+PUBLIC_VAPID_KEY=BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A
+PRIVATE_VAPID_KEY=4vIkQcQ9f8IoPswNSyyaRbK0ZNUoBzS-tbbx4cE073k
+GOOGLE_APPLICATION_CREDENTIALS="./config/super-awesome-party-a9aa7cb5947b.json"
+
+HEROKU SETUP
+DB_HOST=us-cdbr-iron-east-01.cleardb.net
+DB_USER=b037f7c930780b
+DB_PASS=9ff517f8
+DB_NAME=heroku_4bf155150df5f77
+PUBLIC_VAPID_KEY=BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A
+PRIVATE_VAPID_KEY=4vIkQcQ9f8IoPswNSyyaRbK0ZNUoBzS-tbbx4cE073k
+GOOGLE_APPLICATION_CREDENTIALS="./config/super-awesome-party-a9aa7cb5947b.json"
+
+**clearDB on heroku url. Is in dyno vars
+mysql://b037f7c930780b:9ff517f8@us-cdbr-iron-east-01.cleardb.net/heroku_4bf155150df5f77?reconnect=true
+mysql://[user]:[pass]@[host]/
