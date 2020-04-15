@@ -4,7 +4,7 @@ const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
 const fs = require("fs");
-const http = require("http");
+const https = require("https");
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
@@ -19,7 +19,6 @@ if (cluster.isMaster) {
 } else {
   var app = require("../app");
   var debug = require("debug")("express:server");
-  var https = require("https");
   let RSSPoolWorkers = require("../services/rss/index");
   const webpush = require("web-push");
 
@@ -35,7 +34,7 @@ if (cluster.isMaster) {
    * set crawler workload for each cluster.
    */
 
-  // RSSPoolWorkers(cluster.worker.id, cpuCount);
+  RSSPoolWorkers(cluster.worker.id, cpuCount);
 
   /**
    * Get port from environment and store in Express.
@@ -47,15 +46,13 @@ if (cluster.isMaster) {
   /**
    * Create HTTP server.
    */
-  var server = http.createServer(app);
-
-  // var server = https.createServer(
-  //   {
-  //     key: fs.readFileSync("server.key"),
-  //     cert: fs.readFileSync("server.cert"),
-  //   },
-  //   app
-  // );
+  var server = https.createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert"),
+    },
+    app
+  );
 
   /**
    * Listen on provided port, on all network interfaces.
