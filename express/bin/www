@@ -4,6 +4,7 @@ const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
 const fs = require("fs");
+const http = require("http");
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
