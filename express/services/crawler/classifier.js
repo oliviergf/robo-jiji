@@ -15,8 +15,12 @@ const log = new logger();
 const classifySingleApartment = async (postLink) => {
   //reset on error
   try {
-    await classifyRequestAttempt(postLink, 3, false);
-    return { link: postLink };
+    let apartClassifiedWithFullInfo = await classifyRequestAttempt(
+      postLink,
+      3,
+      false
+    );
+    return apartClassifiedWithFullInfo;
   } catch (err) {
     log.err(`FAILED TO CLASSIFY APART ${postLink} `, err);
   }
@@ -25,6 +29,9 @@ const classifySingleApartment = async (postLink) => {
 const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
   //reset on error
   try {
+    //the apart with all info to return
+    let apartWithAllInfo = {};
+
     if (isARetry) log.o(`RETRYING classifying WITH ${triesLeft} TRIES LEFT`);
     const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);
@@ -46,17 +53,27 @@ const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
     });
 
     //fetch every images & info on the post
+    if (attributes)
+      apartWithAllInfo = await updateApartsAttributes(
+        attributes,
+        postLink,
+        imageCount
+      );
     if (photoGallery) fetchPhotos(photoGallery, postLink);
-    if (attributes) updateApartsAttributes(attributes, postLink, imageCount);
+    return apartWithAllInfo;
 
     //todo: fire up notification and await photos and attributes
   } catch (err) {
     log.err(`could not fetch appart link ${postLink} restarting `, err);
     if (triesLeft > 0) {
-      setTimeout(() => {
-        classifyRequestAttempt(postLink, triesLeft - 1, true);
-      }, Math.floor(Math.random() * 1500));
+      await sleep(Math.floor(Math.random() * 1500));
+      apartWithAllInfo = await classifyRequestAttempt(
+        postLink,
+        triesLeft - 1,
+        true
+      );
     }
+    return apartWithAllInfo;
   }
 };
 
@@ -112,7 +129,9 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
         }
         break;
       case "dateavailable":
-        if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
+        //if null, we assume it must be available now
+        if (att.machineValue)
+          Apart.dateAvailable = moment(att.machineValue) || moment();
         break;
       case "petsallowed":
         if (att.machineValue) Apart.petsAllowed = att.machineValue === "1";
@@ -138,6 +157,13 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
     console.log(info);
     console.log(postLink);
   }
+  return Apart.dataValues;
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 module.exports = classifySingleApartment;
