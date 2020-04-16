@@ -25,11 +25,11 @@ router.post("/", async function (req, res, next) {
 
     try {
       await zoneController.createZone(zoneInfo);
+      res.sendStatus(200);
     } catch (error) {
+      console.log(error);
       res.sendStatus(500);
     }
-
-    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }
@@ -43,10 +43,10 @@ router.delete("/", async function (req, res, next) {
 
     try {
       await zoneController.deleteZone(zoneInfo);
+      res.sendStatus(200);
     } catch (error) {
       res.sendStatus(500);
     }
-    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

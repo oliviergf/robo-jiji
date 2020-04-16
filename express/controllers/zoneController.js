@@ -1,5 +1,6 @@
 const model = require("../models");
-
+const logger = require("../utils/logger");
+const log = new logger();
 zoneController = {
   createZone: async (zoneInfo) => {
     //google maps doesnt add the closing point on the polygon but mysql needs it
@@ -17,7 +18,7 @@ zoneController = {
         name: zoneInfo.name,
       });
     } catch (error) {
-      log.o("could not save zone", error);
+      log.err("could not save zone", error);
     }
     //todo: checker quels apparts relativement recents sont dans la nouvelle zone?
   },
