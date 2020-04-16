@@ -6,7 +6,7 @@ import {
   Input,
   Button,
   FormLabel,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core/";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "./Alert";
@@ -44,7 +44,7 @@ class Register extends React.Component {
       registrationSucces: false,
       fireRedirect: false,
       openUsedEmailError: false,
-      openPhoneError: false
+      openPhoneError: false,
     };
   }
 
@@ -102,19 +102,19 @@ class Register extends React.Component {
       openRequiredFieldsError: false,
       openValidEmailError: false,
       openUsedEmailError: false,
-      openPhoneError: false
+      openPhoneError: false,
     });
   };
 
-  handleChange = evt => {
+  handleChange = (evt) => {
     this.setState({
-      [evt.target.name]: evt.target.value
+      [evt.target.name]: evt.target.value,
     });
   };
 
   testPhoneNumber = () => {};
 
-  handleRegisterInput = evt => {
+  handleRegisterInput = (evt) => {
     if (this.hasAnyBlankField()) {
       this.triggerErrorRequired();
     } else if (this.hasInvalidPhoneNumber()) {
@@ -135,9 +135,9 @@ class Register extends React.Component {
           email: this.state.email,
           password: this.state.password,
           platform: this.state.platform,
-          telephone: this.state.telephone
+          telephone: this.state.telephone,
         })
-        .then(function(response) {
+        .then(function (response) {
           if (response.data === "success") {
             self.setState({ waitingRequest: false, registrationSucces: true });
             setTimeout(() => {
@@ -148,7 +148,7 @@ class Register extends React.Component {
             self.setState({ waitingRequest: false });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           self.setState({ waitingRequest: false });
           console.log(error);
         });
