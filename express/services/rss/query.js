@@ -165,7 +165,6 @@ sendNotificationsToUsers = async (apartsClassified) => {
 
   //builds a map of UserAparts for each User
   let UserApartMap = buildUserApartMap(newlyCreatedUserAparts);
-  console.log("UserApartMap before", UserApartMap);
 
   //filters Aparts based on User Preferences
   for (let [userId, apartIds] of UserApartMap) {
@@ -183,20 +182,11 @@ sendNotificationsToUsers = async (apartsClassified) => {
       ],
       where: { _id: userId },
     });
-
-    console.log("Users", User);
-
     //filters aparts
     let apartThatFitPreferences = apartIds.filter((aptId) => {
       //appart with all info
       let apart = apartsClassified.find((apt) => apt._id === aptId);
       //if any criteria is not met; filter this apart
-      console.log("moment(apart.dataAvailable)", moment(apart.dateAvailable));
-      console.log("moment(User.dataAvailable)", moment(User.dateAvailable));
-      console.log(
-        "moment(apart.dataAvailable).isSameOrBefore(User.dataAvailable)",
-        moment(apart.dateAvailable).isSameOrBefore(moment(User.dateAvailable))
-      );
       if (
         moment(apart.dateAvailable).isSameOrBefore(
           moment(User.dateAvailable)
@@ -211,11 +201,8 @@ sendNotificationsToUsers = async (apartsClassified) => {
         return false;
       return filterApartByRoomSize(apart.rooms, JSON.parse(User.rooms));
     });
-
     UserApartMap.set(userId, apartThatFitPreferences);
   }
-
-  console.log("UserApartMap after", UserApartMap);
 
   //push notifactions to each user
   UserApartMap.forEach((val, key) => {

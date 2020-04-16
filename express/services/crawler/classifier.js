@@ -145,7 +145,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
   });
 
   try {
-    if (Apart.dateAvailable) Apart.dateAvailable = moment();
+    if (Apart.dateAvailable === null) Apart.dateAvailable = moment();
     await Apart.save();
   } catch (error) {
     console.log(error);
