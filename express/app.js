@@ -37,8 +37,6 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
 
-// to deploy to heroku: git subtree push --prefix express heroku master
-
 /**
  * SYNC DB
  * todo: check pour timezone. doesnt seem right
@@ -108,13 +106,10 @@ require("./services/passport/passport.js")(passport, db.Users);
 
 //serialize user into session by its _id only : might be a security issue tho.
 passport.serializeUser(function (user, done) {
-  console.log("serialising user", user);
   done(null, user._id);
 });
 
 passport.deserializeUser(async function (id, done) {
-  console.log("deserialising user id", id);
-
   let user = await db.Users.findOne({
     where: { _id: id },
   });
@@ -143,14 +138,6 @@ app.use("/preferences", preferencesRouter);
 app.use("/apartements", apartementsRouter);
 app.use("/etcAparts", etcApartsRouter);
 app.use("/apartVue", vueRouter);
-
-/**
- * launches RSS worker
- *
- * --------------------------------------------------------------------------------
- */
-
-// RSSPoolWorkers();
 
 /**
  * ERROR HANDELING

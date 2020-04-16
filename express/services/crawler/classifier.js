@@ -66,7 +66,7 @@ const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
   } catch (err) {
     log.err(`could not fetch appart link ${postLink} restarting `, err);
     if (triesLeft > 0) {
-      await sleep(Math.floor(Math.random() * 1500));
+      await sleep(Math.random() * 1500);
       apartWithAllInfo = await classifyRequestAttempt(
         postLink,
         triesLeft - 1,

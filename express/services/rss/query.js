@@ -11,11 +11,11 @@ const pushNotification = require("../notification/pushNotification");
 /**
  * Performs a full sequence of events concerning a RSS link
  */
-rssQuery = (researchLink) => {
+RSSqueryService = (researchLink) => {
   let count = 0;
   let lastQueryLinks = [];
 
-  let startService = async () => {
+  const sendRSSRequestToKijiji = async () => {
     try {
       // ping the RSS link & parse stuff
       const response = await request(researchLink);
@@ -33,7 +33,7 @@ rssQuery = (researchLink) => {
       lastQueryLinks = [];
       fetchedAparts.map((apart) => lastQueryLinks.push(apart.link));
 
-      // insert new aparts in db via transaction
+      // insert new aparts in db via transaction and send notifications to users
       if (newAparts.length > 0) {
         const result = await insertApartsIntoDb(newAparts, 3, false);
         log.zoneRequestEnded(
@@ -47,14 +47,15 @@ rssQuery = (researchLink) => {
       }
       count++;
     } catch (err) {
-      log.err("zone query failed", err);
+      log.err(`sendRSSRequestToKijiji failed: ${researchLink}`, err);
     }
   };
-
+  //first one
+  sendRSSRequestToKijiji();
+  //send a query every QueryTimer
   setInterval(function () {
-    startService();
+    sendRSSRequestToKijiji();
   }, QueryTimer);
-  startService();
 };
 
 /**
@@ -137,7 +138,7 @@ sendApartsToClassifier = async (apartsToCreate) => {
   let aparts = await Promise.all(
     apartsToCreate.map(async (apart) => {
       //sleeps random to introduce a bit of randomness to classifier
-      await sleep(Math.floor(Math.random() * 30000));
+      await sleep(Math.random() * 30000);
       return await classifier(apart.link);
     })
   );
@@ -165,10 +166,7 @@ sendNotificationsToUsers = async (apartsClassified) => {
    *
    */
 
-  console.log(
-    "NOTIFICATIONS: new UserAparts count",
-    newlyCreatedUserAparts.length
-  );
+  console.log("NOTIFICATIONS: new UserAparts count", newlyCreatedUserAparts);
 
   let UserApartMap = new Map();
 
@@ -231,4 +229,4 @@ function sleep(ms) {
   });
 }
 
-module.exports = rssQuery;
+module.exports = RSSqueryService;
