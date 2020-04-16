@@ -184,20 +184,22 @@ sendNotificationsToUsers = async (apartsClassified) => {
       where: { _id: userId },
     });
 
+    console.log("Users", User);
+
     //filters aparts
     let apartThatFitPreferences = apartIds.filter((aptId) => {
       //appart with all info
       let apart = apartsClassified.find((apt) => apt._id === aptId);
       //if any criteria is not met; filter this apart
-      console.log("moment(apart.dataAvailable)", moment(apart.dataAvailable));
-      console.log("moment(User.dataAvailable)", moment(User.dataAvailable));
+      console.log("moment(apart.dataAvailable)", moment(apart.dateAvailable));
+      console.log("moment(User.dataAvailable)", moment(User.dateAvailable));
       console.log(
         "moment(apart.dataAvailable).isSameOrBefore(User.dataAvailable)",
-        moment(apart.dataAvailable).isSameOrBefore(moment(User.dataAvailable))
+        moment(apart.dateAvailable).isSameOrBefore(moment(User.dateAvailable))
       );
       if (
-        moment(apart.dataAvailable).isSameOrBefore(
-          moment(User.dataAvailable)
+        moment(apart.dateAvailable).isSameOrBefore(
+          moment(User.dateAvailable)
         ) ||
         apart.price > User.priceEnd ||
         apart.price < User.priceStart ||
@@ -217,6 +219,7 @@ sendNotificationsToUsers = async (apartsClassified) => {
 
   //push notifactions to each user
   UserApartMap.forEach((val, key) => {
+    if (val.length === 0) return;
     pushNotification(key, val);
   });
 };
