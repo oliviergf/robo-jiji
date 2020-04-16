@@ -125,8 +125,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
         break;
       case "dateavailable":
         //if null, we assume it must be available now
-        if (att.machineValue)
-          Apart.dateAvailable = moment(att.machineValue) || moment();
+        if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
         if (att.machineValue) Apart.petsAllowed = att.machineValue === "1";
@@ -146,6 +145,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
   });
 
   try {
+    if (Apart.dateAvailable) Apart.dateAvailable = moment();
     await Apart.save();
   } catch (error) {
     console.log(error);

@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const Logger = require("../../utils/logger");
 const QueryTimer = 60000 * 5; // 5minutes
 const log = new Logger();
+const moment = require("moment");
 const pushNotification = require("../notification/pushNotification");
 
 /**
@@ -162,20 +163,69 @@ sendNotificationsToUsers = async (apartsClassified) => {
     where: { apartId: { [Op.in]: apartIds } },
   });
 
-  /**
-   * todo:
-   *
-   * Avril 16
-   * we have the classified aparts (apartsClassified) with all relevant info
-   * Find a way to only push notifications for the apartements that fits
-   * user preferences
-   *
-   */
+  //builds a map of UserAparts for each User
+  let UserApartMap = buildUserApartMap(newlyCreatedUserAparts);
+  console.log("UserApartMap before", UserApartMap);
 
-  console.log("NOTIFICATIONS: new UserAparts count", newlyCreatedUserAparts);
+  //filters Aparts based on User Preferences
+  for (let [userId, apartIds] of UserApartMap) {
+    //Find user preferences
+    const User = await models.Users.findOne({
+      attributes: [
+        "dateAvailable",
+        "priceStart",
+        "priceEnd",
+        "rooms",
+        "furnished",
+        "parkingAvailable",
+        "wheelchairAccessible",
+        "petsAllowed",
+      ],
+      where: { _id: userId },
+    });
 
+    //filters aparts
+    let apartThatFitPreferences = apartIds.filter((aptId) => {
+      //appart with all info
+      let apart = apartsClassified.find((apt) => apt._id === aptId);
+      //if any criteria is not met; filter this apart
+      console.log("moment(apart.dataAvailable)", moment(apart.dataAvailable));
+      console.log("moment(User.dataAvailable)", moment(User.dataAvailable));
+      console.log(
+        "moment(apart.dataAvailable).isSameOrBefore(User.dataAvailable)",
+        moment(apart.dataAvailable).isSameOrBefore(moment(User.dataAvailable))
+      );
+      if (
+        moment(apart.dataAvailable).isSameOrBefore(
+          moment(User.dataAvailable)
+        ) ||
+        apart.price > User.priceEnd ||
+        apart.price < User.priceStart ||
+        (User.furnished && !apart.furnished) ||
+        (User.parkingAvailable && !apart.parkingAvailable) ||
+        (User.wheelchairAccessible && !apart.wheelchairAccessible) ||
+        (User.petsAllowed && !apart.petsAllowed)
+      )
+        return false;
+      return filterApartByRoomSize(apart.rooms, JSON.parse(User.rooms));
+    });
+
+    UserApartMap.set(userId, apartThatFitPreferences);
+  }
+
+  console.log("UserApartMap after", UserApartMap);
+
+  //push notifactions to each user
+  UserApartMap.forEach((val, key) => {
+    pushNotification(key, val);
+  });
+};
+
+/**
+ * Builds a simple map object {"UserId": [apartsId,apartsId...]}
+ */
+buildUserApartMap = (newlyCreatedUserAparts) => {
   let UserApartMap = new Map();
-
   newlyCreatedUserAparts.map((usrApt) => {
     if (!UserApartMap.has(usrApt.dataValues.userId)) {
       UserApartMap.set(usrApt.dataValues.userId, [usrApt.dataValues.apartId]);
@@ -185,11 +235,7 @@ sendNotificationsToUsers = async (apartsClassified) => {
       UserApartMap.set(usrApt.dataValues.userId, mapUserAparts);
     }
   });
-
-  //push notifactions to each user
-  UserApartMap.forEach((val, key) => {
-    pushNotification(key, val);
-  });
+  return UserApartMap;
 };
 
 /**
@@ -234,5 +280,21 @@ function sleep(ms) {
     setTimeout(resolve, ms);
   });
 }
+
+const filterApartByRoomSize = (apartRooms, userRooms) => {
+  //if aparts has no rooms setting.
+  if (apartRooms === null) return false;
+
+  let filterApart = false;
+  userRooms.map((userRoom) => {
+    if (
+      (userRoom === "1 1/2" || userRoom === "2 2/2") &&
+      (apartRooms.includes("1 ½ ou 2 ½") || apartRooms === "1")
+    )
+      filterApart = true;
+    else if (apartRooms.includes(userRoom)) filterApart = true;
+  });
+  return filterApart;
+};
 
 module.exports = RSSqueryService;
