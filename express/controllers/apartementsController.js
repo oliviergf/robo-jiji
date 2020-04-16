@@ -46,11 +46,8 @@ apartementsController = {
       );
     }
 
-    console.log("user roms", JSON.parse(user.rooms));
-    console.log("seeAllUserAparts", seeAllUserAparts);
     //trims off info we dont want to send to client
     apartsToReturn.map((apt) => {
-      console.log("returned room", apt.rooms);
       apt.seen = apt.users[0].dataValues.UserApart.dataValues.seen;
       apt.zoneName = apt.users[0].dataValues.UserApart.dataValues.zoneName;
       delete apt.users;
@@ -78,8 +75,6 @@ const filterApartByRoomSize = (apartRooms, userRooms) => {
   if (apartRooms === null) return false;
   let filterApart = false;
   userRooms.map((userRoom) => {
-    //to be figured out but assuming apartRooms is always 1 ½ ou 2 ½ or simply 1
-    console.log(apartRooms);
     if (
       (userRoom === "1 1/2" || userRoom === "2 2/2") &&
       (apartRooms.includes("1 ½ ou 2 ½") || apartRooms === "1")

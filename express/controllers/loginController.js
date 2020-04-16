@@ -1,11 +1,12 @@
 const model = require("../models");
-
+const hasher = require("../utils/hasher");
 LoginController = {
   login: async (userinfo) => {
+    let hashPassword = hasher.getHash(userinfo.password);
     let user = await model.Users.findAll({
       where: {
         email: userinfo.email,
-        password: userinfo.password,
+        password: hashPassword,
       },
     });
 

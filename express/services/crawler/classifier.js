@@ -15,7 +15,7 @@ const log = new logger();
 const classifySingleApartment = async (postLink) => {
   //reset on error
   try {
-    classifyRequestAttempt(postLink, 3, false);
+    return await classifyRequestAttempt(postLink, 3, false);
   } catch (err) {
     log.err(`FAILED TO CLASSIFY APART ${postLink} `, err);
   }
@@ -24,6 +24,9 @@ const classifySingleApartment = async (postLink) => {
 const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
   //reset on error
   try {
+    //the apart with all info to return
+    let apartWithAllInfo = {};
+
     if (isARetry) log.o(`RETRYING classifying WITH ${triesLeft} TRIES LEFT`);
     const response = await axios.get(postLink);
     const $ = cheerio.load(response.data);
@@ -45,17 +48,27 @@ const classifyRequestAttempt = async (postLink, triesLeft, isARetry) => {
     });
 
     //fetch every images & info on the post
+    if (attributes)
+      apartWithAllInfo = await updateApartsAttributes(
+        attributes,
+        postLink,
+        imageCount
+      );
     if (photoGallery) fetchPhotos(photoGallery, postLink);
-    if (attributes) updateApartsAttributes(attributes, postLink, imageCount);
+    return apartWithAllInfo;
 
     //todo: fire up notification and await photos and attributes
   } catch (err) {
     log.err(`could not fetch appart link ${postLink} restarting `, err);
     if (triesLeft > 0) {
-      setTimeout(() => {
-        classifyRequestAttempt(postLink, triesLeft - 1, true);
-      }, Math.floor(Math.random() * 1500));
+      await sleep(Math.random() * 1500);
+      apartWithAllInfo = await classifyRequestAttempt(
+        postLink,
+        triesLeft - 1,
+        true
+      );
     }
+    return apartWithAllInfo;
   }
 };
 
@@ -111,6 +124,7 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
         }
         break;
       case "dateavailable":
+        //if null, we assume it must be available now
         if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
@@ -131,12 +145,20 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
   });
 
   try {
+    if (Apart.dateAvailable === null) Apart.dateAvailable = moment();
     await Apart.save();
   } catch (error) {
     console.log(error);
     console.log(info);
     console.log(postLink);
   }
+  return Apart.dataValues;
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 module.exports = classifySingleApartment;

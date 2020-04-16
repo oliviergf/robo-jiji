@@ -4,15 +4,6 @@ var passport = require("passport");
 const loginController = require("../controllers/loginController");
 var Models = require("../models");
 
-/* GET   */
-router.get("/", function (req, res, next) {
-  const email = req.body.email;
-  const password = req.body.password;
-  res.send(
-    `GET this dude is logged the fuck in! email:${email} pass:${password}`
-  );
-});
-
 /* POST  */
 router.post("/", passport.authenticate("local"), async function (
   req,
@@ -24,8 +15,6 @@ router.post("/", passport.authenticate("local"), async function (
     password: req.body.password,
   };
 
-  //todo: here we only send back userfirstname
-  // we may want to send more info than that, to let the user changes his account settings and stuff.
   const user = await loginController.login(userInfo);
   if (user) {
     let userSubscription = await Models.Subscription.count({
@@ -44,7 +33,7 @@ router.post("/", passport.authenticate("local"), async function (
       userSubscription: userSubscription,
     });
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 
