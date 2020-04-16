@@ -107,9 +107,8 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     if (result.toCreate.length !== 0) {
       //classify each apart; this methods fetch the relevant info on apart link url
       let apartsClassified = await sendApartsToClassifier(result.toCreate);
-      console.log("classification round done; sending notifications to users");
-      //With newly apart
-      sendNotificationsToUsers(result.toCreate, apartsClassified);
+      //With newly created apart, verify preferences and shoot notification
+      sendNotificationsToUsers(apartsClassified);
     }
 
     return { result: result.UPcreated, insertInDb: result.toCreate.length };
@@ -142,26 +141,29 @@ sendApartsToClassifier = async (apartsToCreate) => {
       return await classifier(apart.link);
     })
   );
-  console.log("sendApartsToClassifier return ", aparts);
   return aparts;
 };
 
 /**
  * dispatch a notification for newAparts to user
  */
-sendNotificationsToUsers = async (newlyCreatedAparts, apartsClassified) => {
-  const newApartsLinks = newlyCreatedAparts.map((apt) => apt.link);
+sendNotificationsToUsers = async (apartsClassified) => {
+  const apartIds = apartsClassified.map((apt) => apt._id);
 
-  //fetches info about newly created aparts
-  const Aparts = await models.Aparts.findAll({
-    attributes: ["_id", "link"],
-    where: { link: { [Op.in]: [newApartsLinks] } },
-  });
-
-  const apartIds = Aparts.map((apt) => apt.dataValues._id);
+  //check if any newly added apart has a UserApart associated
   const newlyCreatedUserAparts = await models.UserApart.findAll({
     where: { apartId: { [Op.in]: apartIds } },
   });
+
+  /**
+   * todo:
+   *
+   * Avril 16
+   * we have the classified aparts (apartsClassified) with all relevant info
+   * Find a way to only push notifications for the apartements that fits
+   * user preferences
+   *
+   */
 
   console.log(
     "NOTIFICATIONS: new UserAparts count",
