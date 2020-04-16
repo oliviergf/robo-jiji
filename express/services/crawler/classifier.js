@@ -15,12 +15,7 @@ const log = new logger();
 const classifySingleApartment = async (postLink) => {
   //reset on error
   try {
-    let apartClassifiedWithFullInfo = await classifyRequestAttempt(
-      postLink,
-      3,
-      false
-    );
-    return apartClassifiedWithFullInfo;
+    return await classifyRequestAttempt(postLink, 3, false);
   } catch (err) {
     log.err(`FAILED TO CLASSIFY APART ${postLink} `, err);
   }

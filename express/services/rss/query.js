@@ -53,6 +53,7 @@ RSSqueryService = (researchLink) => {
   //first one
   sendRSSRequestToKijiji();
   //send a query every QueryTimer
+  // https://github.com/node-cron/node-cron ?? for cronjobs
   setInterval(function () {
     sendRSSRequestToKijiji();
   }, QueryTimer);
@@ -88,7 +89,10 @@ processTransaction = (responseAparts) => {
         { transaction: t }
       );
     }
-    return { UPcreated: UserApartsCreated, toCreate: ApartsToCreate };
+    return {
+      UserApartsCreated: UserApartsCreated,
+      ApartsCreated: ApartsToCreate,
+    };
   });
 };
 
@@ -105,14 +109,17 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     const result = await processTransaction(responseAparts);
 
     //result.tocreate are the new unique apartements that we inserted in db
-    if (result.toCreate.length !== 0) {
+    if (result.ApartsCreated.length !== 0) {
       //classify each apart; this methods fetch the relevant info on apart link url
-      let apartsClassified = await sendApartsToClassifier(result.toCreate);
+      let apartsClassified = await sendApartsToClassifier(result.ApartsCreated);
       //With newly created apart, verify preferences and shoot notification
       sendNotificationsToUsers(apartsClassified);
     }
 
-    return { result: result.UPcreated, insertInDb: result.toCreate.length };
+    return {
+      result: result.UserApartsCreated,
+      insertInDb: result.ApartsCreated.length,
+    };
   } catch (error) {
     log.err("---Transaction Failed!", error);
     //if theres a deadlock, some
@@ -121,9 +128,8 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
       log.o(
         `Error found! ${error.parent.code} RETRYING WITH ${triesLeft} tries left`
       );
-      setTimeout(() => {
-        insertApartsIntoDb(responseAparts, triesLeft - 1, true);
-      }, 500);
+      await sleep(Math.random() * 1000);
+      insertApartsIntoDb(responseAparts, triesLeft - 1, true);
     } else {
       log.o(`Error found! ${error.parent.code} no more tries left`);
     }

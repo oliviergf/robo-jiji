@@ -46,11 +46,8 @@ apartementsController = {
       );
     }
 
-    console.log("user roms", JSON.parse(user.rooms));
-    console.log("seeAllUserAparts", seeAllUserAparts);
     //trims off info we dont want to send to client
     apartsToReturn.map((apt) => {
-      console.log("returned room", apt.rooms);
       apt.seen = apt.users[0].dataValues.UserApart.dataValues.seen;
       apt.zoneName = apt.users[0].dataValues.UserApart.dataValues.zoneName;
       delete apt.users;
