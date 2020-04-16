@@ -58,7 +58,9 @@ rssQuery = (researchLink) => {
 };
 
 /**
- * Makes transaction to DB
+ * First This func filters out the non-unique apart; some other process might have added them
+ * in parallel. Then, it bulk create new Aparts in DB and only then, adds up unique UserAparts by
+ * the zones defined by our users.
  */
 processTransaction = (responseAparts) => {
   let ApartsToCreate = [];
@@ -97,10 +99,17 @@ processTransaction = (responseAparts) => {
 insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
   try {
     if (isARetry) log.o(`RETRYING QUERY WITH ${triesLeft} TRIES LEFT`);
+
+    //process newly found apart in RSS query
     const result = await processTransaction(responseAparts);
+
+    //result.tocreate are the new unique apartements that we inserted in db
     if (result.toCreate.length !== 0) {
-      sendApartsToClassifier(result.toCreate);
-      sendNotificationsToUsers(result.toCreate);
+      //classify each apart; this methods fetch the relevant info on apart link url
+      let apartsClassified = await sendApartsToClassifier(result.toCreate);
+      console.log("classification round done; sending notifications to users");
+      //With newly apart
+      sendNotificationsToUsers(result.toCreate, apartsClassified);
     }
 
     return { result: result.UPcreated, insertInDb: result.toCreate.length };
@@ -124,20 +133,23 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
 /**
  * dispatch each appart to a classifier
  */
-
-sendApartsToClassifier = (apartsToCreate) => {
+sendApartsToClassifier = async (apartsToCreate) => {
   //queries to get aparts images & info
-  apartsToCreate.map((apart) => {
-    setTimeout(() => {
-      classifier(apart.link);
-    }, Math.floor(Math.random() * 30000));
-  });
+  let aparts = await Promise.all(
+    apartsToCreate.map(async (apart) => {
+      //sleeps random to introduce a bit of randomness to classifier
+      await sleep(Math.floor(Math.random() * 30000));
+      return await classifier(apart.link);
+    })
+  );
+  console.log("sendApartsToClassifier return ", aparts);
+  return aparts;
 };
 
 /**
  * dispatch a notification for newAparts to user
  */
-sendNotificationsToUsers = async (newlyCreatedAparts) => {
+sendNotificationsToUsers = async (newlyCreatedAparts, apartsClassified) => {
   const newApartsLinks = newlyCreatedAparts.map((apt) => apt.link);
 
   //fetches info about newly created aparts
@@ -210,5 +222,11 @@ hasValidGeo = (apart) => {
     typeof apart["geo:lat"] === "number"
   );
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 
 module.exports = rssQuery;
