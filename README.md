@@ -4,9 +4,9 @@
 
 TODO:
 
-- [ ] Gerer les notifications selon préférences
+- [X] Gerer les notifications selon préférences
 - [ ] Finir le UI + CSS + installation wizard
-- [ ] Hasher les passwords
+- [X] Hasher les passwords
 - [ ] full deployment avec AWS (EC2, RDS, domain, SSL, fs...)
 - [ ] Tests, Tests, Tests
 - [ ] Securité
