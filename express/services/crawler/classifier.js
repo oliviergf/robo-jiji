@@ -3,8 +3,8 @@ const fs = require("fs");
 const axios = require("axios");
 const models = require("../../models");
 const logger = require("../../utils/logger");
-const moment = require("moment");
 const log = new logger();
+const moment = require("moment");
 
 /**
  * This function queries the URL of the appartement.
@@ -124,7 +124,6 @@ updateApartsAttributes = async (info, postLink, imageCount) => {
         }
         break;
       case "dateavailable":
-        //if null, we assume it must be available now
         if (att.machineValue) Apart.dateAvailable = moment(att.machineValue);
         break;
       case "petsallowed":
