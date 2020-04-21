@@ -20,7 +20,6 @@ zoneController = {
     } catch (error) {
       log.err("could not save zone", error);
     }
-    //todo: checker quels apparts relativement recents sont dans la nouvelle zone?
   },
   getAllZones: async (userId) => {
     //query db
