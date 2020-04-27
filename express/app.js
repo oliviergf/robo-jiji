@@ -37,6 +37,8 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
 
+// zip ../jiji69_1.zip -r * .[^.]*
+
 /**
  * SYNC DB
  * todo: check pour timezone. doesnt seem right
@@ -155,11 +157,11 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  console.log("ERROR JUST HAPPENED HERE DUDE");
-  // console.log({
-  //   message: err.message,
-  //   error: err,
-  // });
+  // console.log("ERROR JUST HAPPENED HERE DUDE");
+  console.log({
+    message: err.message,
+    error: err,
+  });
 
   // render the error page
   res.status(err.status || 500);
