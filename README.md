@@ -30,5 +30,5 @@ When ready to deploy for real look over the following:
 - set http in www file if its not already there
 - set AWS or custom URL in serverURL
 - set AWS DB configs in config/config.js file for DB
-- use `// zip ../jiji69_1.zip -r * .[^.]*` to create a bundle file
+- use `zip ../jiji69_1.zip -r * .[^.]*` to create a bundle file
 - upload it to beanstalks via AWS console
