@@ -1,51 +1,14 @@
-// module.exports = {
-//   development: {
-//     username: process.env.DB_USER,
-
-//     password: process.env.DB_PASS,
-
-//     database: process.env.DB_NAME,
-
-//     host: process.env.DB_HOST,
-
-//     dialect: "mysql",
-//     logging: false,
-//   },
-
-//   test: {
-//     username: "",
-
-//     password: null,
-
-//     database: "",
-
-//     host: "",
-
-//     dialect: "mysql",
-//   },
-
-//   production: {
-//     username: process.env.DB_USER,
-
-//     password: process.env.DB_PASS,
-
-//     database: process.env.DB_NAME,
-
-//     host: process.env.DB_HOST,
-
-//     dialect: "mysql",
-//   },
-// };
+let usingAWS = false;
 
 module.exports = {
   development: {
-    username: process.env.RDS_USERNAME,
+    username: usingAWS ? process.env.RDS_USERNAME : process.env.DB_USER,
 
-    password: process.env.RDS_PASSWORD,
+    password: usingAWS ? process.env.RDS_PASSWORD : process.env.DB_PASS,
 
-    database: process.env.RDS_DB_NAME,
+    database: usingAWS ? process.env.RDS_DB_NAME : process.env.DB_NAME,
 
-    host: process.env.RDS_HOSTNAME,
+    host: usingAWS ? process.env.RDS_HOSTNAME : process.env.DB_HOST,
 
     dialect: "mysql",
     logging: false,
@@ -64,13 +27,13 @@ module.exports = {
   },
 
   production: {
-    username: process.env.RDS_USERNAME,
+    username: usingAWS ? process.env.RDS_USERNAME : process.env.DB_USER,
 
-    password: process.env.RDS_PASSWORD,
+    password: usingAWS ? process.env.RDS_PASSWORD : process.env.DB_PASS,
 
-    database: process.env.RDS_DB_NAME,
+    database: usingAWS ? process.env.RDS_DB_NAME : process.env.DB_NAME,
 
-    host: process.env.RDS_HOSTNAME,
+    host: usingAWS ? process.env.RDS_HOSTNAME : process.env.DB_HOST,
 
     dialect: "mysql",
   },
