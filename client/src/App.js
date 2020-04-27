@@ -71,8 +71,8 @@ class App extends React.Component {
       unSeenCount: user.unSeenCount,
     });
 
-    if (user.userSubscription !== 0)
-      askPushPermission(this.onNotificationReception);
+    // if (user.userSubscription !== 0)
+    //   askPushPermission(this.onNotificationReception);
   };
 
   onNotificationReception = (payload) => {

@@ -155,11 +155,11 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  console.log("ERROR JUST HAPPENED HERE DUDE");
-  // console.log({
-  //   message: err.message,
-  //   error: err,
-  // });
+  // console.log("ERROR JUST HAPPENED HERE DUDE");
+  console.log({
+    message: err.message,
+    error: err,
+  });
 
   // render the error page
   res.status(err.status || 500);

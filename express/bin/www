@@ -34,12 +34,12 @@ if (cluster.isMaster) {
    * set crawler workload for each cluster.
    */
 
-  RSSPoolWorkers(cluster.worker.id, cpuCount);
+  // RSSPoolWorkers(cluster.worker.id, cpuCount);
 
   /**
    * Get port from environment and store in Express.
    */
-  var port = normalizePort(process.env.PORT || "3000");
+  var port = normalizePort(process.env.PORT || "8081");
   app.set("port", port);
   console.log(`serving our sweet app on port ${port}`);
 
@@ -48,8 +48,8 @@ if (cluster.isMaster) {
    */
   var server = https.createServer(
     {
-      key: fs.readFileSync("server.key"),
-      cert: fs.readFileSync("server.cert"),
+      key: fs.readFileSync("/etc/pki/tls/certs/server.key"),
+      cert: fs.readFileSync("/etc/pki/tls/certs/server.crt"),
     },
     app
   );

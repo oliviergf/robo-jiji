@@ -20,6 +20,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 // Retrieve Firebase Messaging object.
 const messaging = firebase.messaging();
+
 // Add the public key generated from the console here.
 messaging.usePublicVapidKey(
   "BOQLXYjUt8HWl6E97BbqHlLKshkmBtkhCbNfyldQtesSJ9YRy4Ae2ymzOJoU2n8xMLjV327QjoYU-yt0MqdP54A"
