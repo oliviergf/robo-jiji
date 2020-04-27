@@ -6,6 +6,13 @@ const logger = require("../../utils/logger");
 const log = new logger();
 const moment = require("moment");
 
+var AWS = require("aws-sdk");
+// Set the region
+AWS.config.update({ region: "ca-central-1" });
+
+// Create S3 service object
+s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+
 /**
  * This function queries the URL of the appartement.
  * It is responsible for downloading the relevant content to be
@@ -85,8 +92,8 @@ fetchPhotos = async (gallery, postLink) => {
   const dir = `./pictures/${shortlink.replace(/\//g, ".")}`;
 
   //creates new directory for post
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-
+  if (!fs.existsSync(dir) && !Boolean(process.env.IS_IN_PROD))
+    fs.mkdirSync(dir, { recursive: true });
   //query image and save to fs
   gallery.map(async (photo, index) => {
     if (photo.type !== "video") {
@@ -96,7 +103,21 @@ fetchPhotos = async (gallery, postLink) => {
           url: photo.href,
           responseType: "stream",
         });
-        picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+        //we are going to store the pictures on the file system for dev and on S3 for prod
+        if (Boolean(process.env.IS_IN_PROD)) {
+          var uploadParams = {
+            Bucket: process.env.AWS_S3_BUCKET,
+            Key: `pictures/${shortlink.replace(/\//g, ".")}:${index}`,
+            Body: picture.data,
+          };
+          // call S3 to retrieve upload file to specified bucket
+          s3.upload(uploadParams, function (err, data) {
+            if (err) log.err("error", err);
+            if (data) log.o("Upload Success to S3", data.Location);
+          });
+        } else {
+          picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
+        }
       } catch (error) {
         log.err("gallery", gallery);
         log.err(`could not fetch img ${photo.href} in dir ${dir} \n\n\n\n\n\ `);

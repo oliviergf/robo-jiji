@@ -27,6 +27,7 @@ When ready to deploy for real look over the following:
 ### steps to deploy:
 
 - npm run build in /client and replace /build folder in express by created build
+- delete /node_modules and /pictures
 - set http in www file if its not already there
 - set AWS or custom URL in serverURL
 - set AWS DB configs in config/config.js file for DB
