@@ -4,7 +4,8 @@ const os = require("os");
 const cpuCount = os.cpus().length;
 require("dotenv").config();
 const fs = require("fs");
-const https = require("https");
+// const https = require("https");
+const http = require("http");
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
@@ -46,13 +47,14 @@ if (cluster.isMaster) {
   /**
    * Create HTTP server.
    */
-  var server = https.createServer(
-    {
-      key: fs.readFileSync("/etc/pki/tls/certs/server.key"),
-      cert: fs.readFileSync("/etc/pki/tls/certs/server.crt"),
-    },
-    app
-  );
+  // var server = https.createServer(
+  //   {
+  //     key: fs.readFileSync("/etc/pki/tls/certs/server.key"),
+  //     cert: fs.readFileSync("/etc/pki/tls/certs/server.crt"),
+  //   },
+  //   app
+  // );
+  var server = http.createServer(app);
 
   /**
    * Listen on provided port, on all network interfaces.

@@ -37,6 +37,8 @@ var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
 
+// zip ../jiji69_1.zip -r * .[^.]*
+
 /**
  * SYNC DB
  * todo: check pour timezone. doesnt seem right
