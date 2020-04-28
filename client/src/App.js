@@ -13,7 +13,7 @@ import url from "./assets/serverURL";
 import { askPushPermission } from "./services/pushManager";
 
 import "typeface-roboto";
-import "./App.css";
+import "./style/App.css";
 
 import { Switch, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
