@@ -9,6 +9,7 @@ import dictio from "../assets/dictionary";
 import MenuItem from "@material-ui/core/MenuItem";
 import PersonIcon from "@material-ui/icons/Person";
 import Menu from "@material-ui/core/Menu";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: "black",
+  },
+  backIcon: {
+    color: "black",
+    fontSize: "medium",
   },
   profileAndOtherStuff: {
     border: "120px",
@@ -66,7 +71,7 @@ export default function ButtonAppBar(props) {
           props.backClicked();
         }}
       >
-        {"<"}
+        <ArrowBackIosIcon className={classes.backIcon} />
       </Button>
     );
   };
@@ -80,6 +85,10 @@ export default function ButtonAppBar(props) {
         </Link>
       </Button>
     );
+  };
+  const switchLanguage = () => {
+    handleClose();
+    props.changeLanguage();
   };
 
   const profileAndOtherStuff = () => {
@@ -111,6 +120,9 @@ export default function ButtonAppBar(props) {
             {dictio.parameters[props.language]}
           </MenuItem>
           <MenuItem onClick={logout}>{dictio.logout[props.language]}</MenuItem>
+          <MenuItem onClick={switchLanguage}>
+            {dictio.langue[props.language]}
+          </MenuItem>
         </Menu>
       </div>
     );
