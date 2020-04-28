@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
   max-height: 100vh;
   height: 100vh;
 }
@@ -13,8 +12,12 @@
 }
 
 .logoimg {
-  max-width: 35%;
-  max-height: 35%;
+  max-width: 45%;
+  max-height: 45%;
+}
+
+.AppBarDivContainer {
+  border-width: 2px;
 }
 
 .makeStyles-root-1 {
@@ -51,7 +54,7 @@
 }
 
 .home {
-  background-color: #f7edc3;
+  background-color: white;
   height: 100%;
 }
 

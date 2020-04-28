@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -6,10 +7,29 @@ import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
 import dictio from "../assets/dictionary";
 import MenuItem from "@material-ui/core/MenuItem";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import PersonIcon from "@material-ui/icons/Person";
 import Menu from "@material-ui/core/Menu";
 
+const useStyles = makeStyles((theme) => ({
+  grow: {
+    flexGrow: 5,
+  },
+  appBar: {
+    backgroundColor: "white",
+  },
+  toolBar: {
+    justifyContent: "space-between",
+  },
+  icon: {
+    color: "black",
+  },
+  profileAndOtherStuff: {
+    border: "120px",
+  },
+}));
+
 export default function ButtonAppBar(props) {
+  const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
     anchorEl: null,
@@ -17,10 +37,23 @@ export default function ButtonAppBar(props) {
   });
   const open = Boolean(state.anchorEl);
 
+  const openProfileOptions = (evt) => {
+    setState({ ...state, anchorEl: evt.currentTarget });
+  };
+  const handleClose = () => {
+    setState({ ...state, anchorEl: null });
+  };
+  const logout = () => {
+    handleClose();
+    props.userLoggedOut();
+  };
+
   const loginArea = () => {
     return (
-      <Button className="loginButton">
-        <Link to="/login">{dictio.login[props.language]}</Link>
+      <Button>
+        <Link style={{ textDecoration: "none", color: "black" }} to="/login">
+          {dictio.login[props.language]}
+        </Link>
       </Button>
     );
   };
@@ -41,7 +74,7 @@ export default function ButtonAppBar(props) {
   const logoArea = () => {
     return (
       <Button>
-        <Link style={{ textDecoration: "none", color: "white" }} to="/home">
+        <Link style={{ textDecoration: "none", color: "black" }} to="/home">
           {/* <img src={logo} alt="Logo"></img> */}
           Kiji-bot
         </Link>
@@ -49,20 +82,9 @@ export default function ButtonAppBar(props) {
     );
   };
 
-  const openProfileOptions = (evt) => {
-    setState({ ...state, anchorEl: evt.currentTarget });
-  };
-  const handleClose = () => {
-    setState({ ...state, anchorEl: null });
-  };
-  const logout = () => {
-    handleClose();
-    props.userLoggedOut();
-  };
-
   const profileAndOtherStuff = () => {
     return (
-      <div>
+      <div className={classes.profileAndOtherStuff}>
         <IconButton
           aria-label="account of current user"
           aria-controls="menu-appbar"
@@ -70,7 +92,7 @@ export default function ButtonAppBar(props) {
           onClick={openProfileOptions}
           color="inherit"
         >
-          <AccountCircle />
+          <PersonIcon className={classes.icon} />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -95,13 +117,13 @@ export default function ButtonAppBar(props) {
   };
 
   return (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          {props.isLoggedIn && backButton()}
-          {profileAndOtherStuff()}
+    <div className="AppBarDivContainer">
+      <AppBar elevation={0} className={classes.appBar} position="static">
+        <Toolbar className={classes.toolBar}>
+          {props.isInsideWizzard && backButton()}
           {logoArea()}
-          {loginArea()}
+          {!props.isLoggedIn && loginArea()}
+          {props.isLoggedIn && profileAndOtherStuff()}
         </Toolbar>
       </AppBar>
     </div>
