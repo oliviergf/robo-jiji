@@ -16,19 +16,6 @@ import "typeface-roboto";
 import "./style/App.css";
 
 import { Switch, Route } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
-
-const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-});
 
 // use this to geek flexbox https://flexboxfroggy.com/
 
@@ -39,9 +26,8 @@ class App extends React.Component {
       isLoggedIn: false,
       userFirstName: "",
       anchorEl: null,
-      width: window.innerWidth,
-      height: window.innerHeight,
       language: 0,
+      isInsideWizzard: false,
     };
     this.testBrowserSession();
   }
@@ -71,8 +57,8 @@ class App extends React.Component {
       unSeenCount: user.unSeenCount,
     });
 
-    // if (user.userSubscription !== 0)
-    //   askPushPermission(this.onNotificationReception);
+    if (user.userSubscription !== 0)
+      askPushPermission(this.onNotificationReception);
   };
 
   onNotificationReception = (payload) => {
@@ -92,6 +78,11 @@ class App extends React.Component {
     this.setState({ unSeenCount: unSeenCount });
   };
 
+  //gets called when user press back button in nav bar
+  backClicked = () => {
+    console.log("backed pressed");
+  };
+
   //test whether the current browser contains a valid session
   testBrowserSession = () => {
     let self = this;
@@ -106,17 +97,17 @@ class App extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <div className="App">
-        <div className={classes.root}>
+        <div>
           <Bar
+            isLoggedIn={this.state.isLoggedIn}
             userLoggedOut={this.logoutHandeler}
             changeLanguage={this.changeLanguage}
-            isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             language={this.state.language}
-            unSeenCount={this.state.unSeenCount}
+            backClicked={this.backClicked}
+            isInsideWizzard={this.state.isInsideWizzard}
           />
         </div>
         <div className="body">
@@ -163,4 +154,4 @@ class App extends React.Component {
 }
 
 //with Styles is passed as props.
-export default withStyles(styles, { withTheme: true })(App);
+export default App;

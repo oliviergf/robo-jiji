@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
-import ApartmentIcon from "@material-ui/icons/Apartment";
-import ExploreIcon from "@material-ui/icons/Explore";
-import BurgerMenu from "./BurgerMenu";
 import dictio from "../assets/dictionary";
-import Badge from "@material-ui/core/Badge";
+import MenuItem from "@material-ui/core/MenuItem";
+import PersonIcon from "@material-ui/icons/Person";
+import Menu from "@material-ui/core/Menu";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+  grow: {
+    flexGrow: 5,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  appBar: {
+    backgroundColor: "white",
   },
-  title: {
-    flexGrow: 1,
+  toolBar: {
+    justifyContent: "space-between",
   },
-  list: {
-    width: 250,
+  icon: {
+    color: "black",
+  },
+  backIcon: {
+    color: "black",
+    fontSize: "medium",
+  },
+  profileAndOtherStuff: {
+    border: "120px",
   },
 }));
 
@@ -34,83 +40,102 @@ export default function ButtonAppBar(props) {
     anchorEl: null,
     showMenu: false,
   });
+  const open = Boolean(state.anchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    setState({ ...state, anchorEl: event.currentTarget });
+  const openProfileOptions = (evt) => {
+    setState({ ...state, anchorEl: evt.currentTarget });
+  };
+  const handleClose = () => {
+    setState({ ...state, anchorEl: null });
+  };
+  const logout = () => {
+    handleClose();
+    props.userLoggedOut();
   };
 
-  console.log("props.unSeenCount", props.unSeenCount);
-
   const loginArea = () => {
-    let loginButton;
-    if (props.isLoggedIn) {
-      loginButton = (
-        <div>
-          <IconButton
-            edge="end"
-            aria-label="maps"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <Link style={{ textDecoration: "none", color: "white" }} to="/map">
-              <ExploreIcon />
-            </Link>
-          </IconButton>
-          <IconButton
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-          >
-            <Badge color="secondary" badgeContent={props.unSeenCount}>
-              <Link
-                style={{ textDecoration: "none", color: "white" }}
-                to="/apartements"
-              >
-                <ApartmentIcon />
-              </Link>
-            </Badge>
-          </IconButton>
-        </div>
-      );
-    } else {
-      loginButton = (
-        <Button color="inherit">
-          <Link style={{ textDecoration: "none", color: "white" }} to="/login">
-            {dictio.login[props.language]}
-          </Link>
-        </Button>
-      );
-    }
-    return loginButton;
+    return (
+      <Button>
+        <Link style={{ textDecoration: "none", color: "black" }} to="/login">
+          {dictio.login[props.language]}
+        </Link>
+      </Button>
+    );
+  };
+
+  const backButton = () => {
+    return (
+      <Button
+        className="backButton"
+        onClick={() => {
+          props.backClicked();
+        }}
+      >
+        <ArrowBackIosIcon className={classes.backIcon} />
+      </Button>
+    );
+  };
+
+  const logoArea = () => {
+    return (
+      <Button>
+        <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+          {/* <img src={logo} alt="Logo"></img> */}
+          Kiji-bot
+        </Link>
+      </Button>
+    );
+  };
+  const switchLanguage = () => {
+    handleClose();
+    props.changeLanguage();
+  };
+
+  const profileAndOtherStuff = () => {
+    return (
+      <div className={classes.profileAndOtherStuff}>
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={openProfileOptions}
+          color="inherit"
+        >
+          <PersonIcon className={classes.icon} />
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={state.anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>
+            {dictio.account[props.language]}
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            {dictio.notification[props.language]}
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            {dictio.parameters[props.language]}
+          </MenuItem>
+          <MenuItem onClick={logout}>{dictio.logout[props.language]}</MenuItem>
+          <MenuItem onClick={switchLanguage}>
+            {dictio.langue[props.language]}
+          </MenuItem>
+        </Menu>
+      </div>
+    );
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          {props.isLoggedIn && (
-            <BurgerMenu
-              changeLanguage={() => {
-                props.changeLanguage();
-              }}
-              userLoggedOut={props.userLoggedOut}
-              language={props.language}
-            />
-          )}
-          <Typography variant="h6" className={classes.title}>
-            <IconButton edge="start">
-              <Link
-                style={{ textDecoration: "none", color: "white" }}
-                to="/home"
-              >
-                {/* <img src={logo} alt="Logo"></img> */}
-                jijibot
-              </Link>
-            </IconButton>
-          </Typography>
-          {loginArea()}
+    <div className="AppBarDivContainer">
+      <AppBar elevation={0} className={classes.appBar} position="static">
+        <Toolbar className={classes.toolBar}>
+          {props.isInsideWizzard && backButton()}
+          {logoArea()}
+          {!props.isLoggedIn && loginArea()}
+          {props.isLoggedIn && profileAndOtherStuff()}
         </Toolbar>
       </AppBar>
     </div>

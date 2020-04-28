@@ -113,7 +113,6 @@ fetchPhotos = async (gallery, postLink) => {
           // call S3 to retrieve upload file to specified bucket
           s3.upload(uploadParams, function (err, data) {
             if (err) log.err("error", err);
-            if (data) log.o("Upload Success to S3", data.Location);
           });
         } else {
           picture.data.pipe(fs.createWriteStream(dir + `/${index}.jpeg`));
