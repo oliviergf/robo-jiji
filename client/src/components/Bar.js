@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
-import BurgerMenu from "./BurgerMenu";
 import dictio from "../assets/dictionary";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -45,7 +43,7 @@ export default function ButtonAppBar(props) {
       <Button>
         <Link style={{ textDecoration: "none", color: "white" }} to="/home">
           {/* <img src={logo} alt="Logo"></img> */}
-          jijibot
+          Kiji-bot
         </Link>
       </Button>
     );
@@ -56,6 +54,10 @@ export default function ButtonAppBar(props) {
   };
   const handleClose = () => {
     setState({ ...state, anchorEl: null });
+  };
+  const logout = () => {
+    handleClose();
+    props.userLoggedOut();
   };
 
   const profileAndOtherStuff = () => {
@@ -77,8 +79,16 @@ export default function ButtonAppBar(props) {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>
+            {dictio.account[props.language]}
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            {dictio.notification[props.language]}
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            {dictio.parameters[props.language]}
+          </MenuItem>
+          <MenuItem onClick={logout}>{dictio.logout[props.language]}</MenuItem>
         </Menu>
       </div>
     );

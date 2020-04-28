@@ -27,6 +27,7 @@ class App extends React.Component {
       userFirstName: "",
       anchorEl: null,
       language: 0,
+      isInsideWizzard: false,
     };
     this.testBrowserSession();
   }
@@ -77,6 +78,11 @@ class App extends React.Component {
     this.setState({ unSeenCount: unSeenCount });
   };
 
+  //gets called when user press back button in nav bar
+  backClicked = () => {
+    console.log("backed pressed");
+  };
+
   //test whether the current browser contains a valid session
   testBrowserSession = () => {
     let self = this;
@@ -95,12 +101,13 @@ class App extends React.Component {
       <div className="App">
         <div>
           <Bar
+            isLoggedIn={this.state.isLoggedIn}
             userLoggedOut={this.logoutHandeler}
             changeLanguage={this.changeLanguage}
-            isLoggedIn={this.state.isLoggedIn}
             userFirstName={this.state.userFirstName}
             language={this.state.language}
-            unSeenCount={this.state.unSeenCount}
+            backClicked={this.backClicked}
+            isInsideWizzard={this.state.isInsideWizzard}
           />
         </div>
         <div className="body">
