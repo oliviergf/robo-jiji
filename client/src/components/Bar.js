@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -12,23 +11,22 @@ import BurgerMenu from "./BurgerMenu";
 import dictio from "../assets/dictionary";
 import Badge from "@material-ui/core/Badge";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  list: {
-    width: 250,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     flexGrow: 1,
+//   },
+//   menuButton: {
+//     marginRight: theme.spacing(2),
+//   },
+//   title: {
+//     flexGrow: 1,
+//   },
+//   list: {
+//     width: 250,
+//   },
+// }));
 
 export default function ButtonAppBar(props) {
-  const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
     anchorEl: null,
@@ -38,8 +36,6 @@ export default function ButtonAppBar(props) {
   const handleProfileMenuOpen = (event) => {
     setState({ ...state, anchorEl: event.currentTarget });
   };
-
-  console.log("props.unSeenCount", props.unSeenCount);
 
   const loginArea = () => {
     let loginButton;
@@ -87,7 +83,7 @@ export default function ButtonAppBar(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static">
         <Toolbar>
           {props.isLoggedIn && (
@@ -99,7 +95,7 @@ export default function ButtonAppBar(props) {
               language={props.language}
             />
           )}
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6">
             <IconButton edge="start">
               <Link
                 style={{ textDecoration: "none", color: "white" }}
