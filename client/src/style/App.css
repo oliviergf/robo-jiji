@@ -8,6 +8,10 @@
   height: 90%;
 }
 
+.loginButton {
+  background-color: red;
+}
+
 .logoimg {
   max-width: 35%;
   max-height: 35%;
