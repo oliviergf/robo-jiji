@@ -5,11 +5,12 @@
 TODO:
 
 - [x] Gerer les notifications selon préférences
-- [ ] Finir le UI + CSS + installation wizard
 - [x] Hasher les passwords
-- [ ] full deployment avec AWS (EC2, RDS, domain, SSL, fs...)
+- [x] early deployment avec AWS (EC2, RDS, SSL, S3)
+- [ ] Finir le UI + CSS + installation wizard
 - [ ] Tests, Tests, Tests
 - [ ] Securité
+- [x] deployment prod avec AWS (domain name, cron jobs)
 - [ ] Small roll out
 - [ ] Intégrer les messages txts
 - [ ] Sécurité & tests
