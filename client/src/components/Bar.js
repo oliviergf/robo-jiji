@@ -89,12 +89,12 @@ export default function ButtonAppBar(props) {
 
   const logoArea = () => {
     return (
-      <Button>
-        <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+      <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+        <Button onClick={props.returnHome}>
           {/* <img src={logo} alt="Logo"></img> */}
           Kiji-bot
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     );
   };
   const switchLanguage = () => {

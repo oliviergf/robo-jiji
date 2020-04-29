@@ -33,6 +33,10 @@ class App extends React.Component {
     this.testBrowserSession();
   }
 
+  returnHome = () => {
+    this.setState({ isInsideWizzard: false, wizardPage: 0 });
+  };
+
   startWizard = () => {
     this.setState({ isInsideWizzard: true });
   };
@@ -125,6 +129,7 @@ class App extends React.Component {
           backClicked={this.backClicked}
           isInsideWizzard={this.state.isInsideWizzard}
           wizardPage={this.state.wizardPage}
+          returnHome={this.returnHome}
         />
         <div className="body">
           <Switch>
