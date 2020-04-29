@@ -31,6 +31,10 @@ class App extends React.Component {
     this.testBrowserSession();
   }
 
+  startWizard = () => {
+    this.setState({ isInsideWizzard: true });
+  };
+
   changeLanguage = () => {
     this.setState((prevState) => ({
       language: prevState.language === 0 ? 1 : 0,
@@ -138,7 +142,10 @@ class App extends React.Component {
               />
             </Route>
             <Route path="/">
-              <Home language={this.state.language} />
+              <Home
+                startWizard={this.startWizard}
+                language={this.state.language}
+              />
             </Route>
           </Switch>
         </div>

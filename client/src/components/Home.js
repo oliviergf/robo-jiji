@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 import dictio from "../assets/dictionary";
 
 export default function Home(props) {
@@ -11,8 +11,13 @@ export default function Home(props) {
         </div>
         <div>{dictio.welcome[props.language]}</div>
         <div>
-          <button className="check-in-button">
-            {dictio.checking[props.language]}
+          <button onClick={props.startWizard} className="check-in-button">
+            <Link
+              style={{ textDecoration: "none", color: "inherit" }}
+              to="/register"
+            >
+              {dictio.checking[props.language]}
+            </Link>
           </button>
         </div>
       </div>

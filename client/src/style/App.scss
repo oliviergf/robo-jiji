@@ -1,3 +1,7 @@
+$degrader-color1: #53d7c2;
+$degrader-color2: #36b2b3;
+$background-color: white;
+
 .App {
   max-height: 100vh;
   height: 100vh;
@@ -6,9 +10,6 @@
   height: 90%;
 }
 
-.loginButton {
-  background-color: red;
-}
 .information-line {
   padding-top: 5%;
 }
@@ -21,14 +22,18 @@
 }
 .check-in-button {
   margin-top: 5%;
-  background-color: blue;
+  background-image: linear-gradient(
+    to right,
+    $degrader-color1,
+    $degrader-color2
+  );
   width: 20rem;
   height: 50px;
   padding: 14px 28px;
   border-radius: 15px;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 22px;
   cursor: pointer;
 }
 
@@ -56,7 +61,7 @@
 }
 
 .home {
-  background-color: white;
+  background-color: $background-color;
   height: 100%;
 }
 

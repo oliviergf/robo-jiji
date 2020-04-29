@@ -7,10 +7,6 @@
   height: 90%;
 }
 
-.loginButton {
-  background-color: red;
-}
-
 .information-line {
   padding-top: 5%;
 }
@@ -26,14 +22,15 @@
 
 .check-in-button {
   margin-top: 5%;
-  background-color: blue;
+  background-image: -webkit-gradient(linear, left top, right top, from(#53d7c2), to(#36b2b3));
+  background-image: linear-gradient(to right, #53d7c2, #36b2b3);
   width: 20rem;
   height: 50px;
   padding: 14px 28px;
   border-radius: 15px;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 22px;
   cursor: pointer;
 }
 
