@@ -5,6 +5,18 @@
  */
 
 const dictionary = {
+  checking: ["Commencer ", "Let me see"],
+  moreInfo: ["C'est vraiment facile et pas compliqué", "It's easy"],
+  moreInfo2: ["Soyer les premiers", "Be first to contact the owner"],
+  moreInfo3: ["Calmez votre esprit", "Rest easy my child"],
+  welcome: [
+    "Heureusement, on automatise ca pour vous",
+    "Just let us automate that task for you",
+  ],
+  punchLine: [
+    "Chercher un apartement donne la depression",
+    "Finding apartements sucks",
+  ],
   langue: ["English", "Francais"],
   logout: ["Deconnexion", "logout"],
   account: ["Compte", "Account"],

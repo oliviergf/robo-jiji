@@ -1,39 +1,35 @@
 import React from "react";
-import { Container, Box, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 import dictio from "../assets/dictionary";
-import { askPushPermission } from "../services/pushManager";
-import logo from "../assets/roboticon.png";
-import Test from "./Test";
 
 export default function Home(props) {
-  console.log("props home", props);
   return (
-    <Container className="home">
-      <Box justifyContent="center" alignItems="center">
-        <div>
-          <img className="logoimg" src={logo} />
+    <div className="home-container">
+      <div className="home-content">
+        <div className="punch-line">
+          <h2>{dictio.punchLine[props.language]}</h2>
         </div>
-        <div>{dictio.description[props.language]}</div>
-        <Button>
-          <Link
-            style={{ textDecoration: "none", color: "black" }}
-            to="/register"
-          >
-            {dictio.subscribe[props.language]}
-          </Link>
-        </Button>
-        <Button>
-          <Link
-            style={{ textDecoration: "none", color: "black" }}
-            to="/informations"
-          >
-            {dictio.informations[props.language]}
-          </Link>
-        </Button>
-        <Test />
-        {/* <Button onClick={askPushPermission}>push permission</Button> */}
-      </Box>
-    </Container>
+        <div>{dictio.welcome[props.language]}</div>
+        <div>
+          <button className="check-in-button">
+            {dictio.checking[props.language]}
+          </button>
+        </div>
+      </div>
+      <div className="home-content">
+        <div className="punch-line">
+          <h2>{dictio.moreInfo[props.language]}</h2>
+        </div>
+        <div className="information-line">{dictio.info1[props.language]}</div>
+        <div className="punch-line">
+          <h2>{dictio.moreInfo2[props.language]}</h2>
+        </div>
+        <div className="information-line">{dictio.info2[props.language]}</div>
+        <div className="punch-line">
+          <h2>{dictio.moreInfo3[props.language]}</h2>
+        </div>
+        <div className="information-line">{dictio.info3[props.language]}</div>
+      </div>
+    </div>
   );
 }

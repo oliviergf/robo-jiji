@@ -5,7 +5,6 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Notifications from "./components/Notifications";
-import Informations from "./components/Information";
 import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
@@ -99,17 +98,15 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <div>
-          <Bar
-            isLoggedIn={this.state.isLoggedIn}
-            userLoggedOut={this.logoutHandeler}
-            changeLanguage={this.changeLanguage}
-            userFirstName={this.state.userFirstName}
-            language={this.state.language}
-            backClicked={this.backClicked}
-            isInsideWizzard={this.state.isInsideWizzard}
-          />
-        </div>
+        <Bar
+          isLoggedIn={this.state.isLoggedIn}
+          userLoggedOut={this.logoutHandeler}
+          changeLanguage={this.changeLanguage}
+          userFirstName={this.state.userFirstName}
+          language={this.state.language}
+          backClicked={this.backClicked}
+          isInsideWizzard={this.state.isInsideWizzard}
+        />
         <div className="body">
           <Switch>
             <Route path="/apartements">
@@ -118,9 +115,6 @@ class App extends React.Component {
                 clickSeenApart={this.clickSeenApart}
                 clearSeenAparts={this.clearSeenAparts}
               />
-            </Route>
-            <Route path="/informations">
-              <Informations language={this.state.language} />
             </Route>
             <Route path="/register">
               <Register language={this.state.language} />
