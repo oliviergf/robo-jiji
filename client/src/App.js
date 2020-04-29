@@ -56,7 +56,15 @@ class App extends React.Component {
   };
 
   logoutHandeler = () => {
-    this.setState({ isLoggedIn: false, userFirstName: "" });
+    let self = this;
+    axios
+      .get(`${url}/logout`)
+      .then(function (response) {
+        self.setState({ isLoggedIn: false, userFirstName: "" });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   logUserCredentials = (user) => {

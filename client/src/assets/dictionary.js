@@ -73,7 +73,7 @@ const dictionary = {
   password: ["Choisissez votre mot de passe", "Choose your password"],
   confirmation: ["Confirmation", "Spell it again"],
   submit: ["Creer", "Submit"],
-  login: ["se connecter", "login"],
+  login: ["connexion", "login"],
   enter: ["Entrer", "Enter"],
   enablePush: ["Autoriser les notifications", "Enable notifications"],
   Error: ["Erreur", "Error"],
@@ -94,6 +94,7 @@ const dictionary = {
     "Vous devez entrer un courriel valide",
     "You must enter a valid email",
   ],
+  installation: ["Installation", "Installation"],
   registerSucces: ["Compte Creer", "Account Created"],
   openUsedEmailError: [
     "Il y a deja un compte associer a ce courriel",
