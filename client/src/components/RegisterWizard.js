@@ -28,25 +28,23 @@ export default function Home(props) {
     let pageContent;
     if (props.wizardPage === 0) {
       pageContent = (
-        <div className="wizard-container">
+        <div className="question-wizard-container">
           <div className="wizard-question">
+            <div>
+              <h2>{dictio.creation[props.language]}</h2>
+            </div>
             <div>{dictio.email[props.language]}</div>
             <input value={state.email} name="email" onChange={handleChange} />
-          </div>
-          <div className="wizard-question">
-            <div>username firstname last name</div>
-            <input
-              value={state.username}
-              name="username"
-              onChange={handleChange}
-            />
           </div>
         </div>
       );
     } else if (props.wizardPage === 1) {
       pageContent = (
-        <div className="wizard-container">
+        <div className="question-wizard-container">
           <div className="wizard-question">
+            <div>
+              <h2>{dictio.creation[props.language]}</h2>
+            </div>
             <div>{dictio.password[props.language]}</div>
             <input
               value={state.password}
@@ -66,7 +64,7 @@ export default function Home(props) {
       );
     } else if (props.wizardPage === 2) {
       pageContent = (
-        <div className="wizard-container">
+        <div className="question-wizard-container">
           <div>
             <h2>{dictio.platForm[props.language]}</h2>
           </div>
@@ -87,7 +85,7 @@ export default function Home(props) {
       );
     } else if (props.wizardPage === 3) {
       pageContent = (
-        <div className="wizard-container">
+        <div className="question-wizard-container">
           <div>
             <h2>{dictio.installation[props.language]}</h2>
           </div>
@@ -100,9 +98,9 @@ export default function Home(props) {
   };
 
   return (
-    <div>
+    <div className="wizard-container">
       {showWizardPageContent()}
-      <div>
+      <div className="next-button-wrapper">
         <button
           onClick={() => {
             props.wizardPage === 3 ? install() : next();

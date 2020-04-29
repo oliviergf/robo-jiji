@@ -95,6 +95,7 @@ const dictionary = {
     "You must enter a valid email",
   ],
   installation: ["Installation", "Installation"],
+  creation: ["Créez votre compte", "Created your account"],
   registerSucces: ["Compte Creer", "Account Created"],
   openUsedEmailError: [
     "Il y a deja un compte associer a ce courriel",

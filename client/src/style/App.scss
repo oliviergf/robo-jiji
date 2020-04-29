@@ -1,6 +1,6 @@
 $degrader-color1: #53d7c2;
 $degrader-color2: #36b2b3;
-$background-color: white;
+$background-color: blue;
 
 .App {
   max-height: 100vh;
@@ -13,11 +13,12 @@ $background-color: white;
 .information-line {
   padding-top: 5%;
 }
+
 .punch-line {
   color: black;
 }
 .wizard-question {
-  // margin-top: 45px;
+  margin-top: 10vh;
   flex: 1;
 }
 
@@ -25,7 +26,14 @@ $background-color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin: 20px;
+}
+.next-button-wrapper {
+  margin-bottom: 5vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
 }
 
 .logoimg {
@@ -69,7 +77,7 @@ $background-color: white;
 }
 
 .home-content {
-  margin-top: 50%;
+  margin-top: 29vh;
   margin-left: 20px;
 }
 

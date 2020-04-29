@@ -16,6 +16,7 @@
 }
 
 .wizard-question {
+  margin-top: 10vh;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -30,7 +31,24 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin: 20px;
+}
+
+.next-button-wrapper {
+  margin-bottom: 5vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 
 .logoimg {
@@ -79,7 +97,7 @@
 }
 
 .home-content {
-  margin-top: 50%;
+  margin-top: 29vh;
   margin-left: 20px;
 }
 
@@ -97,7 +115,7 @@
 }
 
 .home {
-  background-color: white;
+  background-color: blue;
   height: 100%;
 }
 
