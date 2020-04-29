@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import dictio from "../assets/dictionary";
+import android from "../assets/icons8-android-os-100.png";
+import androidColor from "../assets/icons8-android-os-100_color.png";
+import apple from "../assets/icons8-apple-logo-100.png";
+import appleColor from "../assets/icons8-apple-logo-100_color.png";
 
 export default function Home(props) {
   const [state, setState] = React.useState({
@@ -8,7 +12,7 @@ export default function Home(props) {
     username: "",
     password: "",
     confirmation: "",
-    platForm: "apple",
+    platform: "apple",
     telephoneNumber: "",
   });
 
@@ -19,6 +23,11 @@ export default function Home(props) {
   const install = () => {
     console.log(state);
     console.log("installin");
+  };
+
+  const platformeClick = () => {
+    const isApple = state.platform === "apple";
+    setState({ ...state, platform: isApple ? "android" : "apple" });
   };
 
   const handleChange = (evt) => {
@@ -69,18 +78,28 @@ export default function Home(props) {
             <h2>{dictio.platForm[props.language]}</h2>
           </div>
           <div className="wizard-question">
-            <div>whats ur platfome dude</div>
-            <input type="radio" onChange={handleChange} />
-            <input type="radio" onChange={handleChange} />
-          </div>
-          <div className="wizard-question">
-            <div>{dictio.telephoneNumber[props.language]}</div>
-            <input
-              value={state.telephoneNumber}
-              name="telephoneNumber"
-              onChange={handleChange}
+            <div>
+              The platform is kinda important to use, what's on your mobile?
+            </div>
+            <img
+              src={state.platform === "apple" ? appleColor : apple}
+              onClick={platformeClick}
+            />
+            <img
+              src={state.platform === "apple" ? android : androidColor}
+              onClick={platformeClick}
             />
           </div>
+          {state.platform === "apple" && (
+            <div className="wizard-question">
+              <div>{dictio.telephoneNumber[props.language]}</div>
+              <input
+                value={state.telephoneNumber}
+                name="telephoneNumber"
+                onChange={handleChange}
+              />
+            </div>
+          )}
         </div>
       );
     } else if (props.wizardPage === 3) {
