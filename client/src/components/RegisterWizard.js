@@ -4,7 +4,7 @@ import dictio from "../assets/dictionary";
 
 export default function Home(props) {
   const [state, setState] = React.useState({
-    page: false,
+    email: false,
   });
 
   const next = () => {
@@ -12,14 +12,23 @@ export default function Home(props) {
   };
 
   const showPageContent = () => {
-    return <div>Hello c,est quoi ton email</div>;
+    let pageContent;
+    if (props.wizardPage === 0) {
+      pageContent = <div>Hello c,est quoi ton email</div>;
+    } else if (props.wizardPage === 1) {
+      pageContent = <div>sucks</div>;
+    } else if (props.wizardPage === 2) {
+      pageContent = <div>ass</div>;
+    }
+
+    return pageContent;
   };
 
   return (
-    <div className="home-container">
+    <div className="wizard-container">
       {showPageContent()}
       <div>
-        <button onClick={next} className="check-in-button">
+        <button onClick={next} className="check-in-button next">
           {dictio.next[props.language]}
         </button>
       </div>
