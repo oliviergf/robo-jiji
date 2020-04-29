@@ -71,7 +71,13 @@ export default function ButtonAppBar(props) {
           props.backClicked();
         }}
       >
-        <ArrowBackIosIcon className={classes.backIcon} />
+        {props.wizardPage === 0 ? (
+          <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+            <ArrowBackIosIcon className={classes.backIcon} />
+          </Link>
+        ) : (
+          <ArrowBackIosIcon className={classes.backIcon} />
+        )}
       </Button>
     );
   };

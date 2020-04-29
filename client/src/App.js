@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "./services/axios";
-import Register from "./components/Register";
+import RegisterWizard from "./components/RegisterWizard";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
@@ -10,6 +10,7 @@ import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
 import { askPushPermission } from "./services/pushManager";
+import { Redirect } from "react-router";
 
 import "typeface-roboto";
 import "./style/App.css";
@@ -27,6 +28,8 @@ class App extends React.Component {
       anchorEl: null,
       language: 0,
       isInsideWizzard: false,
+      wizardPage: 0,
+      fireRedirectHome: false,
     };
     this.testBrowserSession();
   }
@@ -83,7 +86,13 @@ class App extends React.Component {
 
   //gets called when user press back button in nav bar
   backClicked = () => {
-    console.log("backed pressed");
+    console.log("back clicked");
+    if (this.state.wizardPage === 0) {
+      this.setState({
+        isInsideWizzard: false,
+        fireRedirectHome: true,
+      });
+    }
   };
 
   //test whether the current browser contains a valid session
@@ -110,6 +119,7 @@ class App extends React.Component {
           language={this.state.language}
           backClicked={this.backClicked}
           isInsideWizzard={this.state.isInsideWizzard}
+          wizardPage={this.state.wizardPage}
         />
         <div className="body">
           <Switch>
@@ -121,7 +131,10 @@ class App extends React.Component {
               />
             </Route>
             <Route path="/register">
-              <Register language={this.state.language} />
+              <RegisterWizard
+                wizardPage={this.state.wizardPage}
+                language={this.state.language}
+              />
             </Route>
             <Route path="/login">
               <Login

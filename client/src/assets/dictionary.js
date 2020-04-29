@@ -6,9 +6,27 @@
 
 const dictionary = {
   checking: ["Commencer ", "Let me see"],
-  moreInfo: ["C'est vraiment facile et pas compliqué", "It's easy"],
-  moreInfo2: ["Soyer les premiers", "Be first to contact the owner"],
+  moreInfo: [
+    "Ne manquez jamais une nouvelle annonce",
+    "Never miss a new posting",
+  ],
+  moreInfo2: [
+    "Vivez où vous voulez vraiment vivre",
+    "Live in the district you really want to live in",
+  ],
   moreInfo3: ["Calmez votre esprit", "Rest easy my child"],
+  info1: [
+    "Kiji-bot automatise la recherche d'apartements en vous envoyant une notification lorsqu'une annonce est affiché, soyez toujours les premiers",
+    "Kiji-bot sends you a notification whenever a new spot is posted online. Be the first to speak to the owner",
+  ],
+  info2: [
+    "Vous pouvez tracer plusieurs zones géographiques afin d'être seulement alerté lorsqu'un logement est disponible dans votre quartier de rêve ",
+    "You can trace areas where ever you want. Be close to that big mac spot u love so much",
+  ],
+  info3: [
+    "Les utilisateurs de Iphone n'ont pas acces directement aux notifications de l'appareils et donc le service enverra des messages texte afin de notidier l'utilisateur.",
+    "Iphones users cannot presently receive notifications via the app and they will receveives texte messages",
+  ],
   welcome: [
     "Heureusement, on automatise ca pour vous",
     "Just let us automate that task for you",
@@ -35,18 +53,6 @@ const dictionary = {
   timeFetch: ["Date ajouter", "Time fetched"],
   install: ["Install", "Install"],
   dateAvailable: ["Date enmenagement", "Date available"],
-  info1: [
-    "Le but est de reduire le stress de l'ulisateur qui cherche un logement en lui envoyant des notifications quand un apparts se post. Nous permettons de definir des zones geographiques et vous serez allerter losrquon new shit pop dans la zone!",
-    "the goal is to reduce the amount of time one yser could spend resfressh kijiji by sending notifications when a given spot is posted inside one of more speficic regions that the user defines",
-  ],
-  info2: [
-    "Ce service est un app que vous pouvez telecharger via le siteweb sur votre telephone",
-    "This service is an website app hybrid that you can download to your phone",
-  ],
-  info3: [
-    "Les utilisateurs de Iphone n'ont pas acces directement aux notifications de l'appareils et donc le service enverra des messages texte afin de notidier l'utilisateur.",
-    "Iphones users cannot presently receive notifications via the app and they will receveives texte messages",
-  ],
   rooms: ["Taille de l'appartement", "Apartement Size"],
   priceRange: ["Range de loyer", "Rent range"],
   beginning: ["heure debut", "start hour"],
