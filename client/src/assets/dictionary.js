@@ -5,6 +5,8 @@
  */
 
 const dictionary = {
+  next: ["Suivant", "Next"],
+  knowEachOther: ["Apprenons à nous connaitre", "Let's learn about each other"],
   checking: ["Commencer ", "Let me see"],
   moreInfo: [
     "Ne manquez jamais une nouvelle annonce",
@@ -67,7 +69,7 @@ const dictionary = {
     "Apply preferences to notification",
   ],
   lastname: ["Nom", "Last name"],
-  email: ["Courriel", "Email"],
+  email: ["Quel est votre courriel?", "What's your email?"],
   password: ["Mot de passe", "Password"],
   confirmation: ["Confirmation", "Confirmation"],
   submit: ["Creer", "Submit"],

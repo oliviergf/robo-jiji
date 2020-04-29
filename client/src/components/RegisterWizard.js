@@ -7,5 +7,22 @@ export default function Home(props) {
     page: false,
   });
 
-  return <div className="home-container">well its fucked</div>;
+  const next = () => {
+    props.nextPage();
+  };
+
+  const showPageContent = () => {
+    return <div>Hello c,est quoi ton email</div>;
+  };
+
+  return (
+    <div className="home-container">
+      {showPageContent()}
+      <div>
+        <button onClick={next} className="check-in-button">
+          {dictio.next[props.language]}
+        </button>
+      </div>
+    </div>
+  );
 }

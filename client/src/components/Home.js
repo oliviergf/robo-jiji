@@ -11,14 +11,14 @@ export default function Home(props) {
         </div>
         <div>{dictio.welcome[props.language]}</div>
         <div>
-          <button onClick={props.startWizard} className="check-in-button">
-            <Link
-              style={{ textDecoration: "none", color: "inherit" }}
-              to="/register"
-            >
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to="/register"
+          >
+            <button onClick={props.startWizard} className="check-in-button">
               {dictio.checking[props.language]}
-            </Link>
-          </button>
+            </button>
+          </Link>
         </div>
       </div>
       <div className="home-content">

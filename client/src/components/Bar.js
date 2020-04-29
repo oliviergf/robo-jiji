@@ -55,29 +55,34 @@ export default function ButtonAppBar(props) {
 
   const loginArea = () => {
     return (
-      <Button>
-        <Link style={{ textDecoration: "none", color: "black" }} to="/login">
-          {dictio.login[props.language]}
-        </Link>
-      </Button>
+      <Link style={{ textDecoration: "none", color: "black" }} to="/login">
+        <Button>{dictio.login[props.language]}</Button>
+      </Link>
     );
   };
 
   const backButton = () => {
-    return (
+    return props.wizardPage === 0 ? (
+      <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+        <Button
+          className="backButton"
+          onClick={() => {
+            props.backClicked();
+          }}
+        >
+          {" "}
+          <ArrowBackIosIcon className={classes.backIcon} />
+        </Button>
+      </Link>
+    ) : (
       <Button
         className="backButton"
         onClick={() => {
           props.backClicked();
         }}
       >
-        {props.wizardPage === 0 ? (
-          <Link style={{ textDecoration: "none", color: "black" }} to="/home">
-            <ArrowBackIosIcon className={classes.backIcon} />
-          </Link>
-        ) : (
-          <ArrowBackIosIcon className={classes.backIcon} />
-        )}
+        {" "}
+        <ArrowBackIosIcon className={classes.backIcon} />
       </Button>
     );
   };

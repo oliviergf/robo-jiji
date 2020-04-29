@@ -29,7 +29,6 @@ class App extends React.Component {
       language: 0,
       isInsideWizzard: false,
       wizardPage: 0,
-      fireRedirectHome: false,
     };
     this.testBrowserSession();
   }
@@ -86,13 +85,19 @@ class App extends React.Component {
 
   //gets called when user press back button in nav bar
   backClicked = () => {
-    console.log("back clicked");
     if (this.state.wizardPage === 0) {
       this.setState({
         isInsideWizzard: false,
-        fireRedirectHome: true,
       });
+    } else {
+      let currentPage = this.state.wizardPage;
+      this.setState({ wizardPage: currentPage - 1 });
     }
+  };
+
+  nextPage = () => {
+    let currentPage = this.state.wizardPage;
+    this.setState({ wizardPage: currentPage + 1 });
   };
 
   //test whether the current browser contains a valid session
@@ -134,6 +139,7 @@ class App extends React.Component {
               <RegisterWizard
                 wizardPage={this.state.wizardPage}
                 language={this.state.language}
+                nextPage={this.nextPage}
               />
             </Route>
             <Route path="/login">
