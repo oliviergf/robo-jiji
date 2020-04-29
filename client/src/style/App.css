@@ -7,6 +7,10 @@
   height: 90%;
 }
 
+.wizard-question-title {
+  margin-top: 13vh;
+}
+
 .information-line {
   padding-top: 5%;
 }
@@ -16,7 +20,7 @@
 }
 
 .wizard-question {
-  margin-top: 10vh;
+  margin-top: 5vh;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;

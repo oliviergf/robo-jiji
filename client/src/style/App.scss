@@ -9,6 +9,9 @@ $background-color: blue;
 .body {
   height: 90%;
 }
+.wizard-question-title {
+  margin-top: 13vh;
+}
 
 .information-line {
   padding-top: 5%;
@@ -18,7 +21,7 @@ $background-color: blue;
   color: black;
 }
 .wizard-question {
-  margin-top: 10vh;
+  margin-top: 5vh;
   flex: 1;
 }
 
