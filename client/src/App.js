@@ -1,16 +1,16 @@
 import React from "react";
 import axios from "./services/axios";
-import Register from "./components/Register";
+import RegisterWizard from "./components/RegisterWizard";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ZoneMenu from "./components/ZoneMenu";
 import Notifications from "./components/Notifications";
-import Informations from "./components/Information";
 import Apartements from "./components/ApartDashboard";
 import Bar from "./components/Bar";
 import Account from "./components/Account";
 import url from "./assets/serverURL";
 import { askPushPermission } from "./services/pushManager";
+import { Redirect } from "react-router";
 
 import "typeface-roboto";
 import "./style/App.css";
@@ -28,9 +28,18 @@ class App extends React.Component {
       anchorEl: null,
       language: 0,
       isInsideWizzard: false,
+      wizardPage: 0,
     };
     this.testBrowserSession();
   }
+
+  returnHome = () => {
+    this.setState({ isInsideWizzard: false, wizardPage: 0 });
+  };
+
+  startWizard = () => {
+    this.setState({ isInsideWizzard: true });
+  };
 
   changeLanguage = () => {
     this.setState((prevState) => ({
@@ -47,7 +56,15 @@ class App extends React.Component {
   };
 
   logoutHandeler = () => {
-    this.setState({ isLoggedIn: false, userFirstName: "" });
+    let self = this;
+    axios
+      .get(`${url}/logout`)
+      .then(function (response) {
+        self.setState({ isLoggedIn: false, userFirstName: "" });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   logUserCredentials = (user) => {
@@ -80,7 +97,19 @@ class App extends React.Component {
 
   //gets called when user press back button in nav bar
   backClicked = () => {
-    console.log("backed pressed");
+    if (this.state.wizardPage === 0) {
+      this.setState({
+        isInsideWizzard: false,
+      });
+    } else {
+      let currentPage = this.state.wizardPage;
+      this.setState({ wizardPage: currentPage - 1 });
+    }
+  };
+
+  nextPage = () => {
+    let currentPage = this.state.wizardPage;
+    this.setState({ wizardPage: currentPage + 1 });
   };
 
   //test whether the current browser contains a valid session
@@ -99,17 +128,17 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <div>
-          <Bar
-            isLoggedIn={this.state.isLoggedIn}
-            userLoggedOut={this.logoutHandeler}
-            changeLanguage={this.changeLanguage}
-            userFirstName={this.state.userFirstName}
-            language={this.state.language}
-            backClicked={this.backClicked}
-            isInsideWizzard={this.state.isInsideWizzard}
-          />
-        </div>
+        <Bar
+          isLoggedIn={this.state.isLoggedIn}
+          userLoggedOut={this.logoutHandeler}
+          changeLanguage={this.changeLanguage}
+          userFirstName={this.state.userFirstName}
+          language={this.state.language}
+          backClicked={this.backClicked}
+          isInsideWizzard={this.state.isInsideWizzard}
+          wizardPage={this.state.wizardPage}
+          returnHome={this.returnHome}
+        />
         <div className="body">
           <Switch>
             <Route path="/apartements">
@@ -119,11 +148,12 @@ class App extends React.Component {
                 clearSeenAparts={this.clearSeenAparts}
               />
             </Route>
-            <Route path="/informations">
-              <Informations language={this.state.language} />
-            </Route>
             <Route path="/register">
-              <Register language={this.state.language} />
+              <RegisterWizard
+                wizardPage={this.state.wizardPage}
+                language={this.state.language}
+                nextPage={this.nextPage}
+              />
             </Route>
             <Route path="/login">
               <Login
@@ -144,7 +174,10 @@ class App extends React.Component {
               />
             </Route>
             <Route path="/">
-              <Home language={this.state.language} />
+              <Home
+                startWizard={this.startWizard}
+                language={this.state.language}
+              />
             </Route>
           </Switch>
         </div>

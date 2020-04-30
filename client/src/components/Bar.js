@@ -55,22 +55,33 @@ export default function ButtonAppBar(props) {
 
   const loginArea = () => {
     return (
-      <Button>
-        <Link style={{ textDecoration: "none", color: "black" }} to="/login">
-          {dictio.login[props.language]}
-        </Link>
-      </Button>
+      <Link style={{ textDecoration: "none", color: "black" }} to="/login">
+        <Button>{dictio.login[props.language]}</Button>
+      </Link>
     );
   };
 
   const backButton = () => {
-    return (
+    return props.wizardPage === 0 ? (
+      <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+        <Button
+          className="backButton"
+          onClick={() => {
+            props.backClicked();
+          }}
+        >
+          {" "}
+          <ArrowBackIosIcon className={classes.backIcon} />
+        </Button>
+      </Link>
+    ) : (
       <Button
         className="backButton"
         onClick={() => {
           props.backClicked();
         }}
       >
+        {" "}
         <ArrowBackIosIcon className={classes.backIcon} />
       </Button>
     );
@@ -78,12 +89,9 @@ export default function ButtonAppBar(props) {
 
   const logoArea = () => {
     return (
-      <Button>
-        <Link style={{ textDecoration: "none", color: "black" }} to="/home">
-          {/* <img src={logo} alt="Logo"></img> */}
-          Kiji-bot
-        </Link>
-      </Button>
+      <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+        <Button onClick={props.returnHome}>Kiji-bot</Button>
+      </Link>
     );
   };
   const switchLanguage = () => {
@@ -112,9 +120,6 @@ export default function ButtonAppBar(props) {
         >
           <MenuItem onClick={handleClose}>
             {dictio.account[props.language]}
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            {dictio.notification[props.language]}
           </MenuItem>
           <MenuItem onClick={handleClose}>
             {dictio.parameters[props.language]}

@@ -3,7 +3,7 @@ import { Polygon } from "react-google-maps";
 const { compose, withProps } = require("recompose");
 const { withScriptjs, withGoogleMap, GoogleMap } = require("react-google-maps");
 const {
-  DrawingManager
+  DrawingManager,
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
 //https://blog.logrocket.com/using-recompose-to-write-clean-higher-order-components-3019a6daf44c/
@@ -14,11 +14,11 @@ const MyMapComponent = compose(
       "https://maps.googleapis.com/maps/api/js?key=AIzaSyBnIReQN29uQlQ9XPcplFlm5R8XnU2n0i4&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
-    mapElement: <div style={{ height: `100%` }} />
+    mapElement: <div style={{ height: `100%` }} />,
   }),
   withScriptjs,
   withGoogleMap
-)(props => (
+)((props) => (
   <GoogleMap
     defaultZoom={12}
     defaultCenter={{ lat: props.userLocation.lat, lng: props.userLocation.lng }}
@@ -31,17 +31,16 @@ const MyMapComponent = compose(
           drawingControl: true,
           drawingControlOptions: {
             position: "",
-            drawingModes: ["polygon"]
+            drawingModes: ["polygon"],
           },
           polygonOptions: {
-            editable: false
-          }
+            editable: false,
+          },
         }}
-        onPolygonComplete={value => props.complete(value)}
+        onPolygonComplete={(value) => props.complete(value)}
       />
     )}
-    {props.zonesToDisplay.map(zone => {
-      console.log(zone.polygon);
+    {props.zonesToDisplay.map((zone) => {
       return <Polygon key={zone.id} path={zone.polygon.getPath()} />;
     })}
   </GoogleMap>

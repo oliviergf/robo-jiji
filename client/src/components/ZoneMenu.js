@@ -169,9 +169,7 @@ class ZoneMenu extends React.Component {
         path: points,
         name: name,
       })
-      .then(function (response) {
-        console.log(response);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         console.log(error);
       });

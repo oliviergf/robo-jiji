@@ -22,23 +22,6 @@ const db = require("./models");
 const app = express();
 var SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-/**   TECHSTACK CHEZ SOFDESK
- * Personnaliser et déployer des outils logiciels, des processus et des mesures TECH STACK React
- * / FluxNodejs (express) MySQL (sequelize) Redis pour caching Mocha pour tests Github
- * / TravisCI pour source management TravisCI
- * / AWS pour déploiements
- */
-
-// http://legisquebec.gouv.qc.ca/fr/ShowDoc/cs/C-1.1
-// http://www.blogueducrl.com/2019/11/chronique-du-cti-banques-de-donnees.html
-// use this for drawing logos! https://excalidraw.com/
-
-// forks n shit https://medium.com/the-andela-way/scaling-out-with-node-clusters-1dca4a39a2a
-
-// google-chrome --ignore-certificate-errors --unsafely-treat-insecure-origin-as-secure=https://127.0.0.1 --user-data-dir=/tmp/foo
-
-// zip ../jiji69_1.zip -r * .[^.]*
-
 /**
  * SYNC DB
  * todo: check pour timezone. doesnt seem right
@@ -59,7 +42,6 @@ var myStore = new SequelizeStore({
  * --------------------------------------------------------------------------------
  */
 
-//to be looked over when ready to deploy
 app.use(
   cors({
     origin: true,
@@ -157,7 +139,6 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // console.log("ERROR JUST HAPPENED HERE DUDE");
   console.log({
     message: err.message,
     error: err,
@@ -172,4 +153,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-//todo: remove --inspect in start for prod

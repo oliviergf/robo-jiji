@@ -1,3 +1,8 @@
+$degrader-color1: #53d7c2;
+$degrader-color2: #36b2b3;
+$background-color: blue;
+$platform-selection-color: #2ecc71;
+
 .App {
   max-height: 100vh;
   height: 100vh;
@@ -5,15 +10,86 @@
 .body {
   height: 90%;
 }
+.wizard-question-title {
+  margin-top: 13vh;
+}
 
-.loginButton {
-  background-color: red;
+.information-line {
+  padding-top: 5%;
+}
+.icons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.punch-line {
+  color: black;
+}
+.wizard-question {
+  margin-top: 5vh;
+  flex: 1;
+}
+
+.wizard-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 20px;
+}
+.next-button-wrapper {
+  margin-bottom: 6vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
 }
 
 .logoimg {
   max-width: 45%;
   max-height: 45%;
 }
+.next-button {
+  margin-top: 5%;
+  background-image: linear-gradient(to right, $degrader-color1, #82fcc9);
+  width: 20rem;
+  height: 50px;
+  padding: 14px 28px;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.check-in-button {
+  margin-top: 5%;
+  background-image: linear-gradient(
+    to right,
+    $degrader-color1,
+    $degrader-color2
+  );
+  width: 20rem;
+  height: 50px;
+  padding: 14px 28px;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+
+.home-content {
+  margin-top: 29vh;
+  margin-left: 20px;
+}
+
 .AppBarDivContainer {
   border-width: 2px;
 }
@@ -26,23 +102,8 @@
   pointer-events: none;
 }
 
-.App-header {
-  background-color: #ffffff;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: red;
-}
-
-.App-link {
-  color: #ffffff;
-}
-
 .home {
-  background-color: white;
+  background-color: $background-color;
   height: 100%;
 }
 
