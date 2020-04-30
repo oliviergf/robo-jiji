@@ -1,36 +1,12 @@
-# robo-jiji
+## robo-jiji
 
-## final count down edition:
+Fun little project that i've made in the beginning of 2020.
 
-TODO:
+It's basically a bot that crawls Kijiji and fetches all photos and infos about newly posted apartements in Montréal.
+The goal was to let users draw spaces on a google map page and send them notifications whenever a new 
+posting could be found in their zones. 
 
-- [x] Gerer les notifications selon préférences
-- [x] Hasher les passwords
-- [x] early deployment avec AWS (EC2, RDS, SSL, S3)
-- [ ] Finir le UI + CSS + installation wizard
-- [ ] Tests, Tests, Tests
-- [ ] Securité
-- [x] deployment prod avec AWS (domain name, cron jobs)
-- [ ] Small roll out
-- [ ] Intégrer les messages txts
-- [ ] Sécurité & tests
+The project failed when kijiji locked us out of their site for crawling it.
+At that point, the whole project was almost ready to be put into production but still needed some touch-ups.
 
-## AWS beanStalk:
-
-Our setup is in single instance environnement with a self signed certificat that
-is uploaded via extensions files. (using https-instance-securitygroup and https-instance)
-used https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl.html to create certificat
-When ready to deploy for real look over the following:
-
-- get a domain name and register it with AWS domain thing.... should be easy to get free certificat
-- enable load balancer and multiples instances via env config
-
-### steps to deploy:
-
-- npm run build in /client and replace /build folder in express by created build
-- delete /node_modules and /pictures
-- set http in www file if its not already there
-- set AWS or custom URL in serverURL
-- set AWS DB configs in config/config.js file for DB
-- use `zip ../jiji69_1.zip -r * .[^.]*` to create a bundle file
-- upload it to beanstalks via AWS console
+Nevertheless, i learned a lot and had some fun during the process :)
