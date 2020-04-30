@@ -54,7 +54,6 @@ RSSqueryService = (researchLink) => {
   //first one
   sendRSSRequestToKijiji();
   //send a query every QueryTimer
-  // https://github.com/node-cron/node-cron ?? for cronjobs
   setInterval(function () {
     sendRSSRequestToKijiji();
   }, QueryTimer);
@@ -123,8 +122,6 @@ insertApartsIntoDb = async (responseAparts, triesLeft, isARetry) => {
     };
   } catch (error) {
     log.err("---Transaction Failed!", error);
-    //if theres a deadlock, some
-    // if (error.parent.code === "ER_LOCK_DEADLOCK" && triesLeft !== 0) {
     if (triesLeft !== 0) {
       log.o(
         `Error found! ${error.parent.code} RETRYING WITH ${triesLeft} tries left`

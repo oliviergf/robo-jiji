@@ -21,8 +21,9 @@ export default function Home(props) {
   };
 
   const install = () => {
-    console.log(state);
-    console.log("installin");
+    /**
+     * get event prompt with service worker and trigger install
+     */
   };
 
   const platformeClick = () => {
@@ -81,14 +82,16 @@ export default function Home(props) {
             <div>
               The platform is kinda important to use, what's on your mobile?
             </div>
-            <img
-              src={state.platform === "apple" ? appleColor : apple}
-              onClick={platformeClick}
-            />
-            <img
-              src={state.platform === "apple" ? android : androidColor}
-              onClick={platformeClick}
-            />
+            <div className="icons-container">
+              <img
+                src={state.platform === "apple" ? appleColor : apple}
+                onClick={platformeClick}
+              />
+              <img
+                src={state.platform === "apple" ? android : androidColor}
+                onClick={platformeClick}
+              />
+            </div>
           </div>
           {state.platform === "apple" && (
             <div className="wizard-question">
@@ -112,7 +115,6 @@ export default function Home(props) {
         </div>
       );
     }
-
     return pageContent;
   };
 

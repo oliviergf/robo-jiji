@@ -17,6 +17,11 @@ $platform-selection-color: #2ecc71;
 .information-line {
   padding-top: 5%;
 }
+.icons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
 
 .punch-line {
   color: black;

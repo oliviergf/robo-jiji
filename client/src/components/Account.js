@@ -19,7 +19,7 @@ import {
   Input,
   Button,
   FormLabel,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core/";
 
 /**
@@ -96,7 +96,6 @@ export default function Account(props) {
       setErrorPassword(true);
       isClean = false;
     }
-    console.log("isClean", isClean);
     return isClean;
   };
 
@@ -104,7 +103,7 @@ export default function Account(props) {
     setWaitingRequest(true);
     axios
       .get(`${url}/users`)
-      .then(function(response) {
+      .then(function (response) {
         setFirstname(response.data.firstname);
         setLastname(response.data.lastname);
         setTelephone(response.data.telephone);
@@ -112,7 +111,7 @@ export default function Account(props) {
         setEmail(response.data.email);
         setWaitingRequest(false);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
         setWaitingRequest(false);
       });
@@ -122,7 +121,7 @@ export default function Account(props) {
     setChangePassword(true);
   };
 
-  const handleChange = evt => {
+  const handleChange = (evt) => {
     if (evt.target.name === "firstname") setFirstname(evt.target.value);
     if (evt.target.name === "lastname") setLastname(evt.target.value);
     if (evt.target.name === "email") setEmail(evt.target.value);
@@ -138,9 +137,8 @@ export default function Account(props) {
       setTelephoneConfirmation(evt.target.value);
   };
 
-  const handleEditInput = evt => {
+  const handleEditInput = (evt) => {
     if (formIsClean()) {
-      console.log("sending request");
       //should be put but it doesnt work apparently
       axios
         .put(`${url}/users`, {
@@ -151,10 +149,9 @@ export default function Account(props) {
           changePassword: changePassword,
           platform: platform,
           oldPassword: oldPassword,
-          newPassword: newPassword
+          newPassword: newPassword,
         })
-        .then(function(response) {
-          console.log("god damn response", response);
+        .then(function (response) {
           if (response.data === "successful") {
             setSuccessAPIcall(true);
             setTimeout(() => {
@@ -164,9 +161,7 @@ export default function Account(props) {
             setOldErrorPassword(true);
           }
         })
-        .catch(function(error) {
-          console.log("sending request post?");
-
+        .catch(function (error) {
           console.log(error);
         });
     }

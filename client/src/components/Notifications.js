@@ -53,7 +53,6 @@ export default function Notifications(props) {
       .get(`${url}/subscribeNotif`)
       .then(function (response) {
         // handle success
-        console.log(response);
       })
       .catch(function (error) {
         // handle error
@@ -85,10 +84,7 @@ export default function Notifications(props) {
         checkedG: checkedG,
         checkedApplyPreferences: checkedApplyPreferences,
       })
-      .then(function (response) {
-        // handle success
-        console.log(response);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         // handle error
         console.log(error);

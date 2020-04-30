@@ -1,8 +1,5 @@
-const axios = require("axios");
 const models = require("../../models");
 const logger = require("../../utils/logger");
-const moment = require("moment");
-const webpush = require("web-push");
 const log = new logger();
 
 let admin = require("firebase-admin");
@@ -10,8 +7,6 @@ admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: "https://super-awesome-party.firebaseio.com",
 });
-
-// sleep 3 ; curl http://localhost:3000/subscribeNotif
 
 /**
  * This function queries the URL of the appartement.

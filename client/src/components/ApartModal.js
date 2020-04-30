@@ -47,9 +47,6 @@ export default function ApartModal(props) {
     });
   };
 
-  // useEffect(() => {
-  //   console.log("impo info", props.apartInfo);
-  // }, []);
   const classes = useStyles();
 
   return (

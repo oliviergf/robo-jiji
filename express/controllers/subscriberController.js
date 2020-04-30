@@ -26,7 +26,6 @@ subscriberController = {
       });
     } catch (error) {
       console.log(error);
-      console.log("could not update notification hours");
     }
   },
 };

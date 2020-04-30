@@ -2,9 +2,7 @@ var express = require("express");
 var router = express.Router();
 const models = require("../models");
 var passport = require("passport");
-const vueController = require("../controllers/apartementsController");
 
-/* GET React home page. */
 router.put("/", passport.authenticate("session"), async function (
   req,
   res,

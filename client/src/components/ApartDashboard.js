@@ -151,7 +151,6 @@ export default function Apartements(props) {
   };
 
   const handleOpen = (id) => {
-    console.log(id);
     axios
       .get(`${url}/apartVue`, {
         params: {

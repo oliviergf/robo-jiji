@@ -3,7 +3,6 @@ var router = express.Router();
 var passport = require("passport");
 const vueController = require("../controllers/apartementsController");
 
-/* GET React home page. */
 router.get("/", passport.authenticate("session"), async function (
   req,
   res,
@@ -18,7 +17,6 @@ router.get("/", passport.authenticate("session"), async function (
   }
 });
 
-/* GET React home page. */
 router.post("/", passport.authenticate("session"), async function (
   req,
   res,

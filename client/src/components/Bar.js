@@ -90,10 +90,7 @@ export default function ButtonAppBar(props) {
   const logoArea = () => {
     return (
       <Link style={{ textDecoration: "none", color: "black" }} to="/home">
-        <Button onClick={props.returnHome}>
-          {/* <img src={logo} alt="Logo"></img> */}
-          Kiji-bot
-        </Button>
+        <Button onClick={props.returnHome}>Kiji-bot</Button>
       </Link>
     );
   };
@@ -123,9 +120,6 @@ export default function ButtonAppBar(props) {
         >
           <MenuItem onClick={handleClose}>
             {dictio.account[props.language]}
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            {dictio.notification[props.language]}
           </MenuItem>
           <MenuItem onClick={handleClose}>
             {dictio.parameters[props.language]}
