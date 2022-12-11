@@ -10,7 +10,7 @@
     "aws-sdk": "^2.664.0",
     "axios": "^0.19.2",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cheerio": "^1.0.0-rc.3",
     "connect-session-sequelize": "^6.1.1",
     "cookie-parser": "~1.4.4",
